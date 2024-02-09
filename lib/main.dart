@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:just_audio/just_audio.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,6 +14,7 @@ Future<void> main() async {
 
 Color selectedColor = const Color(0xFFFFFFFF); // Default selected color
 int scrollDuration = 60;
+int metronomeBpm = 120;
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -46,17 +50,6 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       centerTitle: true,
-      actions: [
-        IconButton(
-          icon: const Icon(
-            Icons.search,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            // Handle search button press
-          },
-        ),
-      ],
       leading: Padding(
         padding: const EdgeInsets.all(8.0),
         child: SvgPicture.asset(
@@ -414,6 +407,12 @@ class SongItem extends StatelessWidget {
         selectedColor = Color(prefs.getInt('selectedColor') ?? 0xFFFFFFFF);
       }
 
+      Future<void> loadMetronomeBpm() async {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        metronomeBpm = prefs.getInt('metronomeBpm') ?? 120;
+      }
+
+      loadMetronomeBpm();
       loadSelectedColor();
       // Optionally, you can limit the size of the list, e.g., keep only the last N songs
       // const int maxSongs = 10;
@@ -488,23 +487,63 @@ class LyricsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String myTitle = title;
-
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: MyAppBarForLyrics(myTitle: myTitle),
-      body: BlurredBackgroundForLyrics(myTitle: myTitle),
+      appBar: MyAppBarForLyrics(myTitle: title),
+      body: BlurredBackgroundForLyrics(myTitle: title),
     );
   }
 }
 
-class MyAppBarForLyrics extends StatelessWidget implements PreferredSizeWidget {
+class MyAppBarForLyrics extends StatefulWidget implements PreferredSizeWidget {
   final String myTitle;
 
   const MyAppBarForLyrics({Key? key, required this.myTitle}) : super(key: key);
 
   @override
+  _MyAppBarForLyricsState createState() => _MyAppBarForLyricsState();
+
+  @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
+class _MyAppBarForLyricsState extends State<MyAppBarForLyrics> {
+  bool _isMetronomePlaying = false;
+  late AudioPlayer _audioPlayer;
+  bool _isPlaying = false;
+
+  late Timer _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _audioPlayer = AudioPlayer();
+  }
+
+  @override
+  void dispose() {
+    _audioPlayer.dispose();
+    _timer.cancel();
+    super.dispose();
+  }
+
+  void _startStopMetronome() {
+    setState(() {
+      _isPlaying = !_isPlaying;
+    });
+
+    if (_isPlaying) {
+      _timer = Timer.periodic(
+        Duration(milliseconds: (60000 / metronomeBpm).round()),
+        (timer) async {
+          await _audioPlayer.setAsset("assets/metronome_sound.mp3");
+          _audioPlayer.play();
+        },
+      );
+    } else {
+      _timer.cancel();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -532,11 +571,19 @@ class MyAppBarForLyrics extends StatelessWidget implements PreferredSizeWidget {
           icon: SvgPicture.asset(
             'assets/metronome.svg',
             color: Colors.white,
-            height: 24.0,
-            width: 24.0,
+            height: 30.0,
+            width: 30.0,
           ),
           onPressed: () {
-            // Call the method to handle the metronome button press
+            setState(() {
+              _isMetronomePlaying = !_isMetronomePlaying;
+              // Call your metronome start/stop logic here
+              if (_isMetronomePlaying) {
+                _startStopMetronome();
+              } else {
+                _startStopMetronome();
+              }
+            });
           },
         ),
         IconButton(
@@ -633,8 +680,7 @@ class _BlurredBackgroundForLyricsState
     _scrollController.animateTo(
       _scrollController.position.maxScrollExtent,
       duration: Duration(seconds: scrollDuration),
-      // Duration for the slow scroll
-      curve: Curves.easeInOut,
+      curve: Curves.linear,
     );
   }
 
@@ -1080,6 +1126,79 @@ class _BlurredBackgroundForSettingsState
         ],
       ),
       ExpansionTile(
+        title: Row(
+          children: [
+            SvgPicture.asset(
+              'assets/metronome.svg',
+              color: Colors.white,
+              height: 50.0,
+              width: 50.0,
+            ),
+            const SizedBox(width: 8),
+            // Adjust the spacing between the icon and text
+            const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Metronom Hızı",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  "Metronom Hızını Ayarlayın",
+                  style: TextStyle(fontSize: 14),
+                ),
+              ],
+            ),
+          ],
+        ),
+        trailing: Icon(isExpanded ? Icons.arrow_downward : Icons.arrow_forward),
+        onExpansionChanged: (bool expansion) {
+          setState(() {
+            _loadScrollDuration();
+            isExpanded = expansion;
+          });
+        },
+        children: [
+          //dialog to select the set the scroll duration with right and left arrow buttons
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.arrow_left),
+                onPressed: () {
+                  setState(() {
+                    metronomeBpm = metronomeBpm - 1;
+                    if (metronomeBpm < 10) {
+                      metronomeBpm = 10;
+                    }
+                    SaveMetronomeBpm.saveMetronomeBpm(metronomeBpm);
+                  });
+                },
+              ),
+              Text(
+                "$metronomeBpm BPM",
+                style: const TextStyle(
+                  fontSize: 24,
+                  color: Colors.white,
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.arrow_right),
+                onPressed: () {
+                  setState(() {
+                    metronomeBpm = metronomeBpm + 1;
+                    if (metronomeBpm > 200) {
+                      metronomeBpm = 200;
+                    }
+                    SaveMetronomeBpm.saveMetronomeBpm(metronomeBpm);
+                  });
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
+      ExpansionTile(
         title: const Text('Yavaş Kaydırma'),
         subtitle: const Text('Şarkı sözlerini yavaşça kaydırın'),
         trailing: Icon(isExpanded ? Icons.arrow_downward : Icons.arrow_forward),
@@ -1178,6 +1297,18 @@ class SaveScrollDuration {
   }
 }
 
+class SaveMetronomeBpm {
+  static const String metronomeBpmKey = "metronomeBpm";
+
+  SaveMetronomeBpm(int metronomeBpm);
+
+  // Save the selected color to shared preferences
+  static Future<void> saveMetronomeBpm(int metronomeBpm) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(metronomeBpmKey, metronomeBpm);
+  }
+}
+
 class MySettingsAppBar extends StatelessWidget implements PreferredSizeWidget {
   const MySettingsAppBar({super.key});
 
@@ -1207,6 +1338,12 @@ class MySettingsAppBar extends StatelessWidget implements PreferredSizeWidget {
             selectedColor = Color(prefs.getInt('selectedColor') ?? 0xFFFFFFFF);
           }
 
+          Future<void> loadMetronomeBpm() async {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            metronomeBpm = prefs.getInt('metronomeBpm') ?? 120;
+          }
+
+          loadMetronomeBpm();
           loadSelectedColor();
           Navigator.of(context).pop();
         },
