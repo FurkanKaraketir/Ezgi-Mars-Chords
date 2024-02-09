@@ -38,6 +38,7 @@ dependencies:
   flutter_blurhash: ^0.8.2
   flutter_svg: ^0.22.0
   shared_preferences: ^2.0.10
+  url_launcher: ^6.0.10
 
 dev_dependencies:
   flutter_test:

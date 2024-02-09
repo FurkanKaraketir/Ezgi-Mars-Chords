@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPreferences.getInstance();
   runApp(const MyApp());
 }
+
+Color selectedColor = const Color(0xFFFFFFFF); // Default selected color
+int scrollDuration = 60;
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -118,18 +122,6 @@ class _BlurredBackgroundState extends State<BlurredBackground> {
     }
   }
 
-  void loadLastPlayedSongs() async {
-    var lastPlayedSongsList = await _loadLastPlayedSongs();
-
-    if (lastPlayedSongsList != null) {
-      // Successfully loaded last played songs
-
-      // Continue with your logic here
-    } else {
-      // Handle the case where loading failed
-    }
-  }
-
   var songList = {
     'Ahzab\'daki Yiğitler': 'F',
     'Dağlardayız Biz Ovalarda': 'G#/m',
@@ -166,20 +158,32 @@ class _BlurredBackgroundState extends State<BlurredBackground> {
             ),
           );
         } else {
-          return SingleChildScrollView(
-            child: ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              scrollDirection: Axis.vertical,
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                return SongItem(
-                  title: snapshot.data![index],
-                  keyNote: songList[snapshot.data![index]] ?? 'Unknown',
-                );
-              },
+          return Column(children: [
+            Container(
+              margin: const EdgeInsets.all(20.0),
+              child: const Text(
+                'En Son Çalınanlar Parçalar',
+                style: TextStyle(
+                  fontSize: 24,
+                  color: Colors.white,
+                ),
+              ),
             ),
-          );
+            SingleChildScrollView(
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  return SongItem(
+                    title: snapshot.data![index],
+                    keyNote: songList[snapshot.data![index]] ?? 'Unknown',
+                  );
+                },
+              ),
+            ),
+          ]);
         }
       },
     );
@@ -232,16 +236,6 @@ class _BlurredBackgroundState extends State<BlurredBackground> {
                     ),
                   ),
                 ]),
-                Container(
-                  margin: const EdgeInsets.all(20.0),
-                  child: const Text(
-                    'En Son Çalınanlar Parçalar',
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
                 _buildLastPlayedSongs(),
               ],
             ));
@@ -410,7 +404,17 @@ class SongItem extends StatelessWidget {
         lastPlayedSongs.remove(song);
         lastPlayedSongs.insert(0, song);
       }
+      //max 10 songs
+      if (lastPlayedSongs.length > 7) {
+        lastPlayedSongs.removeLast();
+      }
 
+      Future<void> loadSelectedColor() async {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        selectedColor = Color(prefs.getInt('selectedColor') ?? 0xFFFFFFFF);
+      }
+
+      loadSelectedColor();
       // Optionally, you can limit the size of the list, e.g., keep only the last N songs
       // const int maxSongs = 10;
       // lastPlayedSongs = lastPlayedSongs.take(maxSongs).toList();
@@ -535,6 +539,21 @@ class MyAppBarForLyrics extends StatelessWidget implements PreferredSizeWidget {
             // Call the method to handle the metronome button press
           },
         ),
+        IconButton(
+          icon: const Icon(
+            Icons.settings,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            // Open a new screen to show the settings
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SettingsScreen(),
+              ),
+            );
+          },
+        ),
       ],
       leading: IconButton(
         icon: const Icon(
@@ -552,7 +571,19 @@ class MyAppBarForLyrics extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
-class BlurredBackgroundForLyrics extends StatelessWidget {
+class BlurredBackgroundForLyrics extends StatefulWidget {
+  final String myTitle; // Declare the variable in the SecondScreen class
+
+  // Constructor to receive the variable from the calling class (MyApp in this case)
+  const BlurredBackgroundForLyrics({super.key, required this.myTitle});
+
+  @override
+  State<BlurredBackgroundForLyrics> createState() =>
+      _BlurredBackgroundForLyricsState();
+}
+
+class _BlurredBackgroundForLyricsState
+    extends State<BlurredBackgroundForLyrics> {
   final List<String> albumCovers = [
     'assets/haykir.jpeg',
     // Add more album covers as needed
@@ -588,10 +619,24 @@ class BlurredBackgroundForLyrics extends StatelessWidget {
     'Haykır': 'Value_2',
   };
 
-  final String myTitle; // Declare the variable in the SecondScreen class
+  List<Widget> widgets = [];
 
-  // Constructor to receive the variable from the calling class (MyApp in this case)
-  BlurredBackgroundForLyrics({super.key, required this.myTitle});
+  final ScrollController _scrollController = ScrollController();
+
+  var scrollDuration = 60;
+
+  Future<void> _startAutoSlowScroll() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    scrollDuration = prefs.getInt('scrollDuration') ?? 60;
+
+    // Adjust the values as needed
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: Duration(seconds: scrollDuration),
+      // Duration for the slow scroll
+      curve: Curves.easeInOut,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -601,7 +646,26 @@ class BlurredBackgroundForLyrics extends StatelessWidget {
         buildGradientOverlay(),
 
         // Step 3: Album List
-        buildLyricsWidget(myTitle, context),
+        buildLyricsWidget(widget.myTitle, context),
+        Positioned(
+          right: 15,
+          bottom: 15,
+          child: Container(
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Color(0xFF364259),
+            ),
+            child: IconButton(
+              icon: const Icon(
+                Icons.arrow_downward,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                _startAutoSlowScroll();
+              },
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -610,7 +674,7 @@ class BlurredBackgroundForLyrics extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/background_image.png'),
+          image: AssetImage('assets/background_image_song.png'),
           // Replace with your image asset path
           fit: BoxFit.cover,
         ),
@@ -620,9 +684,7 @@ class BlurredBackgroundForLyrics extends StatelessWidget {
 
   Widget buildLyricsWidget(String songName, BuildContext context) {
     var lyrics = songLyrics[songName]!;
-
     List<String> lines = lyrics.split('\n');
-    List<Widget> widgets = [];
 
     widgets.add(Container(
       margin: const EdgeInsets.all(20.0),
@@ -657,14 +719,13 @@ class BlurredBackgroundForLyrics extends StatelessWidget {
           if (match.start > index) {
             chordWidgets.add(
               Text(
-                line.substring(index, match.start),
+                "\n${line.substring(index, match.start)}",
                 style: const TextStyle(fontSize: 18, color: Colors.white),
               ),
             );
           }
 
           String? chordText = match.group(1);
-
           if (chordText != null) {
             if (!chords.contains(chordText)) {
               chords.add(chordText);
@@ -680,10 +741,10 @@ class BlurredBackgroundForLyrics extends StatelessWidget {
                   baselineType: TextBaseline.alphabetic,
                   child: Text(
                     chordText,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Colors.blue,
+                      color: selectedColor,
                     ),
                   ),
                 ),
@@ -697,7 +758,7 @@ class BlurredBackgroundForLyrics extends StatelessWidget {
         if (index < line.length) {
           chordWidgets.add(
             Text(
-              line.substring(index),
+              "\n${line.substring(index)}",
               style: const TextStyle(fontSize: 18, color: Colors.white),
             ),
           );
@@ -726,6 +787,7 @@ class BlurredBackgroundForLyrics extends StatelessWidget {
       right: 0,
       bottom: 0,
       child: SingleChildScrollView(
+        controller: _scrollController,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: widgets,
@@ -757,8 +819,6 @@ void _showChordImageDialog(String chord, BuildContext context) {
     },
   );
 }
-
-bool isMetronomeOn = false;
 
 class ChordsScreen extends StatelessWidget {
   final List<String> chords;
@@ -875,6 +935,591 @@ class ChordsPage extends StatelessWidget {
       appBar: const MyChordsAppBar(),
       extendBodyBehindAppBar: true,
       body: BlurredBackgroundForChords(),
+    );
+  }
+}
+
+class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(body: SettingsPage());
+  }
+}
+
+class SettingsPage extends StatelessWidget {
+  const SettingsPage({super.key});
+
+  // This widget is the home page of your application.
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      appBar: MySettingsAppBar(),
+      extendBodyBehindAppBar: true,
+      body: BlurredBackgroundForSettings(),
+    );
+  }
+}
+
+class BlurredBackgroundForSettings extends StatefulWidget {
+  const BlurredBackgroundForSettings({super.key});
+
+  @override
+  _BlurredBackgroundForSettingsState createState() {
+    return _BlurredBackgroundForSettingsState();
+  }
+}
+
+class _BlurredBackgroundForSettingsState
+    extends State<BlurredBackgroundForSettings> {
+  bool isExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        // Step 2: Gradient Overlay
+        buildGradientOverlay(),
+
+        // Step 3: Album List
+        settingsList(context),
+      ],
+    );
+  }
+
+  Widget buildGradientOverlay() {
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/background_settings.png'),
+          // Replace with your image asset path
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+
+  List<Color> colorOptions = [
+    const Color(0xFFCD5D5C),
+    const Color(0xFFFEA501),
+    const Color(0xFF90EE90),
+    const Color(0xFF3FE0D0),
+    const Color(0xFFAED8E6),
+    const Color(0xFFC0C0C0),
+    const Color(0xFF9470DC),
+    const Color(0xFFFFFFFF),
+  ];
+
+  //get the selected color from shared preferences
+  Future<void> _loadSelectedColor() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    selectedColor = Color(prefs.getInt('selectedColor') ?? 0xFFFFFFFF);
+  }
+
+  Future<void> _loadScrollDuration() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    scrollDuration = prefs.getInt('scrollDuration') ?? 120;
+  }
+
+  Widget settingsList(BuildContext context) {
+    return ListView(children: [
+      ExpansionTile(
+        title: const Text('Akor Rengi'),
+        subtitle: const Text('Akor Rengi Seçin'),
+        trailing: Icon(isExpanded ? Icons.arrow_downward : Icons.arrow_forward),
+        onExpansionChanged: (bool expansion) {
+          // Update the expansion state when the tile is expanded or collapsed
+          setState(() {
+            _loadSelectedColor();
+            isExpanded = expansion;
+          });
+        },
+        children: [
+          SizedBox(
+            height: 70, // Set a fixed height
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: colorOptions.length,
+              itemBuilder: (context, index) {
+                Color color = colorOptions[index];
+                return InkWell(
+                  onTap: () {
+                    setState(() {
+                      selectedColor = color;
+                      //save the selected color to shared preferences
+                      SaveSelectedColor.saveColor(selectedColor.value);
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    // Adjust the padding as needed
+                    child: Container(
+                      width: 50,
+                      // Set a fixed width for each color box
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: color,
+                        borderRadius: BorderRadius.circular(
+                            10.0), // Adjust the corner radius as needed
+                      ),
+                      child: selectedColor == color
+                          ? const Center(
+                              child: Icon(
+                                Icons.check,
+                                color: Colors.black38,
+                              ),
+                            )
+                          : null,
+                    ),
+                  ),
+                );
+              },
+            ),
+          )
+        ],
+      ),
+      ExpansionTile(
+        title: const Text('Yavaş Kaydırma'),
+        subtitle: const Text('Şarkı sözlerini yavaşça kaydırın'),
+        trailing: Icon(isExpanded ? Icons.arrow_downward : Icons.arrow_forward),
+        onExpansionChanged: (bool expansion) {
+          setState(() {
+            _loadScrollDuration();
+
+            isExpanded = expansion;
+          });
+        },
+        children: [
+          //dialog to select the set the scroll duration with right and left arrow buttons
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.arrow_left),
+                onPressed: () {
+                  setState(() {
+                    scrollDuration = scrollDuration - 10;
+                    if (scrollDuration < 10) {
+                      scrollDuration = 10;
+                    }
+                    SaveScrollDuration.saveScrollDuration(scrollDuration);
+                  });
+                },
+              ),
+              Text(
+                scrollDuration.toString(),
+                style: const TextStyle(
+                  fontSize: 24,
+                  color: Colors.white,
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.arrow_right),
+                onPressed: () {
+                  setState(() {
+                    scrollDuration = scrollDuration + 10;
+                    if (scrollDuration > 900) {
+                      scrollDuration = 900;
+                    }
+                    SaveScrollDuration.saveScrollDuration(scrollDuration);
+                  });
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
+      ListTile(
+        title: const Text('Hakkında'),
+        subtitle: const Text('Uygulama hakkında bilgi'),
+        trailing: const Icon(Icons.arrow_forward),
+        onTap: () {
+          // Handle the tap event
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AboutScreen(),
+            ),
+          );
+        },
+      ),
+    ]);
+  }
+}
+
+class SaveSelectedColor {
+  static const String _selectedColorKey = "selectedColor";
+
+  SaveSelectedColor(Color color);
+
+  // Save the selected color to shared preferences
+  static Future<void> saveColor(int selectedColor) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_selectedColorKey, selectedColor);
+  }
+
+  // Retrieve the selected color from shared preferences
+  static Future<String?> getSelectedColor() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_selectedColorKey);
+  }
+}
+
+class SaveScrollDuration {
+  static const String scrollDurationKey = "scrollDuration";
+
+  SaveScrollDuration(int scrollDuration);
+
+  // Save the selected color to shared preferences
+  static Future<void> saveScrollDuration(int scrollDuration) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(scrollDurationKey, scrollDuration);
+  }
+}
+
+class MySettingsAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const MySettingsAppBar({super.key});
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      title: const Text(
+        'Ayarlar',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 24.0,
+        ),
+      ),
+      centerTitle: true,
+      leading: IconButton(
+        icon: const Icon(
+          Icons.arrow_back,
+          color: Colors.white,
+        ),
+        onPressed: () {
+          // Handle back button press
+          Future<void> loadSelectedColor() async {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            selectedColor = Color(prefs.getInt('selectedColor') ?? 0xFFFFFFFF);
+          }
+
+          loadSelectedColor();
+          Navigator.of(context).pop();
+        },
+      ),
+
+      // Replace with your desired icon
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+    );
+  }
+}
+
+class AboutScreen extends StatelessWidget {
+  const AboutScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(body: AboutPage());
+  }
+}
+
+class AboutPage extends StatelessWidget {
+  const AboutPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      appBar: MyAboutAppBar(),
+      extendBodyBehindAppBar: true,
+      body: BlurredBackgroundForAbout(),
+    );
+  }
+}
+
+class BlurredBackgroundForAbout extends StatelessWidget {
+  const BlurredBackgroundForAbout({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        // Step 2: Gradient Overlay
+        buildGradientOverlay(),
+
+        // Step 3: Album List
+        aboutList(),
+      ],
+    );
+  }
+
+  Widget buildGradientOverlay() {
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/background_settings.png'),
+          // Replace with your image asset path
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+
+  Widget aboutList() {
+    Future<void> launchUri(Uri url) async {
+      if (!await launchUrl(url)) {
+        throw Exception('Could not launch $url');
+      }
+    }
+
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Container(
+          margin: const EdgeInsets.only(top: 100.0),
+          child: const Center(
+            //make text center
+
+            child: Text(
+              'Grup İslami Direniş',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 32,
+                color: Colors.white,
+              ),
+            ),
+          )),
+      Container(
+          margin: const EdgeInsets.only(top: 10.0),
+          child: const Center(
+            //make text center
+
+            child: Text(
+              'Ezgi ve Marş Uygulaması',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.white,
+              ),
+            ),
+          )),
+      Container(
+        margin: const EdgeInsets.all(20.0),
+        //make text center
+
+        child: const Text(
+          'İlk ve tek albümünü 1992 yılında Özgürlük İçin İslami Direniş adıyla yayınlayan grup, yeni üyeleriyle 2013 yılından beri çalışmalarına devam etmektedir.',
+          textAlign: TextAlign.start,
+          style: TextStyle(
+            fontSize: 19,
+            color: Colors.white,
+          ),
+        ),
+      ),
+      Container(
+        margin: const EdgeInsets.all(20.0),
+        //make text center
+
+        child: const Text(
+          'Linkler',
+          textAlign: TextAlign.start,
+          style: TextStyle(
+            fontSize: 24,
+            color: Colors.white,
+          ),
+        ),
+      ),
+      Container(
+        margin: const EdgeInsets.all(20.0),
+        //make text center
+
+        child: Row(
+          children: [
+            GestureDetector(
+              onTap: () {
+                launchUri(Uri.parse('https://instagram.com/grupislamidirenis'));
+              },
+              child: Image.asset(
+                'assets/instagram_icon.png',
+                width: 50,
+                height: 50,
+              ),
+            ),
+            const SizedBox(width: 10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    launchUri(
+                        Uri.parse('https://instagram.com/grupislamidirenis'));
+                  },
+                  child: const Text(
+                    'Instagram',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    launchUri(
+                        Uri.parse('https://instagram.com/grupislamidirenis'));
+                  },
+                  child: const Text(
+                    'instagram.com/grupislamidirenis',
+                    style: TextStyle(
+                      fontSize: 18,
+                      decoration: TextDecoration.underline,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      Container(
+        margin: const EdgeInsets.all(20.0),
+        //make text center
+
+        child: Row(
+          children: [
+            GestureDetector(
+              onTap: () {
+                launchUri(Uri.parse('https://twitter.com/gislamidirenis'));
+              },
+              child: Image.asset(
+                'assets/x_icon.png',
+                width: 50,
+                height: 50,
+              ),
+            ),
+            const SizedBox(width: 10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    launchUri(Uri.parse('https://twitter.com/gislamidirenis'));
+                  },
+                  child: const Text(
+                    'Twitter',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    launchUri(Uri.parse('https://twitter.com/gislamidirenis'));
+                  },
+                  child: const Text(
+                    'twitter.com/grupislamidirenis',
+                    style: TextStyle(
+                      fontSize: 18,
+                      decoration: TextDecoration.underline,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      Container(
+        margin: const EdgeInsets.all(20.0),
+        //make text center
+
+        child: Row(
+          children: [
+            GestureDetector(
+              onTap: () {
+                launchUri(Uri.parse('https://facebook.com/grupislamidirenis'));
+              },
+              child: Image.asset(
+                'assets/facebook_icon.png',
+                width: 50,
+                height: 50,
+              ),
+            ),
+            const SizedBox(width: 10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    launchUri(
+                        Uri.parse('https://facebook.com/grupislamidirenis'));
+                  },
+                  child: const Text(
+                    'Facebook',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    launchUri(
+                        Uri.parse('https://facebook.com/grupislamidirenis'));
+                  },
+                  child: const Text(
+                    'facebook.com/grupislamidirenis',
+                    style: TextStyle(
+                      fontSize: 18,
+                      decoration: TextDecoration.underline,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ]);
+  }
+}
+
+class MyAboutAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const MyAboutAppBar({super.key});
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      title: const Text(
+        'Hakkında',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 24.0,
+        ),
+      ),
+      centerTitle: true,
+      leading: IconButton(
+        icon: const Icon(
+          Icons.arrow_back,
+          color: Colors.white,
+        ),
+        onPressed: () {
+          // Handle back button press
+          Navigator.of(context).pop();
+        },
+      ),
+
+      // Replace with your desired icon
+      backgroundColor: Colors.transparent,
+      elevation: 0,
     );
   }
 }
