@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -15,6 +16,7 @@ Future<void> main() async {
 Color selectedColor = const Color(0xFFFFFFFF); // Default selected color
 int scrollDuration = 60;
 int metronomeBpm = 120;
+double lyricsFontSize = 18;
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -187,21 +189,21 @@ class _BlurredBackgroundState extends State<BlurredBackground> {
       scrollDirection: Axis.vertical,
       itemCount: albumCovers.length,
       itemBuilder: (BuildContext context, int index) {
-        return GestureDetector(
-            onTap: () {
-              // Navigate to the SongsScreen when an album cover is tapped
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      SongsScreen(albumCover: albumCovers[index].cover),
-                ),
-              );
-            },
-            child: Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.all(32.0),
+        return Column(
+          children: [
+            Container(
+                margin: const EdgeInsets.all(32.0),
+                child: GestureDetector(
+                  onTap: () {
+                    // Navigate to the SongsScreen when an album cover is tapped
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            SongsScreen(albumCover: albumCovers[index].cover),
+                      ),
+                    );
+                  },
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(32.0),
                     child: Image.asset(
@@ -209,9 +211,20 @@ class _BlurredBackgroundState extends State<BlurredBackground> {
                       fit: BoxFit.fill,
                     ),
                   ),
-                ),
-                Container(
-                  margin: const EdgeInsets.all(20.0),
+                )),
+            Container(
+                margin: const EdgeInsets.all(20.0),
+                child: GestureDetector(
+                  onTap: () {
+                    // Navigate to the SongsScreen when an album cover is tapped
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            SongsScreen(albumCover: albumCovers[index].cover),
+                      ),
+                    );
+                  },
                   child: Text(
                     albumCovers[index].title,
                     style: const TextStyle(
@@ -219,19 +232,19 @@ class _BlurredBackgroundState extends State<BlurredBackground> {
                       color: Colors.white,
                     ),
                   ),
+                )),
+            Row(children: <Widget>[
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                  // Adjust the margin as needed
+                  child: const Divider(),
                 ),
-                Row(children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                      // Adjust the margin as needed
-                      child: const Divider(),
-                    ),
-                  ),
-                ]),
-                _buildLastPlayedSongs(),
-              ],
-            ));
+              ),
+            ]),
+            _buildLastPlayedSongs(),
+          ],
+        );
       },
     );
   }
@@ -476,6 +489,8 @@ class SongItem extends StatelessWidget {
     );
   }
 }
+
+final ScrollController _scrollController = ScrollController();
 
 var chords = <String>[];
 
@@ -1256,8 +1271,6 @@ class _BlurredBackgroundForLyricsState
 
   List<Widget> widgets = [];
 
-  final ScrollController _scrollController = ScrollController();
-
   var scrollDuration = 60;
 
   Future<void> _startAutoSlowScroll() async {
@@ -1321,6 +1334,57 @@ class _BlurredBackgroundForLyricsState
             ),
           ),
         ),
+        Positioned(
+          right: 75,
+          bottom: 15,
+          child: Container(
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Color(0xFF364259),
+            ),
+            child: IconButton(
+              icon: const Icon(
+                Icons.zoom_in,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                setState(() {
+                  if (lyricsFontSize < 26) {
+                    lyricsFontSize += 2;
+                  } else {
+                    lyricsFontSize = 26;
+                  }
+                  widgets.clear();
+                });
+              },
+            ),
+          ),
+        ),
+        Positioned(
+          right: 75,
+          bottom: 80,
+          child: Container(
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Color(0xFF364259),
+            ),
+            child: IconButton(
+                icon: const Icon(
+                  Icons.zoom_out,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  setState(() {
+                    if (lyricsFontSize > 8) {
+                      lyricsFontSize -= 2;
+                    } else {
+                      lyricsFontSize = 8;
+                    }
+                    widgets.clear();
+                  });
+                }),
+          ),
+        ),
       ],
     );
   }
@@ -1356,15 +1420,17 @@ class _BlurredBackgroundForLyricsState
     chords.clear();
     for (String line in lines) {
       if (line.contains('{start_of_chorus}')) {
-        widgets.add(const Text(
+        widgets.add(Text(
           'Nakarat Başlangıcı:',
-          style: TextStyle(fontSize: 18, color: Colors.white),
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(fontSize: lyricsFontSize, color: Colors.white),
         ));
       } else if (line.contains('{end_of_chorus}')) {
         // Add any additional styling for the end of chorus
-        widgets.add(const Text(
+        widgets.add(Text(
           'Nakarat Bitişi.',
-          style: TextStyle(fontSize: 18, color: Colors.white),
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(fontSize: lyricsFontSize, color: Colors.white),
         ));
       } else {
         List<Widget> chordWidgets = [];
@@ -1376,7 +1442,8 @@ class _BlurredBackgroundForLyricsState
             chordWidgets.add(
               Text(
                 "\n${line.substring(index, match.start)}",
-                style: const TextStyle(fontSize: 18, color: Colors.white),
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: lyricsFontSize, color: Colors.white),
               ),
             );
           }
@@ -1392,16 +1459,13 @@ class _BlurredBackgroundForLyricsState
                   // Handle the click event, for example, show a dialog with the chord image
                   _showChordImageDialog(chordText, context);
                 },
-                child: Baseline(
-                  baseline: 18.0, // Adjust the baseline value as needed
-                  baselineType: TextBaseline.alphabetic,
-                  child: Text(
-                    chordText,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: selectedColor,
-                    ),
+                child: Text(
+                  chordText,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: lyricsFontSize,
+                    fontWeight: FontWeight.bold,
+                    color: selectedColor,
                   ),
                 ),
               ),
@@ -1415,7 +1479,8 @@ class _BlurredBackgroundForLyricsState
           chordWidgets.add(
             Text(
               "\n${line.substring(index)}",
-              style: const TextStyle(fontSize: 18, color: Colors.white),
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: lyricsFontSize, color: Colors.white),
             ),
           );
         }
@@ -1424,8 +1489,6 @@ class _BlurredBackgroundForLyricsState
           Column(
             children: [
               Row(
-                crossAxisAlignment: CrossAxisAlignment.baseline,
-                textBaseline: TextBaseline.alphabetic,
                 children: chordWidgets,
               ),
               const SizedBox(height: 8),
