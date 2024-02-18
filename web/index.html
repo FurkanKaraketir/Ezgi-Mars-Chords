@@ -23,7 +23,7 @@
   <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="ezgi">
+  <meta name="apple-mobile-web-app-title" content="Ezgiler ve Marşlar">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
@@ -40,6 +40,22 @@
   <script src="flutter.js" defer></script>
 </head>
 <body>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+  const firebaseConfig = {
+    apiKey: "AIzaSyBcRMlBqZUfSJv5dT2V5XZcTqX5xonsTWc",
+    authDomain: "testproject-23ee9.firebaseapp.com",
+    projectId: "testproject-23ee9",
+    storageBucket: "testproject-23ee9.appspot.com",
+    messagingSenderId: "1047885870282",
+    appId: "1:1047885870282:web:41e95b3ff09fccd8467033",
+    measurementId: "G-1ZKPMLTLYG"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
   <script>
     window.addEventListener('load', function(ev) {
       // Download main.dart.js

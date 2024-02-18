@@ -1,16 +1,20 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPreferences.getInstance();
   runApp(const MyApp());
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 }
 
 Color selectedColor = const Color(0xFFFFFFFF); // Default selected color
@@ -56,7 +60,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         padding: const EdgeInsets.all(8.0),
         child: SvgPicture.asset(
           'assets/logo.svg', // Replace with the path to your SVG file
-          color: Colors.white,
+          colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
           height: 240.0,
           width: 240.0,
         ),
@@ -78,19 +82,17 @@ class BlurredBackground extends StatefulWidget {
 class _BlurredBackgroundState extends State<BlurredBackground> {
   final albumCovers = [
     const Song(
-        title: "Haykır · Grup İslami Direniş", cover: 'assets/haykir.jpeg'),
-    // Add more album covers as needed
+      title: "Haykır · Grup İslami Direniş",
+      cover: 'assets/haykir.jpeg',
+    ),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        buildGradientOverlay(),
-        // Step 3: Album List
-        albumList(context),
-      ],
-    );
+    return Stack(children: [
+      buildGradientOverlay(),
+      albumList(context),
+    ]);
   }
 
   Widget buildGradientOverlay() {
@@ -118,16 +120,16 @@ class _BlurredBackgroundState extends State<BlurredBackground> {
   }
 
   var songList = {
-    'Ahzab\'daki Yiğitler': 'F',
-    'Dağlardayız Biz Ovalarda': 'G#/m',
-    'Haykır': 'D',
-    'Bağlanmaz ki Yüreğim': 'F#',
-    'Savur İnancsız Külleri': 'F#',
-    'Kaçış': 'A',
-    'Çocuğum': 'C#',
-    'Büyük Şeytana Ölüm': 'D',
-    'Ninni': 'F',
-    'Müstezafin': 'F#'
+    'Ahzab\'daki Yiğitler': '',
+    'Dağlardayız Biz Ovalarda': '',
+    'Haykır': '',
+    'Bağlanmaz ki Yüreğim': '',
+    'Savur İnancsız Külleri': '',
+    'Kaçış': '',
+    'Çocuğum': '',
+    'Büyük Şeytana Ölüm': '',
+    'Ninni': '',
+    'Müstezafin': ''
   };
 
   Widget _buildLastPlayedSongs() {
@@ -189,61 +191,52 @@ class _BlurredBackgroundState extends State<BlurredBackground> {
       scrollDirection: Axis.vertical,
       itemCount: albumCovers.length,
       itemBuilder: (BuildContext context, int index) {
-        return Column(
-          children: [
-            Container(
+        return GestureDetector(
+          onTap: () {
+            // Navigate to the SongsScreen when an album cover is tapped
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    SongsScreen(albumCover: albumCovers[index].cover),
+              ),
+            );
+          },
+          child: Column(
+            children: [
+              Container(
                 margin: const EdgeInsets.all(32.0),
-                child: GestureDetector(
-                  onTap: () {
-                    // Navigate to the SongsScreen when an album cover is tapped
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            SongsScreen(albumCover: albumCovers[index].cover),
-                      ),
-                    );
-                  },
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(32.0),
-                    child: Image.asset(
-                      albumCovers[index].cover,
-                      fit: BoxFit.fill,
-                    ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(32.0),
+                  child: Image.asset(
+                    albumCovers[index].cover,
+                    fit: BoxFit.fill,
                   ),
-                )),
-            Container(
-                margin: const EdgeInsets.all(20.0),
-                child: GestureDetector(
-                  onTap: () {
-                    // Navigate to the SongsScreen when an album cover is tapped
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            SongsScreen(albumCover: albumCovers[index].cover),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    albumCovers[index].title,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      color: Colors.white,
-                    ),
-                  ),
-                )),
-            Row(children: <Widget>[
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                  // Adjust the margin as needed
-                  child: const Divider(),
                 ),
               ),
-            ]),
-            _buildLastPlayedSongs(),
-          ],
+              Container(
+                margin: const EdgeInsets.all(20.0),
+                child: Text(
+                  albumCovers[index].title,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: const Divider(),
+                    ),
+                  ),
+                ],
+              ),
+              _buildLastPlayedSongs()
+            ],
+          ),
         );
       },
     );
@@ -348,43 +341,43 @@ class BlurredBackgroundForSongs extends StatelessWidget {
       children: const [
         SongItem(
           title: 'Ahzab\'daki Yiğitler',
-          keyNote: 'A',
+          keyNote: '',
         ),
         SongItem(
           title: 'Dağlardayız Biz Ovalarda',
-          keyNote: 'G#/m',
+          keyNote: '',
         ),
         SongItem(
           title: 'Haykır',
-          keyNote: 'D',
+          keyNote: '',
         ),
         SongItem(
           title: 'Bağlanmaz ki Yüreğim',
-          keyNote: 'F#',
+          keyNote: '',
         ),
         SongItem(
           title: 'Savur İnancsız Külleri',
-          keyNote: 'F#',
+          keyNote: '',
         ),
         SongItem(
           title: 'Kaçış',
-          keyNote: 'A',
+          keyNote: '',
         ),
         SongItem(
           title: 'Çocuğum',
-          keyNote: 'C#',
+          keyNote: '',
         ),
         SongItem(
           title: 'Büyük Şeytana Ölüm',
-          keyNote: 'D',
+          keyNote: '',
         ),
         SongItem(
           title: 'Ninni',
-          keyNote: 'F',
+          keyNote: '',
         ),
         SongItem(
           title: 'Müstezafin',
-          keyNote: 'F#',
+          keyNote: '',
         ),
       ],
     );
@@ -543,9 +536,11 @@ class _MyAppBarForLyricsState extends State<MyAppBarForLyrics> {
   }
 
   void _startStopMetronome() {
-    setState(() {
-      _isPlaying = !_isPlaying;
-    });
+    setState(
+      () {
+        _isPlaying = !_isPlaying;
+      },
+    );
 
     if (_isPlaying) {
       _timer = Timer.periodic(
@@ -568,7 +563,7 @@ class _MyAppBarForLyricsState extends State<MyAppBarForLyrics> {
         IconButton(
           icon: SvgPicture.asset(
             'assets/chords_icon.svg',
-            color: Colors.white,
+            colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
             height: 24.0,
             width: 24.0,
           ),
@@ -585,20 +580,22 @@ class _MyAppBarForLyricsState extends State<MyAppBarForLyrics> {
         IconButton(
           icon: SvgPicture.asset(
             'assets/metronome.svg',
-            color: Colors.white,
+            colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
             height: 30.0,
             width: 30.0,
           ),
           onPressed: () {
-            setState(() {
-              _isMetronomePlaying = !_isMetronomePlaying;
-              // Call your metronome start/stop logic here
-              if (_isMetronomePlaying) {
-                _startStopMetronome();
-              } else {
-                _startStopMetronome();
-              }
-            });
+            setState(
+              () {
+                _isMetronomePlaying = !_isMetronomePlaying;
+                // Call your metronome start/stop logic here
+                if (_isMetronomePlaying) {
+                  _startStopMetronome();
+                } else {
+                  _startStopMetronome();
+                }
+              },
+            );
           },
         ),
         IconButton(
@@ -648,6 +645,7 @@ class _BlurredBackgroundForLyricsState
     extends State<BlurredBackgroundForLyrics> {
   final List<String> albumCovers = [
     'assets/haykir.jpeg',
+    "assets/archive.jpg",
     // Add more album covers as needed
   ];
 
@@ -679,381 +677,162 @@ class _BlurredBackgroundForLyricsState
     
   ''',
     'Haykır': '''
-    Ay ışığı
-    Şahit yalnızlığıma
-    Kim tutacak
-    Mahrum ellerimden
-    Kan kusuyor
-    Burası benim coğrafyam
-    Umudumu
-    Bağladım ufuklara
+    [Em]Ay ışığı[Am] [D]şahit [C]yalnızlığıma
+    [Em]Kim tutacak[Am] [D]mahrum [C]ellerimden
+    [Em]Kan kusuyor[Am] [D]burası benim [C]coğrafyam
+    [Em]Umudumu[Am] [D]bağladım [C]ufuklara
     
-    Hadi haykır
-    Hiç korkma
-    Allah hep yanında
-    Hadi diren
-    Zalime
-    Allah hep seninle
-    Vur zillete
-    Kır zulmü
-    Küffar zincirleri
-    Hadi kuşan
-    Davayı
-    Onurlu sevdayı
+    [Em]Hadi haykır [G]hiç korkma [D]Allah hep [C]yanında
+    [Em]Hadi diren [G]zalime [D]Allah hep [C]seninle
+    [Em]Vur zillete [G]kır zulmü [D]küffar [C]zincirleri
+    [Em]Hadi kuşan [G]davayı [D]onurlu [C]sevdayı
     
-    Uyan
-    Diren
-    Özgürleş
-    Diren yılma
-    Sen kardeş
-    Balçıkla sıvanmaz
-    Güneş
-    Uyan
-    Diren
-    Özgürleş ki
-    Yırtılıp çıksın
-    Bağrından karanlığın
-    Tüm şafaklar
+    [Em]Uyan diren [G]özgürleş[D] [C]
+    [Em]Diren yılma [G]sen kardeş[D] [C]
+    [Em]Balçıkla sıvanmaz [G]güneş[D] [C]
     
-    Yeryüzünü zulüm örter
-    Kıyar tüm canlara
-    Sömürür zalim efendiler
-    Umut biter yarına
-    Susar hain işbirlikçi
-    Sözde kınar birileri
-    Sen de susup haykırmazsan
-    Kim haykırır gerçekleri
+    [G]Uyan diren özgürleş[Bm] ki
+    [G]Yırtılıp çıksın bağrından[D] karanlığın tüm şafaklar[Em]
     
-    Gidenler Hüseyin
-    Kalanlar
-    Zeynep olur
-    Sen haykır
-    Hiç düşünme
-    Ateşler
-    Gülistan olur
-    Denizler
-    Yol olur
-    Zindanlar
-    Mektep olur
-    Hira'dan
-    Bir kıvılcım
-    Çağlara güneş olur
-    Bu kıvılcım
-    Sadra düşer
-    Gönüllerde
-    Umut pişer
-    Alnı
-    Secdede yükseldi
-    İnsan oldu
-    Beşer
-    Bağrında
-    Bir yangın
-    Bir bismillah
-    Haykır
-    Bir yumruk
-    Bir kurşun
-    Bir slogan
-    Haykır
+    Yeryüzünü zulüm örter kıyar tüm canlara
+    Sömürür zalim efendiler, umut biter yarına, 
+    Susar hain işbirlikçi, sözde kınar birileri
+    Sen de susup haykırmazsan, kim haykırır gerçekleri
     
-    Gün ışığı
-    Şahit özgürlüğüme
-    Kim duracak
-    Şimdi karşımda?
-    Destan yazıyor
-    Burası
-    Benim coğrafyam
-    Kıyam düşer
-    Mahzun diyarlara
+    Gidenler Hüseyin kalanlar Zeynep olur
+    Sen haykır hiç düşünme ateşler gülistan olur
+    Denizler yol olur, zindanlar mektep olur
+    Hira’dan bir kıvılcım çağlara güneş olur
+     
+    Bu kıvılcım sadra düşer, gönüllerde umut pişer
+    Alnı secdede yükseldi insan oldu beşer
+    Bağrında bir yangın bir bismillah haykır
+    Bir yumruk, bir kurşun, bir slogan haykır
+     
+    [Em]Gün ışığı[Am] [D]şahid özgürlüğüme[C]
+    [Em]Kim duracak[Am] [D]şimdi [C]karşımda?
+    [Em]Destan yazıyor[Am] [D]burası benim [C]coğrafyam
+    [Em]Kıyam düşer[Am] [D]mahzun diyarlara[C]
     
-    Hadi haykır
-    Hiç korkma
-    Allah hep yanında
-    Hadi diren
-    Zalime
-    Allah hep seninle
-    Vur zillete
-    Kır zulmü
-    Küffar zincirleri
-    Hadi kuşan
-    Davayı
-    Onurlu sevdayı
+    [Em]Hadi haykır [G]hiç korkma [D]Allah hep [C]yanında
+    [Em]Hadi diren [G]zalime [D]Allah hep [C]seninle
+    [Em]Vur zillete [G]kır zulmü [D]küffar [C]zincirleri
+    [Em]Hadi kuşan [G]davayı [D]onurlu [C]sevdayı
     
-    Uyan
-    Diren
-    Özgürleş
-    Diren yılma
-    Sen kardeş
-    Balçıkla sıvanmaz
-    Güneş
-    Uyan
-    Diren
-    Özgürleş ki
-    Yırtılıp çıksın
-    Bağrından karanlığın
-    Tüm şafaklar
+    [Em]Uyan diren [G]özgürleş[D] [C]
+    [Em]Diren yılma [G]sen kardeş[D] [C]
+    [Em]Balçıkla sıvanmaz [G]güneş[D] [C]
     
-    Güç
-    Para
-    Şan
-    Şöhret
-    Putlar artık
-    Taştan değil
-    Ebreheler şimdileri
-    Fil yerine
-    Tankla gelir
-    Sanılır ki çoğunluklar
-    Her zaman galip gelir
-    Ebabiller gibi
-    Hür çocuklar
-    Varken değil
+    [G]Uyan diren özgürleş[Bm] ki
+    [G]Yırtılıp çıksın bağrından[D] karanlığın tüm şafaklar[Em]
     
-    Sakın şaşma
-    Hakikat
-    Aslında biraz
-    Yalnızlıktır
-    Vicdanları yutkunanların
-    Korkaklıkları azıktır
-    Yazıktır
-    Bedel zamanı sesleri
-    Hep kısıktır
-    Ölüm gelip
-    Çatsa bile
-    Zillet bizden uzaktır
+    Güç, para, şan, şöhret putlar artık taştan değil
+    Ebreheler şimdileri fil yerine tankla gelir
+    Sanılır ki çoğunluklar her zaman galip gelir
+    Ebabiller gibi hür çocuklar varken değil
     
-    Bir balta kuşan şimdi
-    İlahi bir kelimeden
-    Özgürlükle oku
-    Yıkılsın bu
-    Hain düzen
-    Umut ek
-    Sabır büyüt
-    Yılmak nedir bilmeden
-    Suni zindanlar yıkılmaz
-    Rabbim Allah demeden
+    Sakın şaşma hakikat aslında biraz yalnızlıktır
+    Vicdanları yutkunanların korkaklıkları azıktır
+    Yazıktır, bedel zamanı sesleri hep kısıktır
+    Ölüm gelip çatsa bile zillet bizden uzaktır
     
-    Uyan
-    Diren
-    Özgürleş ki
-    Karanlığın
-    Bağrından çıkar bütün
-    Şafaklar''',
+    Bir balta kuşan şimdi ilahi bir kelimeden
+    Özgürlükle oku hadi yıkılsın bu hain düzen
+    Umut ek sabır büyüt yılmak nedir bilmeden
+    Suni zindanlar yıkılmaz Rabbim Allah demeden
+    
+    [G]Uyan Diren özgürleş[Bm] ki
+    [G]karanlığın bağrından[D] çıkar bütün şafaklar[Em]
+    
+    
+    
+    ''',
     "Ahzab'daki Yiğitler": '''
-    Bir seher
-    Vaktinde
-    Şafakla
+    [Em]Bir seher vaktinde şafakla geleceğiz
+    [F]Gün bugün ötesi yok, gün bugün durmak [Em]yok 
     
-    Geleceğiz
-    Gün bugün
-    Ötesi yok
-    Gün bugün
-    Durmak yok
-    Bir seher vaktinde
-    Şafakla geleceğiz
-    Gün bugün ötesi yok
-    Gün bugün durmak yok
+    [Em]Bir seher vaktinde şafakla geleceğiz
+    [F]Gün bugün ötesi yok, gün bugün durmak [Em]yok 
     
-    Rabbin müjdesi
-    Bizleri bekler
-    Zalim yüreği
-    Korkudan titrer
-    Susmazsa eğer
-    Söz veren erler
-    Ahzab′daki yiğitler
-    Rabbin müjdesi
-    Bizleri bekler
-    Zalim yüreği
-    Korkudan titrer
-    Susmazsa eğer
-    Söz veren erler
-    Ahzab'daki yiğitler
+    {start_of_chorus}
+    [Am]Rabbin müjdesi [Fmaj7]bizleri bekler [G]zalim yüreği [Em]korkudan titrer
+    [Fmaj7]Susmazsa eğer [Dm7]söz veren erler [G]Ahzab′daki[F] yiğitler[Em]
+    [Am]Rabbin müjdesi [Fmaj7]bizleri bekler [G]zalim yüreği [Em]korkudan titrer
+    [Fmaj7]Susmazsa eğer [Dm7]söz veren erler [G]Ahzab′daki[F] yiğitler[Em]
+    {end_of_chorus}
     
-    Bir seher
-    Vaktinde
-    Zaferle
-    Geleceğiz
-    Müjde bu
-    Dönmek yok
-    Yatakta ölmek yok
+    [Em]Bir seher vaktinde zaferle geleceğiz
+    [F]Müjde bu dönmek yok, yatakta ölmek [Em]yok
+    [Em]Bir seher vaktinde zaferle geleceğiz
+    [F]Müjde bu dönmek yok, yatakta ölmek [Em]yok
     
-    Bir seher
-    Vaktinde
-    Zaferle
-    Geleceğiz
-    Müjde bu
-    Dönmek yok
-    Yatakta ölmek yok
+    {start_of_chorus}
+    [Am]Rabbin müjdesi [Fmaj7]bizleri bekler [G]zalim yüreği [Em]korkudan titrer
+    [Fmaj7]Susmazsa eğer [Dm7]söz veren erler [G]Ahzab′daki[F] yiğitler[Em]
+    [Am]Rabbin müjdesi [Fmaj7]bizleri bekler [G]zalim yüreği [Em]korkudan titrer
+    [Fmaj7]Susmazsa eğer [Dm7]söz veren erler [G]Ahzab′daki[F] yiğitler[Em]
+    {end_of_chorus}
     
-    Rabbin müjdesi
-    Bizleri bekler
-    Zalim yüreği
-    Korkudan titrer
-    Susmazsa eğer
-    Söz veren erler
-    Ahzab′daki yiğitler
-    Rabbin müjdesi
-    Bizleri bekler
-    Zalim yüreği
-    Korkudan titrer
-    Susmazsa eğer
-    Söz veren erler
-    Ahzab'daki yiğitler
+    [Em]Bir seher vaktinde ölümle geleceğiz
+    [F]Od olup sönmek yok şehitsiz dönmek [Em]yok
+    [Em]Bir seher vaktinde ölümle geleceğiz
+    [F]Od olup sönmek yok şehitsiz dönmek [Em]yok
     
-    Bir seher
-    Vaktinde
-    Ölümle
-    Geleceğiz
-    Od olup
-    Sönmek yok
-    Şehitsiz
-    Dönmek yok
-    Bir seher
-    Vaktinde
-    Ölümle
-    Geleceğiz
-    Od olup
-    Sönmek yok
-    Şehitsiz
-    Dönmek yok
+    {start_of_chorus}
+    [Am]Rabbin müjdesi [Fmaj7]bizleri bekler [G]zalim yüreği [Em]korkudan titrer
+    [Fmaj7]Susmazsa eğer [Dm7]söz veren erler [G]Ahzab′daki[F] yiğitler[Em]
+    [Am]Rabbin müjdesi [Fmaj7]bizleri bekler [G]zalim yüreği [Em]korkudan titrer
+    [Fmaj7]Susmazsa eğer [Dm7]söz veren erler [G]Ahzab′daki[F] yiğitler[Em]
+    {end_of_chorus}
     
-    Rabbin müjdesi
-    Bizleri bekler
-    Zalim yüreği
-    Korkudan titrer
-    Susmazsa eğer
-    Söz veren erler
-    Ahzab'daki yiğitler
-    
-    Sadıklar
-    Şahitler
-    Önderler onlar
-    Ateşte İbrahim
-    Denizde Musa
-    Kuyuda Yusuf′tular
-    Kerbela′da Hüseyin'di onlar
-    Şahitler
-    Önderler
-    Ölümsüz şehitler
-    Onlar
-    Direnişin
-    Onurlu çocukları
-    Onlar
-    Müjde dolu laleler
-    Onlar
-    Yetim bebeklerin
-    Şerefli intikamı
-    Mazlumun feryadının
-    Cevabıdırlar
-    
-    Korksun bizden
-    Zalimler
-    Hainler
-    Zorbalar
-    Bozguncular
-    Korksunlar
-    Nefretimizden
-    Öfkemizden
-    Onurumuzdan
-    Ve şehadetimizden
-    Korksunlar
-    Söyleyin beklesinler
-    Ansızın kabus olacak
-    Direnişimizi
-    Bir seher vakti
-    Beklesinler
-    
-    Ey sevdamıza
-    Taş koyanlar
-    Ey kaybımızdan
-    Haz duyanlar
-    Ey yeryüzünün
-    Fesat
-    Fitne
-    Nifak kaynakları
-    Ey Amerika
-    Bakışlarımız çetin
-    Nefretimiz büyük
-    İntikamımız kısa ve hiddetlidir
-    Ve ey İsrail
-    Bekle bizi
-    Beklediğin her yerde
-    Ve bekle bizi
-    Beklemediğin her yerde
-    
-    Rabbin müjdesi
-    Bizleri bekler
-    Zalim yüreği
-    Korkudan titrer
-    Susmazsa eğer
-    Söz veren erler
-    Ahzab′daki yiğitler
     ''',
     "Bağlanmaz ki Yüreğim": '''
-    Kurtuluşum
-    İslam'dadır
-    Kurtuluşum
-    Lâ ilahe
-    Amacımız
-    İllallah'tır
-    Tağutlardan
-    Kurtulmaktır
-    Amacımız
-    İllallah'tır
-    Tağutlardan
-    Kurtulmaktır
-    Bağlansa
-    Elim ayağım
-    Bağlanmaz ki
-    Yüreğim
-    Alev olur
-    Rüzgar olur
-    Savurur
-    Zulmü yüreğim
-    Feryat olur
-    Yumruk olur
-    Dağıtır
-    Zulmü yüreğim
-    Savaşımız
-    İnançladır
-    Coğrafya bilmez
-    Fitne kalkmadan
-    Bu savaş
-    İnan ki bitmez
-    Fitne kalkmadan
-    Bu savaş
-    İnan ki bitmez
-    Bağlansa
-    Elim ayağım
-    Bağlanmaz ki
-    Yüreğim
-    Alev olur
-    Rüzgar olur
-    Savurur
-    Zulmü yüreğim
-    Feryat olur
-    Yumruk olur
-    Dağıtır
-    Zulmü yüreğim
-    İşkencelerden
-    Geçtik
-    Sürgünler yedik
-    Kan aktı
-    Bedenlerden
-    Kurbanlar verdik
-    Kan aktı
-    Bedenlerden
-    Kurbanlar verdik
-    Bağlansa
-    Elim ayağım
-    Bağlanmaz ki
-    Yüreğim
-    Alev olur
-    Rüzgar olur
-    Savurur
-    Zulmü yüreğim
-    Feryat olur
-    Yumruk olur
-    Dağıtır
-    Zulmü yüreğim
+    
+    [Am]Kurtuluşum [Bdim]İslam’dadır 
+    [Dm]Kurtuluşum [Fmaj7]Lâ ilahe
+    [Am]Amacımız [Bdim]illallah’tır 
+    [Dm]Tağutlardan [Fmaj7]kurtulmaktır
+    [Am]Amacımız [Bdim]illallah’tır 
+    [Dm]Tağutlardan [Fmaj7]kurtulmaktır
+
+    {start_of_chorus}
+    [Am]Bağlansa [F]elim ayağım 
+    [Dm]Bağlanmaz [F]ki yüreğim[Am]
+    [Am]Alev olur [F]rüzgar olur  
+    [Dm]Savurur zulmü[F] yüreğim[Am]
+    [Am]Feryat olur [F]yumruk olur  
+    [Dm]Dağıtır zulmü[F] yüreğim[Am]
+    {end_of_chorus}
+    
+    [Am]Savaşımız [Bdim]inançladır 
+    [Dm]Coğrafya [Fmaj7]bilmez
+    [Am]Fitne kalkmadan [Bdim]bu savaş 
+    [Dm]İnan ki [Fmaj7]bitmez
+    [Am]Fitne kalkmadan [Bdim]bu savaş 
+    [Dm]İnan ki [Fmaj7]bitmez
+    
+    {start_of_chorus}
+    [Am]Bağlansa [F]elim ayağım 
+    [Dm]Bağlanmaz [F]ki yüreğim[Am]
+    [Am]Alev olur [F]rüzgar olur  
+    [Dm]Savurur zulmü[F] yüreğim[Am]
+    [Am]Feryat olur [F]yumruk olur  
+    [Dm]Dağıtır zulmü[F] yüreğim[Am]
+    {end_of_chorus}
+    
+    [Am]İşkencelerden [Bdim]geçtik 
+    [Dm]Sürgünler [Fmaj7]yedik
+    [Am]Kan aktı [Bdim]bedenlerden 
+    [Dm]Kurbanlar [Fmaj7]verdik 
+    
+    {start_of_chorus}
+    [Am]Bağlansa [F]elim ayağım 
+    [Dm]Bağlanmaz [F]ki yüreğim[Am]
+    [Am]Alev olur [F]rüzgar olur  
+    [Dm]Savurur zulmü[F] yüreğim[Am]
+    [Am]Feryat olur [F]yumruk olur  
+    [Dm]Dağıtır zulmü[F] yüreğim[Am]
+    {end_of_chorus}
     ''',
     "Savur İnancsız Külleri": '''
     Savur inançsız
@@ -1270,6 +1049,7 @@ class _BlurredBackgroundForLyricsState
   };
 
   List<Widget> widgets = [];
+  List<Widget> widgets2 = [];
 
   var scrollDuration = 60;
 
@@ -1348,14 +1128,17 @@ class _BlurredBackgroundForLyricsState
                 color: Colors.white,
               ),
               onPressed: () {
-                setState(() {
-                  if (lyricsFontSize < 26) {
-                    lyricsFontSize += 2;
-                  } else {
-                    lyricsFontSize = 26;
-                  }
-                  widgets.clear();
-                });
+                setState(
+                  () {
+                    if (lyricsFontSize < 50) {
+                      lyricsFontSize += 2;
+                    } else {
+                      lyricsFontSize = 50;
+                    }
+                    widgets.clear();
+                    widgets2.clear();
+                  },
+                );
               },
             ),
           ),
@@ -1369,20 +1152,24 @@ class _BlurredBackgroundForLyricsState
               color: Color(0xFF364259),
             ),
             child: IconButton(
-                icon: const Icon(
-                  Icons.zoom_out,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  setState(() {
+              icon: const Icon(
+                Icons.zoom_out,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                setState(
+                  () {
                     if (lyricsFontSize > 8) {
                       lyricsFontSize -= 2;
                     } else {
                       lyricsFontSize = 8;
                     }
                     widgets.clear();
-                  });
-                }),
+                    widgets2.clear();
+                  },
+                );
+              },
+            ),
           ),
         ),
       ],
@@ -1405,33 +1192,39 @@ class _BlurredBackgroundForLyricsState
     var lyrics = songLyrics[songName]!;
     List<String> lines = lyrics.split('\n');
 
-    widgets.add(Container(
-      margin: const EdgeInsets.all(20.0),
-      child: Text(
-        songName,
-        textAlign: TextAlign.center,
-        style: const TextStyle(
-          fontSize: 32,
-          color: Colors.white,
+    widgets.add(
+      Container(
+        margin: const EdgeInsets.all(20.0),
+        child: Text(
+          songName,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: lyricsFontSize + 4,
+            color: Colors.white,
+          ),
         ),
       ),
-    ));
+    );
 
     chords.clear();
     for (String line in lines) {
       if (line.contains('{start_of_chorus}')) {
-        widgets.add(Text(
-          'Nakarat Başlangıcı:',
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(fontSize: lyricsFontSize, color: Colors.white),
-        ));
+        widgets.add(
+          Text(
+            'Nakarat Başlangıcı:',
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontSize: lyricsFontSize, color: selectedColor),
+          ),
+        );
       } else if (line.contains('{end_of_chorus}')) {
         // Add any additional styling for the end of chorus
-        widgets.add(Text(
-          'Nakarat Bitişi.',
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(fontSize: lyricsFontSize, color: Colors.white),
-        ));
+        widgets.add(
+          Text(
+            'Nakarat Bitişi.',
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontSize: lyricsFontSize, color: selectedColor),
+          ),
+        );
       } else {
         List<Widget> chordWidgets = [];
         RegExp regExp = RegExp(r'\[([^\]]*)\]');
@@ -1498,7 +1291,15 @@ class _BlurredBackgroundForLyricsState
         );
       }
     }
-
+    widgets2.add(
+      SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: widgets,
+        ),
+      ),
+    );
     return Positioned(
       top: 90,
       // Adjust this value based on your app bar height
@@ -1508,8 +1309,8 @@ class _BlurredBackgroundForLyricsState
       child: SingleChildScrollView(
         controller: _scrollController,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: widgets,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: widgets2,
         ),
       ),
     );
@@ -1762,7 +1563,7 @@ class _BlurredBackgroundForSettingsState
           children: [
             SvgPicture.asset(
               'assets/metronome.svg',
-              color: Colors.white,
+              colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
               height: 50.0,
               width: 50.0,
             ),
@@ -1785,10 +1586,12 @@ class _BlurredBackgroundForSettingsState
         ),
         trailing: Icon(isExpanded ? Icons.arrow_downward : Icons.arrow_forward),
         onExpansionChanged: (bool expansion) {
-          setState(() {
-            _loadScrollDuration();
-            isExpanded = expansion;
-          });
+          setState(
+            () {
+              _loadScrollDuration();
+              isExpanded = expansion;
+            },
+          );
         },
         children: [
           //dialog to select the set the scroll duration with right and left arrow buttons
@@ -1798,13 +1601,15 @@ class _BlurredBackgroundForSettingsState
               IconButton(
                 icon: const Icon(Icons.arrow_left),
                 onPressed: () {
-                  setState(() {
-                    metronomeBpm = metronomeBpm - 1;
-                    if (metronomeBpm < 10) {
-                      metronomeBpm = 10;
-                    }
-                    SaveMetronomeBpm.saveMetronomeBpm(metronomeBpm);
-                  });
+                  setState(
+                    () {
+                      metronomeBpm = metronomeBpm - 1;
+                      if (metronomeBpm < 10) {
+                        metronomeBpm = 10;
+                      }
+                      SaveMetronomeBpm.saveMetronomeBpm(metronomeBpm);
+                    },
+                  );
                 },
               ),
               Text(
@@ -1817,13 +1622,15 @@ class _BlurredBackgroundForSettingsState
               IconButton(
                 icon: const Icon(Icons.arrow_right),
                 onPressed: () {
-                  setState(() {
-                    metronomeBpm = metronomeBpm + 1;
-                    if (metronomeBpm > 200) {
-                      metronomeBpm = 200;
-                    }
-                    SaveMetronomeBpm.saveMetronomeBpm(metronomeBpm);
-                  });
+                  setState(
+                    () {
+                      metronomeBpm = metronomeBpm + 1;
+                      if (metronomeBpm > 200) {
+                        metronomeBpm = 200;
+                      }
+                      SaveMetronomeBpm.saveMetronomeBpm(metronomeBpm);
+                    },
+                  );
                 },
               ),
             ],
@@ -1859,10 +1666,12 @@ class _BlurredBackgroundForSettingsState
         trailing: Icon(isExpanded ? Icons.arrow_downward : Icons.arrow_forward),
         onExpansionChanged: (bool expansion) {
           // Update the expansion state when the tile is expanded or collapsed
-          setState(() {
-            _loadSelectedColor();
-            isExpanded = expansion;
-          });
+          setState(
+            () {
+              _loadSelectedColor();
+              isExpanded = expansion;
+            },
+          );
         },
         children: [
           SizedBox(
@@ -1874,11 +1683,13 @@ class _BlurredBackgroundForSettingsState
                 Color color = colorOptions[index];
                 return InkWell(
                   onTap: () {
-                    setState(() {
-                      selectedColor = color;
-                      //save the selected color to shared preferences
-                      SaveSelectedColor.saveColor(selectedColor.value);
-                    });
+                    setState(
+                      () {
+                        selectedColor = color;
+                        //save the selected color to shared preferences
+                        SaveSelectedColor.saveColor(selectedColor.value);
+                      },
+                    );
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -1914,7 +1725,7 @@ class _BlurredBackgroundForSettingsState
           children: [
             SvgPicture.asset(
               'assets/arrow_downward_circle.svg',
-              color: Colors.white,
+              colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
               height: 30.0,
               width: 30.0,
             ),
@@ -1937,11 +1748,13 @@ class _BlurredBackgroundForSettingsState
         ),
         trailing: Icon(isExpanded ? Icons.arrow_downward : Icons.arrow_forward),
         onExpansionChanged: (bool expansion) {
-          setState(() {
-            _loadScrollDuration();
+          setState(
+            () {
+              _loadScrollDuration();
 
-            isExpanded = expansion;
-          });
+              isExpanded = expansion;
+            },
+          );
         },
         children: [
           //dialog to select the set the scroll duration with right and left arrow buttons
@@ -1951,13 +1764,15 @@ class _BlurredBackgroundForSettingsState
               IconButton(
                 icon: const Icon(Icons.arrow_left),
                 onPressed: () {
-                  setState(() {
-                    scrollDuration = scrollDuration - 10;
-                    if (scrollDuration < 10) {
-                      scrollDuration = 10;
-                    }
-                    SaveScrollDuration.saveScrollDuration(scrollDuration);
-                  });
+                  setState(
+                    () {
+                      scrollDuration = scrollDuration - 10;
+                      if (scrollDuration < 10) {
+                        scrollDuration = 10;
+                      }
+                      SaveScrollDuration.saveScrollDuration(scrollDuration);
+                    },
+                  );
                 },
               ),
               Text(
@@ -1970,13 +1785,15 @@ class _BlurredBackgroundForSettingsState
               IconButton(
                 icon: const Icon(Icons.arrow_right),
                 onPressed: () {
-                  setState(() {
-                    scrollDuration = scrollDuration + 10;
-                    if (scrollDuration > 900) {
-                      scrollDuration = 900;
-                    }
-                    SaveScrollDuration.saveScrollDuration(scrollDuration);
-                  });
+                  setState(
+                    () {
+                      scrollDuration = scrollDuration + 10;
+                      if (scrollDuration > 900) {
+                        scrollDuration = 900;
+                      }
+                      SaveScrollDuration.saveScrollDuration(scrollDuration);
+                    },
+                  );
                 },
               ),
             ],
@@ -1989,7 +1806,7 @@ class _BlurredBackgroundForSettingsState
           children: [
             SvgPicture.asset(
               'assets/info.svg',
-              color: Colors.white,
+              colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
               height: 30.0,
               width: 30.0,
             ),
@@ -2174,33 +1991,35 @@ class BlurredBackgroundForAbout extends StatelessWidget {
 
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Container(
-          margin: const EdgeInsets.only(top: 100.0),
-          child: const Center(
-            //make text center
+        margin: const EdgeInsets.only(top: 100.0),
+        child: const Center(
+          //make text center
 
-            child: Text(
-              'Grup İslami Direniş',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 32,
-                color: Colors.white,
-              ),
+          child: Text(
+            'Grup İslami Direniş',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 32,
+              color: Colors.white,
             ),
-          )),
+          ),
+        ),
+      ),
       Container(
-          margin: const EdgeInsets.only(top: 10.0),
-          child: const Center(
-            //make text center
+        margin: const EdgeInsets.only(top: 10.0),
+        child: const Center(
+          //make text center
 
-            child: Text(
-              'Ezgi ve Marş Uygulaması',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-              ),
+          child: Text(
+            'Ezgi ve Marş Uygulaması',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.white,
             ),
-          )),
+          ),
+        ),
+      ),
       Container(
         margin: const EdgeInsets.all(20.0),
         //make text center
