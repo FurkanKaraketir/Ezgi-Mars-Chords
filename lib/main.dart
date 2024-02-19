@@ -85,13 +85,18 @@ class _BlurredBackgroundState extends State<BlurredBackground> {
       title: "Haykır · Grup İslami Direniş",
       cover: 'assets/haykir.jpeg',
     ),
+    const Song(
+      title: "Arşiv",
+      cover: 'assets/archive.jpg',
+    ),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
       buildGradientOverlay(),
-      albumList(context),
+      Positioned(
+          top: 60, left: 0, right: 0, bottom: 0, child: albumList(context)),
     ]);
   }
 
@@ -120,16 +125,31 @@ class _BlurredBackgroundState extends State<BlurredBackground> {
   }
 
   var songList = {
-    'Ahzab\'daki Yiğitler': '',
-    'Dağlardayız Biz Ovalarda': '',
-    'Haykır': '',
-    'Bağlanmaz ki Yüreğim': '',
-    'Savur İnancsız Külleri': '',
-    'Kaçış': '',
-    'Çocuğum': '',
-    'Büyük Şeytana Ölüm': '',
-    'Ninni': '',
-    'Müstezafin': ''
+    'Ahzab\'daki Yiğitler': 'assets/haykir.jpeg',
+    'Dağlardayız Biz Ovalarda': 'assets/haykir.jpeg',
+    'Haykır': 'assets/haykir.jpeg',
+    'Bağlanmaz ki Yüreğim': 'assets/haykir.jpeg',
+    'Savur İnancsız Külleri': 'assets/haykir.jpeg',
+    'Kaçış': 'assets/haykir.jpeg',
+    'Çocuğum': 'assets/haykir.jpeg',
+    'Büyük Şeytana Ölüm': 'assets/haykir.jpeg',
+    'Ninni': 'assets/haykir.jpeg',
+    'Müstezafin': 'assets/haykir.jpeg',
+    'Şehadet Bir Tutku': 'assets/archive.jpg',
+    'Yolunda İslamın': 'assets/archive.jpg',
+    'Adı Bilinmez Müslüman': 'assets/archive.jpg',
+    'Suskunluğun Bedeli': 'assets/archive.jpg',
+    'Bak Ülkeme': 'assets/archive.jpg',
+    'Şehitler Ölmez': 'assets/archive.jpg',
+    'Şehit Tahtında': 'assets/archive.jpg',
+    'Ayrılık Türküsü': 'assets/archive.jpg',
+    'Özgürlük Türküleri': 'assets/archive.jpg',
+    'Andola': 'assets/archive.jpg',
+    'Ey Şehid': 'assets/archive.jpg',
+    'Mescid-i Aksa': 'assets/archive.jpg',
+    'Kardan Aydınlık': 'assets/archive.jpg',
+    'Şehadet Uykusu': 'assets/archive.jpg',
+    'Bilal': 'assets/archive.jpg',
   };
 
   Widget _buildLastPlayedSongs() {
@@ -175,7 +195,8 @@ class _BlurredBackgroundState extends State<BlurredBackground> {
                 itemBuilder: (context, index) {
                   return SongItem(
                     title: snapshot.data![index],
-                    keyNote: songList[snapshot.data![index]] ?? 'Unknown',
+                    keyNote: "",
+                    albumCover: songList[snapshot.data![index]] ?? "",
                   );
                 },
               ),
@@ -187,89 +208,144 @@ class _BlurredBackgroundState extends State<BlurredBackground> {
   }
 
   Widget albumList(BuildContext context) {
-    return ListView.builder(
-      scrollDirection: Axis.vertical,
-      itemCount: albumCovers.length,
-      itemBuilder: (BuildContext context, int index) {
-        return GestureDetector(
-          onTap: () {
-            // Navigate to the SongsScreen when an album cover is tapped
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    SongsScreen(albumCover: albumCovers[index].cover),
-              ),
-            );
-          },
-          child: Column(
-            children: [
-              Container(
-                margin: const EdgeInsets.all(32.0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(32.0),
-                  child: Image.asset(
-                    albumCovers[index].cover,
-                    fit: BoxFit.fill,
-                  ),
+    return SingleChildScrollView(
+        child: Column(children: [
+      GestureDetector(
+        onTap: () {
+          // Navigate to the SongsScreen when an album cover is tapped
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  SongsScreen(albumTitle: albumCovers[0].title),
+            ),
+          );
+        },
+        child: Column(
+          children: [
+            Container(
+              margin: const EdgeInsets.all(32.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(32.0),
+                child: Image.asset(
+                  albumCovers[0].cover,
+                  fit: BoxFit.fill,
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.all(20.0),
-                child: Text(
-                  albumCovers[index].title,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    color: Colors.white,
-                  ),
+            ),
+            Container(
+              margin: const EdgeInsets.all(20.0),
+              child: Text(
+                albumCovers[0].title,
+                style: const TextStyle(
+                  fontSize: 24,
+                  color: Colors.white,
                 ),
               ),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: const Divider(),
-                    ),
+            ),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: const Divider(),
                   ),
-                ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      GestureDetector(
+        onTap: () {
+          // Navigate to the SongsScreen when an album cover is tapped
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  SongsScreen(albumTitle: albumCovers[1].title),
+            ),
+          );
+        },
+        child: Column(
+          children: [
+            Container(
+              margin: const EdgeInsets.all(32.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(32.0),
+                child: Image.asset(
+                  albumCovers[1].cover,
+                  fit: BoxFit.fill,
+                ),
               ),
-              _buildLastPlayedSongs()
-            ],
-          ),
-        );
-      },
-    );
+            ),
+            Container(
+              margin: const EdgeInsets.all(20.0),
+              child: Text(
+                albumCovers[1].title,
+                style: const TextStyle(
+                  fontSize: 24,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: const Divider(),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      _buildLastPlayedSongs()
+    ]));
   }
 }
 
-class SongsScreen extends StatelessWidget {
-  final String albumCover;
+class SongsScreen extends StatefulWidget {
+  String albumTitle;
 
-  const SongsScreen({super.key, required this.albumCover});
+  SongsScreen({super.key, required this.albumTitle});
 
   @override
+  State<SongsScreen> createState() => _SongsScreenState();
+}
+
+class _SongsScreenState extends State<SongsScreen> {
+  @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: MySongsPage());
+    return Scaffold(
+        body: MySongsPage(
+      albumTitle: widget.albumTitle,
+    ));
   }
 }
 
 class MySongsPage extends StatelessWidget {
-  const MySongsPage({super.key});
+  final String albumTitle;
+
+  const MySongsPage({super.key, required this.albumTitle});
 
   // This widget is the home page of your application.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const MySongListAppBar(),
+      appBar: MySongListAppBar(myTitle: albumTitle),
       extendBodyBehindAppBar: true,
-      body: BlurredBackgroundForSongs(),
+      body: BlurredBackgroundForSongs(albumTitle: albumTitle),
     );
   }
 }
 
 class MySongListAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const MySongListAppBar({super.key});
+  final String myTitle;
+
+  const MySongListAppBar({super.key, required this.myTitle});
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -277,9 +353,9 @@ class MySongListAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: const Text(
-        'Haykır',
-        style: TextStyle(
+      title: Text(
+        myTitle,
+        style: const TextStyle(
           color: Colors.white,
           fontSize: 24.0,
         ),
@@ -304,12 +380,14 @@ class MySongListAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class BlurredBackgroundForSongs extends StatelessWidget {
+  String albumTitle = "";
+
+  BlurredBackgroundForSongs({super.key, required this.albumTitle});
+
   final List<String> songList = [
     'assets/haykir.jpeg',
     // Add more album covers as needed
   ];
-
-  BlurredBackgroundForSongs({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -319,7 +397,7 @@ class BlurredBackgroundForSongs extends StatelessWidget {
         buildGradientOverlay(),
 
         // Step 3: Album List
-        albumList(),
+        albumList(albumTitle),
       ],
     );
   }
@@ -336,51 +414,130 @@ class BlurredBackgroundForSongs extends StatelessWidget {
     );
   }
 
-  Widget albumList() {
-    return ListView(
-      children: const [
-        SongItem(
-          title: 'Ahzab\'daki Yiğitler',
-          keyNote: '',
-        ),
-        SongItem(
-          title: 'Dağlardayız Biz Ovalarda',
-          keyNote: '',
-        ),
-        SongItem(
-          title: 'Haykır',
-          keyNote: '',
-        ),
-        SongItem(
-          title: 'Bağlanmaz ki Yüreğim',
-          keyNote: '',
-        ),
-        SongItem(
-          title: 'Savur İnancsız Külleri',
-          keyNote: '',
-        ),
-        SongItem(
-          title: 'Kaçış',
-          keyNote: '',
-        ),
-        SongItem(
-          title: 'Çocuğum',
-          keyNote: '',
-        ),
-        SongItem(
-          title: 'Büyük Şeytana Ölüm',
-          keyNote: '',
-        ),
-        SongItem(
-          title: 'Ninni',
-          keyNote: '',
-        ),
-        SongItem(
-          title: 'Müstezafin',
-          keyNote: '',
-        ),
-      ],
-    );
+  Widget albumList(albumTitle) {
+    if (albumTitle == "Haykır · Grup İslami Direniş") {
+      return ListView(
+        children: const [
+          SongItem(
+            title: 'Ahzab\'daki Yiğitler',
+            keyNote: '',
+            albumCover: 'assets/haykir.jpeg',
+          ),
+          SongItem(
+            title: 'Dağlardayız Biz Ovalarda',
+            keyNote: '',
+            albumCover: 'assets/haykir.jpeg',
+          ),
+          SongItem(
+            title: 'Haykır',
+            keyNote: '',
+            albumCover: 'assets/haykir.jpeg',
+          ),
+          SongItem(
+            title: 'Bağlanmaz ki Yüreğim',
+            keyNote: '',
+            albumCover: 'assets/haykir.jpeg',
+          ),
+          SongItem(
+            title: 'Savur İnancsız Külleri',
+            keyNote: '',
+            albumCover: 'assets/haykir.jpeg',
+          ),
+          SongItem(
+            title: 'Kaçış',
+            keyNote: '',
+            albumCover: 'assets/haykir.jpeg',
+          ),
+          SongItem(
+            title: 'Çocuğum',
+            keyNote: '',
+            albumCover: 'assets/haykir.jpeg',
+          ),
+          SongItem(
+            title: 'Büyük Şeytana Ölüm',
+            keyNote: '',
+            albumCover: 'assets/haykir.jpeg',
+          ),
+          SongItem(
+            title: 'Ninni',
+            keyNote: '',
+            albumCover: 'assets/haykir.jpeg',
+          ),
+          SongItem(
+            title: 'Müstezafin',
+            keyNote: '',
+            albumCover: 'assets/haykir.jpeg',
+          ),
+        ],
+      );
+    } else {
+      return ListView(
+        children: const [
+          SongItem(
+            title: 'Şehadet Bir Tutku',
+            keyNote: '',
+            albumCover: 'assets/archive.jpg',
+          ),
+          SongItem(
+            title: 'Yolunda İslamın',
+            keyNote: '',
+            albumCover: 'assets/archive.jpg',
+          ),
+          SongItem(
+            title: 'Adı Bilinmez Müslüman',
+            keyNote: '',
+            albumCover: 'assets/archive.jpg',
+          ),
+          SongItem(
+              title: "Suskunluğun Bedeli",
+              keyNote: "",
+              albumCover: "assets/archive.jpg"),
+          SongItem(
+            title: "Bak Ülkeme",
+            keyNote: "",
+            albumCover: "assets/archive.jpg",
+          ),
+          SongItem(
+            title: "Şehitler Ölmez",
+            keyNote: "",
+            albumCover: "assets/archive.jpg",
+          ),
+          SongItem(
+            title: "Şehit Tahtında",
+            keyNote: "",
+            albumCover: "assets/archive.jpg",
+          ),
+          SongItem(
+            title: "Ayrılık Türküsü",
+            keyNote: "",
+            albumCover: "assets/archive.jpg",
+          ),
+          SongItem(
+            title: "Özgürlük Türküleri",
+            keyNote: "",
+            albumCover: "assets/archive.jpg",
+          ),
+          SongItem(
+              title: "Andola", keyNote: "", albumCover: "assets/archive.jpg"),
+          SongItem(
+              title: "Ey Şehid", keyNote: "", albumCover: "assets/archive.jpg"),
+          SongItem(
+              title: "Mescid-i Aksa",
+              keyNote: "",
+              albumCover: "assets/archive.jpg"),
+          SongItem(
+              title: "Kardan Aydınlık",
+              keyNote: "",
+              albumCover: "assets/archive.jpg"),
+          SongItem(
+              title: "Şehadet Uykusu",
+              keyNote: "",
+              albumCover: "assets/archive.jpg"),
+          SongItem(
+              title: "Bilal", keyNote: "", albumCover: "assets/archive.jpg"),
+        ],
+      );
+    }
   }
 }
 
@@ -388,8 +545,13 @@ class SongItem extends StatelessWidget {
   // This widget is a custom list item for each song.
   final String title;
   final String keyNote;
+  final String albumCover;
 
-  const SongItem({Key? key, required this.title, required this.keyNote})
+  const SongItem(
+      {Key? key,
+      required this.title,
+      required this.keyNote,
+      required this.albumCover})
       : super(key: key);
 
   Future<void> _addToLastPlayedSongs(String song) async {
@@ -456,7 +618,7 @@ class SongItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
               // You can adjust the radius as needed
               child: Image.asset(
-                'assets/haykir.jpeg',
+                albumCover,
                 width: 50,
                 height: 50,
               ),
@@ -835,140 +997,111 @@ class _BlurredBackgroundForLyricsState
     {end_of_chorus}
     ''',
     "Savur İnancsız Külleri": '''
-    Savur inançsız
-    Külleri avuçlarından
-    O küller ki savruldu
-    Put meydanından
-    İbrahim mirasından
-    Sana kalanla
-    Put kıran ellerini
-    Kuşan Müslüman
-    İbrahim mirasından
-    Sana kalanla
-    Put kıran ellerini
-    Kuşan Müslüman
+    [Em]Savur inançsız külleri [D]avuçlarından[Em]
+    [Em]O küller ki savruldu [D]put meydanından[Em]
+    [Am]İbrahim [Em]mirasından [F#dim]sana kalanla[G]
+    [Am]Put kıran [Em]ellerini [D]kuşan Müslüman[Em]
+    [Am]İbrahim [Em]mirasından [F#dim]sana kalanla[G]
+    [Am]Put kıran [Em]ellerini [D]kuşan Müslüman[Em]
     
-    Direniş
-    İbadetim
-    Onurum
-    Şehadetim
-    Ne gam bilir
-    Yüreğim
-    Korku tatmış
-    Değilim
+    [Em]Direniş [Am]ibadetim
+    [F#dim]Onurum [C]şehadetim
+    [Em]Ne gam bilir [Am]yüreğim
+    [F#dim]Korku tatmış [Em]değilim
     
-    Rabbim Allah’tır benim
-    Adım Müslüman benim
-    Rabbim Allah’tır benim
-    Adım Müslüman benim
+    [Em]Rabbim Allah’tır[C] benim
+    [D]Adım Müslüman[Em] benim
+    [Em]Rabbim Allah’tır[C] benim
+    [D]Adım Müslüman[Em] benim
     
-    Omzunda tevhidin
-    İhtişamı var
-    Zillet görmemiş alnında
-    Secde izi var
-    Korkutur zalimi
-    Dik duruşun hey
-    Her mazlumu
-    Saracak
-    Merhametin var
-    Korkutur zalimi
-    Dik duruşun hey
-    Her mazlumu
-    Saracak
+    [Em]Omzunda tevhidin [D]ihtişamı [Em]var
+    [Em]Zillet görmemiş alnında [D]secde izi [Em]var
+    [Am]Korkutur [Em]zalimi [F#dim]dik duruşun [G]hey
+    [Am]Her mazlumu [Em]saracak [D]merhametin [Em]var
+    [Am]Korkutur [Em]zalimi [F#dim]dik duruşun [G]hey
+    [Am]Her mazlumu [Em]saracak [D]merhametin [Em]var
     
-    Direniş
-    İbadetim
-    Onurum
-    Şehadetim
-    Ne gam bilir
-    Yüreğim
-    Korku tatmış
-    Değilim
+    [Em]Direniş [Am]ibadetim
+    [F#dim]Onurum [C]şehadetim
+    [Em]Ne gam bilir [Am]yüreğim
+    [F#dim]Korku tatmış [Em]değilim
     
-    Rabbim Allah’tır benim
-    Adım Müslüman benim
-    Rabbim Allah’tır benim
-    Adım Müslüman benim
-    Rabbim Allah’tır benim
-    Adım Müslüman benim
+    [Em]Rabbim Allah’tır[C] benim
+    [D]Adım Müslüman[Em] benim
+    [Em]Rabbim Allah’tır[C] benim
+    [D]Adım Müslüman[Em] benim
+    
+    
     ''',
     "Kaçış": '''
-    Dün gece
-    Yürüdüm
-    Yeryüzü denen
-    Handa
-    Kıyamete boyanmış
-    Kabuslar sokaklarda
-    Adalet dağıtılmış
-    Merhametsiz silahlarla
-    Burada hep suçlu doğmuş
-    Güneş yüzlü çocuklar
+    [Em]Dün gece [C]yürüdüm [D]yeryüzü denen [Em]handa
+    [Em]Kıyamete [C]boyanmış [D]kabuslar [Em]sokaklarda
+    [Em]Adalet [C]dağıtılmış [D]merhametsiz [Em]silahlarla
+    [Em]Burada hep [C]suçlu doğmuş [D]güneş yüzlü [Em]çocuklar
     
-    Çürümüş başaklardan
-    Kurumuş pınarlardan
-    Çalınmış emeklerden
+    [C]Çürümüş [D]başaklardan
+    [C]Kurumuş [D]pınarlardan
+    [C]Çalınmış [D]emeklerden
     Parçalanmış canlardan
-    Utandım
-    Biçare kaldım
+    [Bm7]Utandım biçare kaldım
     
-    İçimde döndü dünya
-    Aradım karış karış
-    Haykırdı Meryem’ce
-    Bir sükûtla
-    Yok mu bir kaçış
-    Sonra
-    Bir sığınış
-    Rahmetince sakin
-    Bir yere
-    Kainattan
-    Boşalmış
+    {start_of_chorus}
+    [C]İçimde döndü[D] dünya
+    Aradım[Am] karış[Em] karış
+    Haykırdı [D]Meryem’ce
+    Bir [Am]sükûtla[Em]
+    [Em]Yok mu bir [D]kaçış
+    Sonra[Am]
+    Bir [Em]sığınış
+    [C]Rahmetince [D]sakin
+    Bir [Em]yere
+    [Bm7]Kainattan
+    Boşalmış[Em]
+    {end_of_chorus}
     
-    Sanki dağlar
-    Yıkılırmış
-    İçimdeki
-    Bu sancıdan
-    Göğsüm sıkışıp daralmış
-    Türlü bela
-    Acılardan
-    Bir felah ver
-    Katından
-    Sadrıma ver bir
-    Genişlik
-    Bir devrim müjdesi
-    Bana bir haber gönder
+    [Em]Sanki [C]dağlar yıkılırmış [D]içimdeki [Em]bu sancıdan
+    [Em]Göğsüm [C]sıkışıp daralmış [D]türlü bela [Em]acılardan
+    [Em]Bir felah ver [C]katından [D]sadrıma ver bir [Em]genişlik
+    [Em]Bir devrim [C]müjdesi bana [D]bir haber [Em]gönder
     
-    İbrahim gülistanından
-    Yusuf’un Kenan’ından
-    İsa kundağından
+    [C]İbrahim [D]gülistanından
+    [C]Yusuf’un [D]Kenan’ından
+    [C]İsa [D]kundağından
     Tur-i Sina Musa’sından
-    Hira’dan bir
-    Nefes aldım
+    [Bm7]Hira’dan bir
+    Nefes aldım[Em]
     
-    İçimde döndü dünya
-    Aradım karış karış
-    Haykırdı Meryem’ce
-    Bir sükûtla
-    Yok mu bir kaçış
-    Sonra
-    Bir sığınış
-    Rahmetince sakin
-    Bir yere
-    Kainattan
-    Boşalmış
+    {start_of_chorus}
+    [C]İçimde döndü[D] dünya
+    Aradım[Am] karış[Em] karış
+    Haykırdı [D]Meryem’ce
+    Bir [Am]sükûtla[Em]
+    [Em]Yok mu bir [D]kaçış
+    Sonra[Am]
+    Bir [Em]sığınış
+    [C]Rahmetince [D]sakin
+    Bir [Em]yere
+    [Bm7]Kainattan
+    Boşalmış[Em]
+    {end_of_chorus}
     ''',
     "Çocuğum": '''
-    Vakit akşamüstü çok bekleme
-    Zaman çok daraldı koş evine
-    Haydi akşamın vakti girmeden yine
-    Bekletme babanı çocuğum
-    Küçük çocukları küçük kurşunlar
-    Sokakta annelerden önce kucaklar
-    Melekler cennette yerini hazırlar
-    Rabbini bekletme çocuğum
-    Karanlık çökmeden bul evini
-    Bombalar bastırmadan ezan sesini
-    Uyu sen düşünme hiç gerisini
-    Rüyalar öldürmez çocuğum
+    [Am]Vakit akşamüstü [F]çok bekleme[E]
+    [Am]Zaman çok daraldı [F]koş evine[E]
+    [E]Haydi akşamın vakti girmeden [F]yine
+    [Em]Bekletme babanı çocuğum[Am]
+    
+    {start_of_chorus}
+    [Am]Küçük çocukları [E]küçük kurşunlar
+    Sokakta annelerden [F]önce kucaklar
+    Melekler cennette yerini[Am] hazırlar[E]
+    Rabbini bekletme[F] [F] çocuğum[Am]
+    {end_of_chorus}
+
+    [Am]Karanlık çökmeden [F]bul evini[E]
+    [Am]Bombalar bastırmadan [F]ezan sesini[E]
+    [E]Uyu sen düşünme hiç gerisini[F]
+    [E]Rüyalar öldürmez çocuğum[Am]
     ''',
     "Büyük Şeytana Ölüm": '''
     Kıyama duracak İslam ümmeti
@@ -991,28 +1124,41 @@ class _BlurredBackgroundForLyricsState
     Susmayan çığlıklar duyuyorum
     Bir köşe başında babasını kaybetmiş çocuklardan
     Uyutmayan kabuslar görüyorum
-    Yetim bebekleri mezar beşiklere yatırmış, toprak örtüler sermiş analardan
+    Yetim bebekleri mezar beşiklere yatırmış, 
+    toprak örtüler sermiş analardan
     Ağıtlar yankılanıyor arzda
     Avuçları soğuk toprakta bir anne
     Şimdi bir ninni fısıldıyor kainata
 
-    Annesinin minik kuzusu
-    Yavrusunun sinmiş kokusu
-    Gül rengi gömleğine
-    Eee bebeğim
-    Yum gözünü baban bekler
-    Vuruldun alnından
-    Onurlu imanından
-    İnsanlık vicdanından
-    Eee bebeğim
-    Yum gözünü baban bekler
-    Mis kokulu can parem benim
-    Yitip giden minik çiçeğim
-    Sevinç bilmez gözbebeğim
-    Eee bebeğim
-    Yum gözünü baban bekler
-    Ve ölür insan bozulur mizan
-    Ölür insan…
+    [Am9]Annesinin minik[Fmaj9]kuzusu
+    [Em7]Yavrusunun sinmiş[Cmaj7]kokusu
+    [Fmaj7]Gül rengi[G] gömleğine[Am9]
+    
+    [Am9]Eeeeeee [Fmaj7]eeeee bebeğim[Cmaj7]
+    [Fmaj7]Yum [G]gözünü baban[Am9] bekler
+    
+    {start_of_chorus}
+    [Am9]Vuruldun [Fmaj7]alnından
+    [Em7]Onurlu [Am9]imanından
+    [Fmaj7]İnsanlık vicdanından
+    [Dm7]Eeeeeee eeeee bebeğim[Em7]
+    [Fmaj7]Yum [G]gözünü baban[Am9] bekler
+    {end_of_chorus}
+
+    [Am9]Mis kokulu can[Fmaj7] parem benim
+    [Em7]Yitip giden minik[Cmaj7] çiçeğim
+    [Fmaj7]Sevinç bilmez[G] gözbebeğim[Am9]
+    
+    {start_of_chorus}
+    [Am9]Vuruldun [Fmaj7]alnından
+    [Em7]Onurlu [Am9]imanından
+    [Fmaj7]İnsanlık vicdanından
+    [Dm7]Eeeeeee eeeee bebeğim[Em7]
+    [Fmaj7]Yum [G]gözünü baban[Am9] bekler
+    {end_of_chorus}
+    
+    [Am9]Ve ölür insan [Fmaj7]bozulur mizan
+    [G]Ölür insan…[Am]
     ''',
     "Müstezafin": '''
     Kaldır başını çocuğum sil göz yaşını bacım
@@ -1024,6 +1170,491 @@ class _BlurredBackgroundForLyricsState
     Kıyam günüdür, kıyam bugün zaferdir nihayeti
     Kıyam günüdür, kıyam bugün şehadet hediyesi
     ''',
+    "Şehadet Bir Tutku": '''
+    Yalnız bırakılsak savaş yolunda
+    Olmasa yanımızda yol arkadaşı
+    Karşımıza çıksa bütün bir dünya
+    Dönmek yok sürdüreceğiz savaşı
+    
+    Şehadet bir tutku, bir özlem bize
+    Ölüm bir son değil, diriliş bize
+    
+    Sarsılsa acıyla tüm bedenimiz
+    Eğilmez başımız kullara karşı
+    Her gün yeniden yemin ederiz
+    Dönmek yok sürdüreceğiz savaşı
+    
+    Şehadet bir tutku, bir özlem bize
+    Ölüm bir son değil, diriliş bize
+    
+    Sayı, silah, zaman hepsi bahane
+    Tutamaz mı elim yerdeki taşı
+    İman ve sabır olduğu müddetçe
+    Dönmek yok sürdüreceğiz savaşı
+    
+    Şehadet bir tutku, bir özlem bize
+    Ölüm bir son değil, diriliş bize
+    Şehadet bir tutku, bir özlem bize
+    Ölüm bir son değil, diriliş bize
+    
+    Şehadet bir tutku, bir özlem bize
+    Ölüm bir son değil, diriliş bize
+    ''',
+    "Yolunda İslamın": '''
+    Yolunda İslamın kardeşler olalım
+    Acıyı paylaşıp sevgiyle dolalım
+    Emperyalizmin sağ soluna karşı duralım
+    Müstezafinin hakkı için haydi vuralım
+
+    Allahu Ekber , Allahu Ekber
+    Bir inkılaptır bu güneş gibi doğdu
+    Hakikatin nuru karanlığı boğdu
+    Allahu ekber bayrağımız dalgalanmakta
+    Halka be halka halklar Hakta halkalanmakta
+    Allahu Ekber , Allahu Ekber
+    Allahu Ekber , Allahu Ekber
+    Allahu Ekber , Allahu Ekber
+
+    Allahu Ekber , Allahu Ekber
+    Yıkıldı firavun Haman ile Karun
+    Nemruda ne oldu çağdaşlara sorun
+    Bu inkılap tağutların korkulu rüyası
+    Bu inkılap mazlumların en haklı davası
+
+    Allahu Ekber , Allahu Ekber
+    Bir inkılaptır bu güneş gibi doğdu
+    Hakikatin nuru karanlığı boğdu
+    Allahu ekber bayrağımız dalgalanmakta
+    Halka be halka halklar Hakta halkalanmakta
+    Allahu Ekber , Allahu Ekber
+    Allahu Ekber , Allahu Ekber
+    Allahu Ekber , Allahu Ekber
+    ''',
+    "Adı Bilinmez Müslüman": '''
+    Gece karanlığında bir yiğit çıkmış yola
+    Elinde mavzeriyle alnı sanki yıldızlarda
+    Adı bilinmez müslüman ver elini götür bizi
+    Götür bizi uzaklara özgürlüğün diyarına
+
+    Hak uğrunda geçen günler pekiştirmiş yüreğini
+    Ekmek değil istediği izzetli bir yaşam diler
+    Adı bilinmez müslüman ver elini götür bizi
+    Götür bizi uzaklara özgürlüğün diyarına
+
+    Ve duası kabul oldu bir kurşun onu buldu
+    Ondan duyulan son ses Allahüekber oldu
+    Adı bilinmez müslüman ver elini götür bizi
+    Götür bizi uzaklara özgürlüğün diyarına
+''',
+    "Suskunluğun Bedeli": '''
+    Suskunluğun bedeli çaresizliğin diyetidir Muhammed
+    Ve şimdi kudüs şahittirki semaların küçük şehidi
+    Nazlı çiçeğidir Muhammed
+    
+    Kudüste puslu bir yaz günü
+    Kudüste puslu bir yaz günü
+    Birazdan kıyamet kopacak
+    Küçücük bir şehit cennete uçacak birazdan
+    
+    Birazdan kıyamet kopacak
+    Küçücük bir şehit cennete uçacak birazdan, birazdan
+    
+    Muhammed yaralı ceylanım kapatma gözlerini
+    Muhammed kurbanın olayım bırakma elimi
+    Muhammed ne olur duy beni baba gel gidelim de
+    Daha çok görecek günün var acelen ne diye
+    Kapıda annen bekliyor yolunu gözlüyor
+    Muhammed, Muhammed, Muhammed
+    
+    Kudüste puslu bir yaz günü
+    Kudüste puslu bir yaz günü
+    Birazdan kıyamet kopacak
+    Küçücük bir şehit cennete uçacak birazdan
+    
+    Birazdan kıyamet kopacak
+    Küçücük bir şehit cennete uçacak birazdan, birazdan
+    
+    Muhammed yaralı ceylanım kapatma gözlerini
+    Muhammed kurbanın olayım bırakma elimi
+    Muhammed ne olur duy beni baba gel gidelim de
+    Daha çok görecek günün var acelen ne diye
+    Kapıda annen bekliyor yolunu gözlüyor
+    Muhammed, Muhammed, Muhammed, Muhammed
+''',
+    "Bak Ülkeme": '''
+    Bak ülkeme paramparça kim çizmiş bu sınırları
+    kavuşacak bir gün elbet ayrı düşmüş ellerimiz
+
+    Ben çeçenim ben arabım kürdüm türküm ben insanım
+    Düşmanımız bir, zalimlerdir ben ümmetim müslümanım
+
+    Bak dağlara bak rengine kızıl kana boyanmışlar
+    Filistinde Irakta Kürdistanda Çeçenyada
+    Ölen benim cephelerde yanan benim ateşlerde
+
+    Ben Yasinim ben Yahyayım Şikakiyim Musaviyim
+    el Halilim el Aksayım Felluceyim Halepçeyim
+''',
+    "Şehitler Ölmez": '''
+    şehitler ölmez ölmez
+    şehitler ölmez ölmez
+    ölü demeyin aman
+    ölü demeyin aman
+    
+    birkucak söz senin için
+    bir kucak dua bana
+    bir kaçdamla göz yaşı
+    bir avuç mısra sana
+    
+    şehitler ölmez ölmez
+    şehitler ölmez ölmez
+    ölü demeyin aman
+    ölü demeyin aman
+    
+    hasretlerde düzülmüş
+    şahadetin özlemi
+    bekler yüreyim şimdi
+    kahpe vuran bir mermi
+    
+    şehitler ölmez ölmez
+    şehitler ölmez ölmez
+    ölü demeyin aman
+    ölü demeyin aman
+    
+    bizide bulurmu ölüm
+    bir cami avlusunda
+    şehit kanına doysun
+    bulvarlar ve soğuk betonlar
+    
+    şehitler ölmez ölmez
+    şehitler ölmez ölmez
+    ölü demeyin aman
+    ölü demeyin aman
+''',
+    "Şehit Tahtında": '''
+    Şehit tahtında Rabbe gülümser
+    Ah binlerce canım olsaydı der
+    Şehit tahtında Rabbe gülümser
+    Canım bedeli bir sofradan yer
+    
+    Ümitsiz olmaz ümitsiz olmaz
+    Sevdasız olmaz sevdasız olmaz
+    
+    Dağları oyup zindan etseler
+    Allah nurunu söndüremezler
+    Dağları oyup zindan etseler
+    Davamın önüne geçemezler
+  
+    Yarasız olmaz Çilesiz olmaz
+    Şehitsiz olmaz Kurbansız olmaz
+    
+    Şehit tahtında Rabbe gülümser
+    Ah binlerce canım olsaydı der
+    Şehit tahtında Rabbe gülümser
+    Canım bedeli bir sofradan yer
+   
+    Karanlık ölür zulümat ölür
+    Gözler önünde ve Ölüm ölür
+   
+    Anladım artık Uhud ve Bedir
+    Ve Ümit sevda Şehadet nedir
+    Soludum Kabri Mahşer anını
+    Ümidi Şehidi ve Sevdayı
+  
+    Şehit tahtında Rabbe gülümser
+    Ah binlerce canım olsaydı der
+    Şehit tahtında Rabbe gülümser
+    Canım bedeli bir sofradan yer
+  
+    Bilmem nideyim, Allah Allah
+    Aşkın elinden, hay hay
+    Kande gideyim, aşkın elinden.
+    Sallallahu alâ Muhammed
+    Sallallahu aleyke Ahmed
+
+    Meskenim dağlar, Allah Allah
+    Gözyaşı çağlar, hay hay
+    Durmaz kan ağlar, aşkın-elinden.
+    Sallallahu alâ Muhammed
+    Sallallahu aleyke Ahmed
+
+    Varım vereyim, Allah Allah
+    Kadre ereyim, hay hay
+    Üryan olayım, aşkın elinden.
+    Sallallahu alâ Muhammed
+    Sallallahu aleyke Ahmed.
+  
+    Yunus’un sözü, Allah Allah
+    Kül olmuş özü, hay hay
+    Kan ağlar gözü, aşkın elinden.
+    Sallallahu alâ Muhammed
+    Sallallahu aleyke Ahmed.
+    ''',
+    "Ayrılık Türküsü": '''
+    Hani anne demiştin ya,
+    Gidiyorsun oğul uğurlar ola,
+    Yalnız kalbimde bir yara,
+    Sanki gelmezsin bir daha,
+    Gelesin oğul, söz ver bana,
+    Sarılayım sana, son defa,
+    Gelesin oğul, mutlaka,
+    Öpeyim seni doya, doya.
+    Ben de sana demiştim ya,
+    Gidiyorum anne, hak yoluna,
+    İhtiyacım var dualarına,
+    Hakkını helal et, anne bana,
+    Dağları aşmam gerekse de anne,
+    Bekle beni anne geleceğim,
+    Yollar bitmek bilmese de anne,
+    Bekle beni anne geleceğim,
+    Belki bu son mektup olur anne,
+    Sana yazdığım gurbet elde,
+    Belki bir cansız beden gelir,
+    Bakarsın öylece kavuşuruz.
+    Cansız bedenim anne, gelse bile,
+    Öp alnımdan anne, sarıl,
+    Sıcak ellerin değsin, soğuk dudaklarıma,
+    Öpeyim anne elini.
+    Gelirsen anne, toprağıma,
+    Kalbinde derin yaralarla,
+    Gözlerin sulasın toprağımı,
+    Hüzünlü sesin sarsın mekanımı.
+    Gökler ağlasın anne, sevgimize,
+    Yağmurlar boşalsın üzerimize,
+    Bu ayrılık türkümüz anne,
+    Ulaşsın dertli gönüllere.
+    ''',
+    "Özgürlük Türküleri": '''
+    Henüz ondokuzunda gencecik bir fidan
+    Filizlendi, filizlendi, filizlendi dağlarda
+    Katıldı kervanına dağlarla konuşanların
+    Ve okudu özgürlük, özgürlük türküsünü
+    
+    Katıldı kervanına dağlarla konuşanların
+    Ve okudu özgürlük, özgürlük türküsünü
+    Silahları saz ettiler, kurşunları birer nota
+    Kanları kalanlar için türkü oldu dağlarda
+    
+    Güneşi doğdu bu sabah
+    Şehadet yolcularının
+    Güneşi doğdu bu sabah
+    Şehadet yolcularının
+    
+    Daha gür okundu bugün
+    Özgürlük türküleri
+    Daha gür okundu bugün
+    Özgürlük türküleri
+    
+    Parladı iman ateşi söndü zalimin güneşi
+    Bir yiğit daha katıldı özgürlük korosuna
+    Silahları saz ettiler, kurşunları birer nota
+    Kanları kalanlar için türkü oldu dağlarda
+    ''',
+    "Andola": '''
+    Andola yarına, Andola akan kana,
+    Andola Allah için çarpışan kullara.
+    
+    Müslüman’dır adımız, tağutlardan korkmayız,
+    İbrahim’in yolunda putları biz kırarız.
+    Sürgün, işkence, ölüm, hepsi vız gelir bize,
+    Şehadeti seçtik biz, korku yok kalbimizde.
+    
+    Andola yarına, Andola akan kana,
+    Andola Allah için çarpışan kullara.
+   
+    Savaşımız başladı, zafere dek sürecek,
+    Mazlumların ahları zalimi devirecek,
+    Rahat yok hepimize, korku girmez düşlere
+    Yolumuz Filistin’e, sonra Allah evine.
+  
+    Andola yarına, Andola akan kana,
+    Andola Allah için çarpışan kullara.
+   
+    Büyük Şeytana (Amerika’ya) ölüm, işbirlikçiye lanet,
+    İhanetin bedeli; Zalimler Devrilmeli.
+    Halkların özgürlüğü ancak İslam’la olur,
+    Ümmetin özgürlüğü ancak Kur’an’la olur.
+
+    Andola yarına, Andola akan kana,
+    Andola Allah için çarpışan kullara.
+    ''',
+    "Ey Şehid": '''
+    Hayat iman ve cihad, alnımızın yazısı
+    Hayat iman ve cihad, alnımızın yazısı
+    Gözlerimde bir hırsı, kamçılayan bir arzu
+    Sana ulaşan çağrı Ey Şehid, Ey Şehid
+    
+    Gözlerimde bir hırsı, kamçılayan bir arzu
+    Sana ulaşan çağrı Ey Şehid, Ey Şehid
+    Alnı öpülesiler her biri bir dağ gibi
+    Alnı öpülesiler her biri bir dağ gibi
+    Düşseler vurulupta kanlarıyla boğacak
+    Zulmün soluk sesini Ey Şehid, Ey Şehid
+    
+    Düşseler vurulupta kanlarıyla boğacak
+    Zulmün soluk sesini Ey Şehid, Ey Şehid
+    Çırpınan kuş misali kalbim sığmaz kabına
+    Çırpınan kuş misali kalbim sığmaz kabına
+    Allah için bir mermi çıkarırken katına
+    Çağırsın ardımızdan Ey Şehid, Ey Şehid
+    
+    Allah için bir mermi çıkarırken katına
+    Çağırsın ardımızdan Ey Şehid, Ey Şehid
+    Ey Şehid, Ey Şehid
+    Ey Şehid, Ey Şehid
+    ''',
+    "Mescid-i Aksa": '''
+    Dayan kanlı mescit, Mescid-i Aksa
+    Bu zulüm, işkence sürmez asla
+    Filizleniyor kutsal, yüce dava
+    Kafirlerin yapmadığı kalmadı
+    Filistin, Filistin, rasul yılmadı
+    Kafirlerin yapmadığı kalmadı
+    Filistin, Filistin, rasul yılmadı
+    Bir uyanış ki dağlar inliyor
+    Bir kıyam ki gökler gürlüyor
+    Bir uyanış ki dağlar inliyor
+    Bir kıyam ki gökler gürlüyor
+    Bir cihat ki kalpler titriyor
+    Toprağına rahmet yağmuru yağdı
+    Filistin, Filistin sabret az kaldı
+    Bir cihat ki kalpler titriyor
+    Toprağına rahmet yağmuru yağdı
+    Filistin, Filistin sabret az kaldı
+    Zulüm sende kardeş, sakın boşverme
+    Uyku bizi sarmış zehirli meyve
+    Sevdaların en yücesi sende
+    Kafirlerin yapmadığı kalmadı
+    Filistin, Filistin rasul yılmadı
+    Kafirlerin yapmadığı kalmadı
+    Filistin, Filistin rasul yılmadı
+    Bir uyanış ki dağlar inliyor
+    Bir kıyam ki gökler gürlüyor
+    Bir uyanış ki dağlar inliyor
+    Bir kıyam ki gökler gürlüyor
+    Bir cihat ki kalpler titriyor
+    Toprağına rahmet yağmuru yağdı
+    Filistin, Filistin sabret az kaldı
+    Bir cihat ki kalpler titriyor
+    Toprağına rahmet yağmuru yağdı
+    Filistin, Filistin sabret az kaldı
+    ''',
+    "Kardan Aydınlık": '''
+    Gergin uykulardan, kör gecelerden
+    Bir sabah gelecek kardan aydınlık
+    Gergin uykulardan, kör gecelerden
+    Bir sabah gelecek kardan aydınlık
+    
+    Sonra düğüm düğüm bilmecelerden
+    Bir sabah gelecek kardan aydanlık
+    Sonra düğüm düğüm bilmecelerden
+    Bir sabah gelecek kardan aydanlık
+    
+    Vurulup ömrünün ilkbaharında
+    Kanından çiçekler açar yanında
+    Vurulup ömrünün ilkbaharında
+    Kanından çiçekler açar yanında
+    
+    Cümle şehitlerin omuzlarında
+    Bir sabah gelecek kardan aydınlık
+    Cümle şehitlerin omuzlarında
+    Bir sabah gelecek kardan aydınlık
+    
+    Gökten yağmur yağmur yağacak renkler
+    Daha hoş kokacak otlar, çiçekler
+    Gökten yağmur yağmur yağacak renkler
+    Daha hoş kokacak otlar, çiçekler
+    
+    Ardından bitmeyen mutlu gerçekler
+    Bir sabah gelecek kardan aydınlık
+    Ardından bitmeyen mutlu gerçekler
+    Bir sabah gelecek kardan aydınlık
+    Bir sabah gelecek kardan aydınlık
+    ''',
+    "Şehadet Uykusu": '''
+    Kara gözlerinde mahmurca gülüş
+    Gayrı uyanılmaz uykunda mısın
+    Gayrı uyanılmaz uykunda mısın
+    
+    Kanın cemre gibi toprağa düşmüş
+    Şehadet yolunun ufkunda mısın
+    Şehadet yolunun ufkunda mısın
+    
+    Çizgilerle dolu ellerin yüzün
+    Otuzunda mısın kırkında mısın
+    Bizi yalnız koyup göğe süzüldün
+    Acın dayanılmaz farkında mısın
+    
+    Dudakların sanki bir şey söylüyor
+    Yine aynı sevda şarkında mısın
+    Yine aynı sevda şarkında mısın
+    
+    Melekler bile sana özeniyor
+    Cennette döşenmiş tahtında mısın
+    Cennette döşenmiş tahtında mısın
+    
+    Çizgilerle dolu ellerin yüzün
+    Otuzunda mısın kırkında mısın
+    Bizi yalnız koyup göğe süzüldün
+    Acın dayanılmaz farkında mısın
+    
+    Acın dayanılmaz farkında mısın
+    Farkında mısın
+    Melekler bile sana özeniyor
+    Cennette döşenmiş tahtında mısın
+    Yine aynı sevda şarkında mısın
+    Şarkında mısın
+''',
+    "Bilal": '''
+    Yine dağların sevdası düştü yüreğime anne
+    Kurşunların sevdası,
+    Zulümlerden bıktım usandım
+    Yüreğim kanıyor anne,
+    Kara bulutlar bir sağanaktır tutturmuş gider
+    Dünya zulüm, zulüm kokar anne
+    
+    Bir bahar düşlüyorum anne
+    Gözlerimiz güneşe doymuş ışıl ışıl
+    Şehadet rüzgarına kapıldık yüreğimiz göçüyor anne
+    Bu savaş bitecek, bu savaş bitecek,
+    Hemde karanlığa kalmadan anne
+    
+    Kanlı gömleğimi göğsüme basıp
+    Tağuta lanet okursun ağlarsın ana
+    
+    Yürekler avuçta dağlara çıkıp
+    Şehit şehit vardık düşman üstüne ana
+    
+    Bilal öldü derler ise sakın inanma ana
+    Bilki ben şehid olmuşum şehidler ölmez ana
+    
+    Şarapnel altında kurşun altında
+    Tekbir getiririz marşlar söyleriz ana
+    
+    Şafakla birlikte düşman üstüne
+    Cehennem alevi olur yağarız ana
+    
+    Bilal öldü derler ise sakın inanma ana
+    Bilki ben şehid olmuşum şehidler ölmez ana
+    
+    Dağlardan dünya bir başka görünür
+    Ölüm korkusu gözümden silinir ana
+    
+    Her şehidin kanı bir lale olmuş
+    Haydi sende katıl bize katıl der ana
+    
+    Bilal öldü derler ise sakın inanma ana
+    Bilki ben şehid olmuşum şehidler ölmez ana
+    
+    Ve 29 ekim 1987
+    Bilal de can evinden vuruldu
+    Yaprak yaprak düştü
+    Şehit kanlarının karıştığı toprağa
+    Görün dağlar
+    Görün nasıl döne döne savaşıldığını
+    Görün sözlerinde duranları
+    Ve sonrakilerin nasıl sözlerinde durduklarını
+    '''
   };
   final songYoutubeLinks = {
     "Dağlardayız Biz Ovalarda":
@@ -1046,6 +1677,36 @@ class _BlurredBackgroundForLyricsState
         "https://music.youtube.com/watch?v=ZNLCu6tVpMo&si=VVZZhYxTaPbu4XqP",
     "Bağlanmaz ki Yüreğim":
         "https://music.youtube.com/watch?v=GMuuwEIKAko&si=rORCCwC7JhnmePVk",
+    "Şehadet Bir Tutku":
+        "https://music.youtube.com/watch?v=FAE7bpBwsjA&si=RcHfMDUofv4WtrXo",
+    "Yolunda İslamın":
+        "https://music.youtube.com/watch?v=uFm7vAxiK7Y&si=vCX5aT2nkz_Ja6zA",
+    "Adı Bilinmez Müslüman":
+        "https://music.youtube.com/watch?v=68454zJBR8g&si=6hpZudxbJggQ7bSH",
+    "Suskunluğun Bedeli":
+        "https://music.youtube.com/watch?v=wB67Tpr2Owc&si=J_Ri7ZIcubwoxZZN",
+    "Bak Ülkeme":
+        "https://music.youtube.com/watch?v=cD-XZgGSdg4&si=EqrCoUN2YT-mNHFb",
+    "Şehitler Ölmez":
+        "https://music.youtube.com/watch?v=h9EPKGXV7WQ&si=wzFJAsuKSF7yBv3u",
+    "Şehit Tahtında":
+        "https://music.youtube.com/watch?v=K-Rr5N_oRvo&si=HHq6n9ATFQi31ZXB",
+    "Ayrılık Türküsü":
+        "https://music.youtube.com/watch?v=GPaVMLtHfJg&si=U6DMdqXecWPMS06s",
+    "Özgürlük Türküleri":
+        "https://music.youtube.com/watch?v=Wjk0yWFixRc&si=_wRk2DRmRTZhMj86",
+    "Andola":
+        "https://music.youtube.com/watch?v=UTo83NLjbtA&si=y1UqFcq3sYachw-c",
+    "Ey Şehid":
+        "https://music.youtube.com/watch?v=MhYkwLTmcQk&si=WfkGcoN1iosOxeCR",
+    "Mescid-i Aksa":
+        "https://music.youtube.com/watch?v=DjMmJvcy_qo&si=rWw-5TqJShWqjZjH",
+    "Kardan Aydınlık":
+        "https://music.youtube.com/watch?v=PkNikj0mBkA&si=ZpFiM4E3hAc32fvI",
+    "Şehadet Uykusu":
+        "https://music.youtube.com/watch?v=M-E5qQJDhzs&si=aM7Czljuc1SAplmg",
+    "Bilal":
+        "https://music.youtube.com/watch?v=vTagGK2DFvY&si=cV0UKrrbDf926cSz",
   };
 
   List<Widget> widgets = [];
@@ -1563,7 +2224,8 @@ class _BlurredBackgroundForSettingsState
           children: [
             SvgPicture.asset(
               'assets/metronome.svg',
-              colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+              colorFilter:
+                  const ColorFilter.mode(Colors.white, BlendMode.srcIn),
               height: 50.0,
               width: 50.0,
             ),
@@ -1725,7 +2387,8 @@ class _BlurredBackgroundForSettingsState
           children: [
             SvgPicture.asset(
               'assets/arrow_downward_circle.svg',
-              colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+              colorFilter:
+                  const ColorFilter.mode(Colors.white, BlendMode.srcIn),
               height: 30.0,
               width: 30.0,
             ),
@@ -1806,7 +2469,8 @@ class _BlurredBackgroundForSettingsState
           children: [
             SvgPicture.asset(
               'assets/info.svg',
-              colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+              colorFilter:
+                  const ColorFilter.mode(Colors.white, BlendMode.srcIn),
               height: 30.0,
               width: 30.0,
             ),
