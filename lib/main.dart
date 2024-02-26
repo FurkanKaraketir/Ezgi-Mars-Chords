@@ -17,7 +17,7 @@ Future<void> main() async {
   );
 }
 
-Color selectedColor = const Color(0xFFFFFFFF); // Default selected color
+Color selectedColor = const Color(0xFFFEA501); // Default selected color
 int scrollDuration = 60;
 int metronomeBpm = 120;
 double lyricsFontSize = 18;
@@ -572,7 +572,7 @@ class SongItem extends StatelessWidget {
 
       Future<void> loadSelectedColor() async {
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        selectedColor = Color(prefs.getInt('selectedColor') ?? 0xFFFFFFFF);
+        selectedColor = Color(prefs.getInt('selectedColor') ?? 0xFFFEA501);
       }
 
       Future<void> loadMetronomeBpm() async {
@@ -1171,165 +1171,279 @@ class _BlurredBackgroundForLyricsState
     Kıyam günüdür, kıyam bugün şehadet hediyesi
     ''',
     "Şehadet Bir Tutku": '''
-    Yalnız bırakılsak savaş yolunda
-    Olmasa yanımızda yol arkadaşı
-    Karşımıza çıksa bütün bir dünya
-    Dönmek yok sürdüreceğiz savaşı
+    [Em]Yalnız bırakılsak [G]savaş yolunda
+    [Em]Olmasa yanımızda [Dm]yol arkadaşı[Em]
+    [Em]Karşımıza çıksa [G]bütün bir dünya
+    [Em]Dönmek yok sürdüreceğiz[Dm] savaşı[Em]
     
-    Şehadet bir tutku, bir özlem bize
-    Ölüm bir son değil, diriliş bize
+    {start_of_chorus}
+    [Em]Şehadet bir tutku[F], bir [G]özlem bize[Em]
+    [Em]Ölüm bir son değil[F], [G]diriliş bize[Em]
+    [Em]Şehadet bir tutku[F], bir [G]özlem bize[Em]
+    [Em]Ölüm bir son değil[F], [G]diriliş bize[Em]
+    {end_of_chorus}
     
-    Sarsılsa acıyla tüm bedenimiz
-    Eğilmez başımız kullara karşı
-    Her gün yeniden yemin ederiz
-    Dönmek yok sürdüreceğiz savaşı
+    [Em]Sarsılsa acıyla [G]tüm bedenimiz
+    [Em]Eğilmez başımız [Dm]düşmana karşı[Em]
+    [Em]Her gün yeniden [G]yemin ederiz
+    [Em]Dönmek yok sürdüreceğiz[Dm] savaşı[Em]
     
-    Şehadet bir tutku, bir özlem bize
-    Ölüm bir son değil, diriliş bize
+    {start_of_chorus}
+    [Em]Şehadet bir tutku[F], bir [G]özlem bize[Em]
+    [Em]Ölüm bir son değil[F], [G]diriliş bize[Em]
+    [Em]Şehadet bir tutku[F], bir [G]özlem bize[Em]
+    [Em]Ölüm bir son değil[F], [G]diriliş bize[Em]
+    {end_of_chorus}
     
-    Sayı, silah, zaman hepsi bahane
-    Tutamaz mı elim yerdeki taşı
-    İman ve sabır olduğu müddetçe
-    Dönmek yok sürdüreceğiz savaşı
+    [Em]Sayı, silah, zaman [G]hepsi bahane
+    [Em]Tutamaz mı ellerim [Dm]yerdeki taşı[Em]
+    [Em]İman ve sabır [G]olduğu müddetçe
+    [Em]Dönmek yok sürdüreceğiz[Dm] savaşı[Em]
     
-    Şehadet bir tutku, bir özlem bize
-    Ölüm bir son değil, diriliş bize
-    Şehadet bir tutku, bir özlem bize
-    Ölüm bir son değil, diriliş bize
+    {start_of_chorus}
+    [Em]Şehadet bir tutku[F], bir [G]özlem bize[Em]
+    [Em]Ölüm bir son değil[F], [G]diriliş bize[Em]
+    [Em]Şehadet bir tutku[F], bir [G]özlem bize[Em]
+    [Em]Ölüm bir son değil[F], [G]diriliş bize[Em]
+    {end_of_chorus}
     
-    Şehadet bir tutku, bir özlem bize
-    Ölüm bir son değil, diriliş bize
     ''',
     "Yolunda İslamın": '''
-    Yolunda İslamın kardeşler olalım
-    Acıyı paylaşıp sevgiyle dolalım
-    Emperyalizmin sağ soluna karşı duralım
-    Müstezafinin hakkı için haydi vuralım
+    [Em]Yolunda İslamın [Am]kardeşler olalım[Em]
+    [Em]Yolunda İslamın [Am]kardeşler olalım[Em]
+    [Am]Acıyı paylaşıp [G]sevgiyle dolalım[Am]
+    [Am]Emperyalizmin [G]sağ soluna [D]karşı duralım[Em]
+    [Am]Mustaz'afin [G]hakkı için [D]haydi vuralım[Em]
+    [G]Allahu Ekber[Em]
+    [G]Allahu Ekber[Em]
+    [G]Allahu Ekber[Em]
+    [G]Allahu Ekber[Em]
 
-    Allahu Ekber , Allahu Ekber
-    Bir inkılaptır bu güneş gibi doğdu
-    Hakikatin nuru karanlığı boğdu
-    Allahu ekber bayrağımız dalgalanmakta
-    Halka be halka halklar Hakta halkalanmakta
-    Allahu Ekber , Allahu Ekber
-    Allahu Ekber , Allahu Ekber
-    Allahu Ekber , Allahu Ekber
+    [D]Bir inkılaptır bu [Am]güneş gibi doğdu
+    [D]Bir inkılaptır bu [Am]güneş gibi doğdu
+    [C]Hakikatin nuru [G]karanlığı [Am]boğdu
+    [Am]Allahu ekber [G]bayrağımız [D]dalgalanmakta[Em]
+    [Am]Halka be halka [G]halklar Hakta [D]halkalanmakta[Em]
+    [G]Allahu Ekber[Em]
+    [G]Allahu Ekber[Em]
+    [G]Allahu Ekber[Em]
+    [G]Allahu Ekber[Em]
 
-    Allahu Ekber , Allahu Ekber
-    Yıkıldı firavun Haman ile Karun
-    Nemruda ne oldu çağdaşlara sorun
-    Bu inkılap tağutların korkulu rüyası
-    Bu inkılap mazlumların en haklı davası
-
-    Allahu Ekber , Allahu Ekber
-    Bir inkılaptır bu güneş gibi doğdu
-    Hakikatin nuru karanlığı boğdu
-    Allahu ekber bayrağımız dalgalanmakta
-    Halka be halka halklar Hakta halkalanmakta
-    Allahu Ekber , Allahu Ekber
-    Allahu Ekber , Allahu Ekber
-    Allahu Ekber , Allahu Ekber
+    [Em]Yıkıldı firavun Haman[Am] ile Karun[Em]
+    [Em]Yıkıldı firavun Haman[Am] ile Karun[Em]
+    [Am]Nemruda ne oldu [G]çağdaşlara sorun[Am]
+    [Am]Bu inkılap [G]mazlumların en [D]haklı davası[Em]
+    [Am]Bu inkılap [G]tağutların [D]korkulu rüyası[Em]
+    [G]Allahu Ekber[Em]
+    [G]Allahu Ekber[Em]
+    [G]Allahu Ekber[Em]
+    [G]Allahu Ekber[Em]
+    
+    [D]Milletimiz İslam, [Am]anayasa Kur'an
+    [D]Milletimiz İslam, [Am]anayasa Kur'an
+    [C]Vatanımız dünya, [G]parolamız [Am]selam
+    [Am]Allahu Ekber [G]bayrağımız [D]dalgalanmakta[Em]
+    [Am]Halka ve halka [G]halklar Hakta [D]halkalanmakta[Em]
+    [G]Allahu Ekber[Em]
+    [G]Allahu Ekber[Em]
+    [G]Allahu Ekber[Em]
+    [G]Allahu Ekber[Em]
+    
+    
     ''',
     "Adı Bilinmez Müslüman": '''
-    Gece karanlığında bir yiğit çıkmış yola
-    Elinde mavzeriyle alnı sanki yıldızlarda
-    Adı bilinmez müslüman ver elini götür bizi
-    Götür bizi uzaklara özgürlüğün diyarına
+    [Em]Gece karanlığında bir yiğit çıkmış yola
+    [Em]Gece karanlığında bir yiğit çıkmış yola
+    [Am]Elinde mavzeriyle [G]alnı sanki [Em]yıldızlarda
+    [Am]Elinde mavzeriyle [G]alnı sanki [Em]yıldızlarda
+    [Am]Adı bilinmez müslüman [Em]ver elini götür bizi
+    [Am]Adı bilinmez müslüman [Em]ver elini götür bizi
+    [Am]Götür bizi uzaklara [G]özgürlüğün [Em]diyarına
+    [Am]Götür bizi uzaklara [G]özgürlüğün [Em]diyarına
 
-    Hak uğrunda geçen günler pekiştirmiş yüreğini
-    Ekmek değil istediği izzetli bir yaşam diler
-    Adı bilinmez müslüman ver elini götür bizi
-    Götür bizi uzaklara özgürlüğün diyarına
+    [Em]Hak uğrunda geçen günler pekiştirmiş yüreğini
+    [Em]Hak uğrunda geçen günler pekiştirmiş yüreğini
+    [Am]Ekmek değil istediği [G]izzetli bir [Em]yaşam diler
+    [Am]Ekmek değil istediği [G]izzetli bir [Em]yaşam diler
+    [Am]Adı bilinmez müslüman [Em]ver elini götür bizi
+    [Am]Adı bilinmez müslüman [Em]ver elini götür bizi
+    [Am]Götür bizi uzaklara [G]özgürlüğün [Em]diyarına
+    [Am]Götür bizi uzaklara [G]özgürlüğün [Em]diyarına
 
-    Ve duası kabul oldu bir kurşun onu buldu
-    Ondan duyulan son ses Allahüekber oldu
-    Adı bilinmez müslüman ver elini götür bizi
-    Götür bizi uzaklara özgürlüğün diyarına
+    [Am]Ve duası kabul oldu bir kurşun onu buldu
+    [Am]Ve duası kabul oldu bir kurşun onu buldu
+    [Am]Ondan duyulan son ses [G]Allahüekber[Em] oldu
+    [Am]Ondan duyulan son ses [G]Allahüekber[Em] oldu
+    [Am]Adı bilinmez müslüman [Em]ver elini götür bizi
+    [Am]Adı bilinmez müslüman [Em]ver elini götür bizi
+    [Am]Götür bizi uzaklara [G]özgürlüğün [Em]diyarına
+    [Am]Götür bizi uzaklara [G]özgürlüğün [Em]diyarına
 ''',
     "Suskunluğun Bedeli": '''
-    Suskunluğun bedeli çaresizliğin diyetidir Muhammed
-    Ve şimdi kudüs şahittirki semaların küçük şehidi
-    Nazlı çiçeğidir Muhammed
+    Kudüste[Em] puslu [G]bir yaz günü[F]
+    Kudüste[Em] puslu [G]bir yaz günü[F]
+    Birazdan[Em] kıyamet kopacak[G]
+    Küçücük[Am] bir şehit[F] cennete[G] uçacak[F] birazdan[Em]
     
-    Kudüste puslu bir yaz günü
-    Kudüste puslu bir yaz günü
-    Birazdan kıyamet kopacak
-    Küçücük bir şehit cennete uçacak birazdan
+    Birazdan[Em] kıyamet kopacak[G]
+    Küçücük[Am] bir şehit[F] cennete[G] uçacak[F] birazdan[Em]
+    Birazdan[Em], Birazdan[Em]
     
-    Birazdan kıyamet kopacak
-    Küçücük bir şehit cennete uçacak birazdan, birazdan
+    Muhammed[Am] yaralı ceylanım kapatma gözlerini
+    Muhammed[G] kurbanın olayım bırakma elimi
+    Muhammed[Am] ne olur duy beni baba gel gidelim de
+    Daha [G]çok görecek günün var acelen ne diye
+    Kapıda[Am] annen bekliyor yolunu gözlüyor
+    Muhammed[G], Muhammed[Am], Muhammed[Am]
     
-    Muhammed yaralı ceylanım kapatma gözlerini
-    Muhammed kurbanın olayım bırakma elimi
-    Muhammed ne olur duy beni baba gel gidelim de
-    Daha çok görecek günün var acelen ne diye
-    Kapıda annen bekliyor yolunu gözlüyor
-    Muhammed, Muhammed, Muhammed
+    Kudüste[Em] puslu [G]bir yaz günü[F]
+    Kudüste[Em] puslu [G]bir yaz günü[F]
+    Birazdan[Em] kıyamet kopacak[G]
+    Küçücük[Am] bir şehit[F] cennete[G] uçacak[F] birazdan[Em]
     
-    Kudüste puslu bir yaz günü
-    Kudüste puslu bir yaz günü
-    Birazdan kıyamet kopacak
-    Küçücük bir şehit cennete uçacak birazdan
+    Birazdan[Em] kıyamet kopacak[G]
+    Küçücük[Am] bir şehit[F] cennete[G] uçacak[F] birazdan[Em]
+    Birazdan[Em], Birazdan[Em]
     
-    Birazdan kıyamet kopacak
-    Küçücük bir şehit cennete uçacak birazdan, birazdan
+    Muhammed[Am] yaralı ceylanım kapatma gözlerini
+    Muhammed[G] kurbanın olayım bırakma elimi
+    Muhammed[Am] ne olur duy beni baba gel gidelim de
+    Daha [G]çok görecek günün var acelen ne diye
+    Kapıda[Am] annen bekliyor yolunu gözlüyor
+    Muhammed[G], Muhammed[Am], Muhammed[Am], Muhammed[Am]
     
-    Muhammed yaralı ceylanım kapatma gözlerini
-    Muhammed kurbanın olayım bırakma elimi
-    Muhammed ne olur duy beni baba gel gidelim de
-    Daha çok görecek günün var acelen ne diye
-    Kapıda annen bekliyor yolunu gözlüyor
-    Muhammed, Muhammed, Muhammed, Muhammed
+    
 ''',
     "Bak Ülkeme": '''
-    Bak ülkeme paramparça kim çizmiş bu sınırları
-    kavuşacak bir gün elbet ayrı düşmüş ellerimiz
+    [Em]Bak ülkeme [Dm]paramparça 
+    [Am]kim çizmiş bu [Em]sınırları
+    [Em]Bak ülkeme [Dm]paramparça 
+    [Am]kim çizmiş bu [Em]sınırları
+    [Am]Kavuşacak [G]bir gün elbet 
+    [F]Ayrı düşmüş [Em]ellerimiz
+    [Am]Kavuşacak [G]bir gün elbet 
+    [F]Ayrı düşmüş [Em]ellerimiz
 
-    Ben çeçenim ben arabım kürdüm türküm ben insanım
-    Düşmanımız bir, zalimlerdir ben ümmetim müslümanım
+    {start_of_chorus}  
+    [Am]Ben çeçenim [G]ben arabım [F]kürdüm türküm [Em]ben insanım
+    [Am]Düşmanımız bir, [G]zalimlerdir 
+    [F]ben ümmetim [Em]müslümanım
+    {end_of_chorus}
+    
+    [Em]Bak dağlara [Dm]bak rengine 
+    [Am]kızıl kana [Em]boyanmışlar
+    [Em]Bak dağlara [Dm]bak rengine 
+    [Am]kızıl kana [Em]boyanmışlar
+    
+    [Am]Filistinde [G]ah Irakta [F]Kürdistanda [Em]Çeçenyada
+    [Am]Ölen benim [G]cephelerde 
+    [F]yanan benim [Em]ateşlerde
 
-    Bak dağlara bak rengine kızıl kana boyanmışlar
-    Filistinde Irakta Kürdistanda Çeçenyada
-    Ölen benim cephelerde yanan benim ateşlerde
+    {start_of_chorus}  
+    [Am]Ben çeçenim [G]ben arabım [F]kürdüm türküm [Em]ben insanım
+    [Am]Düşmanımız bir, [G]zalimlerdir 
+    [F]ben ümmetim [Em]müslümanım
+    {end_of_chorus}
 
-    Ben Yasinim ben Yahyayım Şikakiyim Musaviyim
-    el Halilim el Aksayım Felluceyim Halepçeyim
+    [Em]Ben Yasinim [Dm]ben Yahyayım 
+    [Em]Ben Yasinim [Dm]ben Rantisi'yim 
+    [Am]Şikakiyim [Em]Musaviyim
+    [Am]el Halilim [G]el Aksayım 
+    [F]Felluceyim [Em]Halepçeyim
+    [Am]el Halilim [G]el Aksayım 
+    [F]Felluceyim [Em]Halepçeyim
+    
+    {start_of_chorus}  
+    [Am]Ben çeçenim [G]ben arabım [F]kürdüm türküm [Em]ben insanım
+    [Am]Düşmanımız bir, [G]zalimlerdir 
+    [F]ben ümmetim [Em]müslümanım
+    {end_of_chorus}
 ''',
     "Şehitler Ölmez": '''
-    şehitler ölmez ölmez
-    şehitler ölmez ölmez
-    ölü demeyin aman
-    ölü demeyin aman
+    {start_of_chorus}
+    [Am]şehitler ölmez ölmez
+    [Am]şehitler ölmez ölmez
+    [G]ölü demeyin aman
+    ölü demeyin[F] [Em]aman
+    {end_of_chorus}
     
-    birkucak söz senin için
-    bir kucak dua bana
-    bir kaçdamla göz yaşı
-    bir avuç mısra sana
+    {start_of_chorus}
+    [Am]şehitler ölmez ölmez
+    [Am]şehitler ölmez ölmez
+    [G]ölü demeyin aman
+    ölü demeyin[F] [Em]aman
+    {end_of_chorus}
     
-    şehitler ölmez ölmez
-    şehitler ölmez ölmez
-    ölü demeyin aman
-    ölü demeyin aman
+    [Am]bir kucak söz senin için
+    [Am]bir kucak söz senin için
+    [G]bir kucak dua bana
+    bir kucak dua[F] [Em]bana
+    [Am]birkaç damla göz yaşı
+    [Am]birkaç damla göz yaşı
+    [G]bir avuç mısra sana
+    bir avuç mısra[F] [Em]sana
     
-    hasretlerde düzülmüş
-    şahadetin özlemi
-    bekler yüreyim şimdi
-    kahpe vuran bir mermi
+    {start_of_chorus}
+    [Am]şehitler ölmez ölmez
+    [Am]şehitler ölmez ölmez
+    [G]ölü demeyin aman
+    ölü demeyin[F] [Em]aman
+    {end_of_chorus}
     
-    şehitler ölmez ölmez
-    şehitler ölmez ölmez
-    ölü demeyin aman
-    ölü demeyin aman
+    {start_of_chorus}
+    [Am]şehitler ölmez ölmez
+    [Am]şehitler ölmez ölmez
+    [G]ölü demeyin aman
+    ölü demeyin[F] [Em]aman
+    {end_of_chorus}
     
     bizide bulurmu ölüm
+    bizide bulurmu ölüm
+    bir cami avlusunda
     bir cami avlusunda
     şehit kanına doysun
-    bulvarlar ve soğuk betonlar
+    şehit kanına doysun
+    bulvarlar ve soğuk beton
+    bulvarlar ve soğuk beton
     
-    şehitler ölmez ölmez
-    şehitler ölmez ölmez
-    ölü demeyin aman
-    ölü demeyin aman
+    {start_of_chorus}
+    [Am]şehitler ölmez ölmez
+    [Am]şehitler ölmez ölmez
+    [G]ölü demeyin aman
+    ölü demeyin[F] [Em]aman
+    {end_of_chorus}
+    
+    {start_of_chorus}
+    [Am]şehitler ölmez ölmez
+    [Am]şehitler ölmez ölmez
+    [G]ölü demeyin aman
+    ölü demeyin[F] [Em]aman
+    {end_of_chorus}
+    
+    hasretlerde dizilmiş
+    hasretlerde dizilmiş
+    şahadetin özlemi
+    şahadetin özlemi
+    bekler yüreyim şimdi
+    bekler yüreyim şimdi
+    kahpe vuran bir mermi
+    kahpe vuran bir mermi
+    
+    {start_of_chorus}
+    [Am]şehitler ölmez ölmez
+    [Am]şehitler ölmez ölmez
+    [G]ölü demeyin aman
+    ölü demeyin[F] [Em]aman
+    {end_of_chorus}
+    
+    {start_of_chorus}
+    [Am]şehitler ölmez ölmez
+    [Am]şehitler ölmez ölmez
+    [G]ölü demeyin aman
+    ölü demeyin[F] [Em]aman
+    {end_of_chorus}
+    
+    
 ''',
     "Şehit Tahtında": '''
     Şehit tahtında Rabbe gülümser
@@ -1337,14 +1451,18 @@ class _BlurredBackgroundForLyricsState
     Şehit tahtında Rabbe gülümser
     Canım bedeli bir sofradan yer
     
-    Ümitsiz olmaz ümitsiz olmaz
-    Sevdasız olmaz sevdasız olmaz
+    [Em]Ümitsiz olmaz ümitsiz olmaz
+    Sevdasız[F] olmaz sevdasız[Em] olmaz
+    [Em]Ümitsiz olmaz ümitsiz olmaz
+    Sevdasız[F] olmaz sevdasız[Em] olmaz
     
-    Dağları oyup zindan etseler
-    Allah nurunu söndüremezler
-    Dağları oyup zindan etseler
-    Davamın önüne geçemezler
+    Dağları[Am] oyup zindan [G]etseler
+    Allah [F]nurunu [Em]söndüremezler
+    Dağları[Am] oyup zindan [G]etseler
+    Davamın[F] önüne [Em]geçemezler
   
+    Yarasız olmaz Çilesiz olmaz
+    Şehitsiz olmaz Kurbansız olmaz
     Yarasız olmaz Çilesiz olmaz
     Şehitsiz olmaz Kurbansız olmaz
     
@@ -1355,7 +1473,9 @@ class _BlurredBackgroundForLyricsState
    
     Karanlık ölür zulümat ölür
     Gözler önünde ve Ölüm ölür
-   
+    Karanlık ölür zulümat ölür
+    Gözler önünde ve Ölüm ölür
+    
     Anladım artık Uhud ve Bedir
     Ve Ümit sevda Şehadet nedir
     Soludum Kabri Mahşer anını
@@ -1365,90 +1485,90 @@ class _BlurredBackgroundForLyricsState
     Ah binlerce canım olsaydı der
     Şehit tahtında Rabbe gülümser
     Canım bedeli bir sofradan yer
-  
-    Bilmem nideyim, Allah Allah
-    Aşkın elinden, hay hay
-    Kande gideyim, aşkın elinden.
-    Sallallahu alâ Muhammed
-    Sallallahu aleyke Ahmed
-
-    Meskenim dağlar, Allah Allah
-    Gözyaşı çağlar, hay hay
-    Durmaz kan ağlar, aşkın-elinden.
-    Sallallahu alâ Muhammed
-    Sallallahu aleyke Ahmed
-
-    Varım vereyim, Allah Allah
-    Kadre ereyim, hay hay
-    Üryan olayım, aşkın elinden.
-    Sallallahu alâ Muhammed
-    Sallallahu aleyke Ahmed.
-  
-    Yunus’un sözü, Allah Allah
-    Kül olmuş özü, hay hay
-    Kan ağlar gözü, aşkın elinden.
-    Sallallahu alâ Muhammed
-    Sallallahu aleyke Ahmed.
+    
+    
     ''',
     "Ayrılık Türküsü": '''
-    Hani anne demiştin ya,
-    Gidiyorsun oğul uğurlar ola,
-    Yalnız kalbimde bir yara,
-    Sanki gelmezsin bir daha,
-    Gelesin oğul, söz ver bana,
-    Sarılayım sana, son defa,
-    Gelesin oğul, mutlaka,
-    Öpeyim seni doya, doya.
-    Ben de sana demiştim ya,
-    Gidiyorum anne, hak yoluna,
-    İhtiyacım var dualarına,
-    Hakkını helal et, anne bana,
-    Dağları aşmam gerekse de anne,
-    Bekle beni anne geleceğim,
-    Yollar bitmek bilmese de anne,
-    Bekle beni anne geleceğim,
-    Belki bu son mektup olur anne,
-    Sana yazdığım gurbet elde,
-    Belki bir cansız beden gelir,
-    Bakarsın öylece kavuşuruz.
-    Cansız bedenim anne, gelse bile,
-    Öp alnımdan anne, sarıl,
-    Sıcak ellerin değsin, soğuk dudaklarıma,
-    Öpeyim anne elini.
-    Gelirsen anne, toprağıma,
-    Kalbinde derin yaralarla,
-    Gözlerin sulasın toprağımı,
-    Hüzünlü sesin sarsın mekanımı.
-    Gökler ağlasın anne, sevgimize,
-    Yağmurlar boşalsın üzerimize,
-    Bu ayrılık türkümüz anne,
-    Ulaşsın dertli gönüllere.
+    [Em]Hani anne demiştin [F]ya,
+    Gidiyorsun oğul uğurlar ola[Em],
+    [Em]Yalnız kalbimde bir [F]yara,
+    Sanki gelmezsin bir daha[Em],
+    
+    Gelesin [Am]oğul, söz ver bana[G],
+    Sarılayım [F]sana, son [Em]defa,
+    Gelesin [Am]oğul, mutlaka[G],
+    Öpeyim [F]seni doya, [Em]doya.
+    
+    [Em]Ben de sana demiştim [F]ya,
+    Gidiyorum anne, hak yoluna[Em],
+    [Em]İhtiyacım var dualarına[F],
+    Hakkını helal et, anne bana[Em],
+    
+    Dağları [Am]aşmam gerekse [G]de anne,
+    Bekle beni[F] anne geleceğim[Em],
+    Yollar bitmek[Am] bilmese de [G]anne,
+    Bekle beni[F] anne geleceğim[Em],
+    
+    [Em]Belki bu son mektup olur anne[F],
+    Sana yazdığım gurbet elde[Em],
+    [Em]Belki bir cansız beden gelir[F],
+    Bakarsın öylece kavuşuruz.[Em]
+    
+    Cansız bedenim[Am] anne, gelse bile[G],
+    Öp alnımdan[F] anne, sarıl[Em],
+    Sıcak ellerin[Am] değsin, soğuk dudaklarıma[G],
+    Öpeyim[F] anne elini[Em].
+    
+    [Em]Gelirsen anne, toprağıma[F],
+    Kalbinde derin yaralarla[Em],
+    [Em]Gözlerin sulasın toprağımı[F],
+    Hüzünlü sesin sarsın mekanımı[Em].
+    
+    Gökler ağlasın[Am] anne, sevgimize,[G]
+    Yağmurlar boşalsın[F] üzerimize,[Em]
+    Bu ayrılık[Am] türkümüz anne,[G]
+    Ulaşsın [F]dertli gönüllere.
     ''',
     "Özgürlük Türküleri": '''
-    Henüz ondokuzunda gencecik bir fidan
-    Filizlendi, filizlendi, filizlendi dağlarda
-    Katıldı kervanına dağlarla konuşanların
-    Ve okudu özgürlük, özgürlük türküsünü
+    [Em]Henüz ondokuzunda 
+    [Am]gencecik bir [F]fidan
+    [G]Filizlendi, [F]filizlendi,
+     [G]filizlendi[F] [G]dağlarda[F] [Em]
     
-    Katıldı kervanına dağlarla konuşanların
-    Ve okudu özgürlük, özgürlük türküsünü
-    Silahları saz ettiler, kurşunları birer nota
-    Kanları kalanlar için türkü oldu dağlarda
+    [Am]Katıldı kervanına[G] 
+    [Am]dağlarla konuşanların[F]
+    [Dm]Ve okudu özgür[F]lüüüüüüük[G], 
+    [G]özgürlük [F]tür[G]kü[F]sünü[Em]
     
-    Güneşi doğdu bu sabah
-    Şehadet yolcularının
-    Güneşi doğdu bu sabah
-    Şehadet yolcularının
+    [Am]Katıldı kervanına [
+    F]dağlarla konuşanların
+    [Dm]Ve okudu özgürlüüüüüüük, 
+    [G]özgürlük [F]tür[G]kü[F]sünü[Em]
     
-    Daha gür okundu bugün
-    Özgürlük türküleri
-    Daha gür okundu bugün
-    Özgürlük türküleri
+    [Am]Silahları saz ettiler, 
+    [F]kurşunları birer nota
+    [Dm]Kanları kalanlar için 
+    [G]türkü oldu[F] [G]dağ[F]lar[Em]da
     
-    Parladı iman ateşi söndü zalimin güneşi
-    Bir yiğit daha katıldı özgürlük korosuna
-    Silahları saz ettiler, kurşunları birer nota
-    Kanları kalanlar için türkü oldu dağlarda
+    [Em]Güneşi [G]doğdu bu sabah
+    Şehadet [G]yolcularının[Em]
+    [Em]Güneşi [G]doğdu bu sabah
+    Şehadet [G]yolcularının[Em]
+    
+    [Am]Daha gür okundu [F]bugün
+    [G]Özgürlük [Dm]türküleri[Em]
+    [Am]Daha gür okundu [F]bugün
+    [G]Özgürlük [Dm]türküleri[Em]
+    
+    [Am]Parladı iman ateşi[F] 
+    söndü zalimin güneşi
+    [Dm]Bir yiğit daha katıldı 
+    [G]Özgürlük [F]ko[G]ro[F]su[Em]na
+    
+    [Am]Silahları saz ettiler, 
+    [F]kurşunları birer nota
+    [Dm]Kanları kalanlar için 
+    [G]türkü oldu[F] [G]dağ[F]lar[Em]da
     ''',
     "Andola": '''
     Andola yarına, Andola akan kana,
@@ -2208,7 +2328,7 @@ class _BlurredBackgroundForSettingsState
   //get the selected color from shared preferences
   Future<void> _loadSelectedColor() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    selectedColor = Color(prefs.getInt('selectedColor') ?? 0xFFFFFFFF);
+    selectedColor = Color(prefs.getInt('selectedColor') ?? 0xFFFEA501);
   }
 
   Future<void> _loadScrollDuration() async {
