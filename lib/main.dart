@@ -813,9 +813,10 @@ class _BlurredBackgroundForLyricsState
 
   final songLyrics = {
     'Dağlardayız Biz Ovalarda': '''
-    [Em]Dağlardayız biz [C]ovalarda [Em]
-    [Am]Makina başında [C]sıralarda [Em]
-    [Am]Sürdürüyoruz kavgamızı
+    {Kapo 4}
+    [Em]Dağlardayız biz [G]ovalarda [Em]
+    [Am]Makina başında [Em]sıralarda
+    [Am]Sürdürüyoruz [G]kavgamızı
     [D]Zalimler boğulaya[Em]
        
     {start_of_chorus}
@@ -839,6 +840,7 @@ class _BlurredBackgroundForLyricsState
     
   ''',
     'Haykır': '''
+    {Kapo 2}
     [Em]Ay ışığı[Am] [D]şahit [C]yalnızlığıma
     [Em]Kim tutacak[Am] [D]mahrum [C]ellerimden
     [Em]Kan kusuyor[Am] [D]burası benim [C]coğrafyam
@@ -1034,6 +1036,7 @@ class _BlurredBackgroundForLyricsState
     
     ''',
     "Kaçış": '''
+    {Kapo 2}
     [Em]Dün gece [C]yürüdüm [D]yeryüzü denen [Em]handa
     [Em]Kıyamete [C]boyanmış [D]kabuslar [Em]sokaklarda
     [Em]Adalet [C]dağıtılmış [D]merhametsiz [Em]silahlarla
@@ -1171,6 +1174,7 @@ class _BlurredBackgroundForLyricsState
     Kıyam günüdür, kıyam bugün şehadet hediyesi
     ''',
     "Şehadet Bir Tutku": '''
+    {Kapo 2}
     [Em]Yalnız bırakılsak [G]savaş yolunda
     [Em]Olmasa yanımızda [Dm]yol arkadaşı[Em]
     [Em]Karşımıza çıksa [G]bütün bir dünya
@@ -1209,6 +1213,7 @@ class _BlurredBackgroundForLyricsState
     
     ''',
     "Yolunda İslamın": '''
+    {Kapo 2}
     [Em]Yolunda İslamın [Am]kardeşler olalım[Em]
     [Em]Yolunda İslamın [Am]kardeşler olalım[Em]
     [Am]Acıyı paylaşıp [G]sevgiyle dolalım[Am]
@@ -1489,6 +1494,7 @@ class _BlurredBackgroundForLyricsState
     
     ''',
     "Ayrılık Türküsü": '''
+    {Kapo 2}
     [Em]Hani anne demiştin [F]ya,
     Gidiyorsun oğul uğurlar ola[Em],
     [Em]Yalnız kalbimde bir [F]yara,
@@ -1530,6 +1536,7 @@ class _BlurredBackgroundForLyricsState
     Ulaşsın [F]dertli gönüllere.
     ''',
     "Özgürlük Türküleri": '''
+    {Kapo 4}
     [Em]Henüz ondokuzunda 
     [Am]gencecik bir [F]fidan
     [G]Filizlendi, [F]filizlendi,
@@ -1571,159 +1578,185 @@ class _BlurredBackgroundForLyricsState
     [G]türkü oldu[F] [G]dağ[F]lar[Em]da
     ''',
     "Andola": '''
-    Andola yarına, Andola akan kana,
-    Andola Allah için çarpışan kullara.
+    {Kapo 2}
+    {start_of_chorus}
+    [Am]Andola yarına, [Em]Andola akan kana,
+    [G]Andola Allah için [Em]çarpışan [Am]kullara.
+    [Am]Andola yarına, [Em]Andola akan kana,
+    [G]Andola Allah için [Em]çarpışan [Am]kullara.
+    {end_of_chorus}
+        
+    [Am]Müslüman’dır adımız, [Em]tağutlardan korkmayız,
+    [G]İbrahim’in yolunda [Em]putları biz [Am]kırarız.
+    [Am]Sürgün, işkence, ölüm, [Em]hepsi vız gelir bize,
+    [G]Şehadeti seçtik biz, [EM]korku yok [Am]kalbimizde.
     
-    Müslüman’dır adımız, tağutlardan korkmayız,
-    İbrahim’in yolunda putları biz kırarız.
-    Sürgün, işkence, ölüm, hepsi vız gelir bize,
-    Şehadeti seçtik biz, korku yok kalbimizde.
+    {start_of_chorus}
+    [Am]Andola yarına, [Em]Andola akan kana,
+    [G]Andola Allah için [Em]çarpışan [Am]kullara.
+    [Am]Andola yarına, [Em]Andola akan kana,
+    [G]Andola Allah için [Em]çarpışan [Am]kullara.
+    {end_of_chorus}
     
-    Andola yarına, Andola akan kana,
-    Andola Allah için çarpışan kullara.
-   
-    Savaşımız başladı, zafere dek sürecek,
-    Mazlumların ahları zalimi devirecek,
-    Rahat yok hepimize, korku girmez düşlere
-    Yolumuz Filistin’e, sonra Allah evine.
+    [Am]Savaşımız başladı, [Em]zafere dek sürecek,
+    [G]Mazlumların ahları [Em]zalimi [Am]devirecek,
+    [Am]Rahat yok hepimize, [Em]korku girmez düşlere
+    [G]Yolumuz Filistin’e, [Em]sonra Allah [Am]evine.
   
-    Andola yarına, Andola akan kana,
-    Andola Allah için çarpışan kullara.
+    {start_of_chorus}
+    [Am]Andola yarına, [Em]Andola akan kana,
+    [G]Andola Allah için [Em]çarpışan [Am]kullara.
+    [Am]Andola yarına, [Em]Andola akan kana,
+    [G]Andola Allah için [Em]çarpışan [Am]kullara.
+    {end_of_chorus}
    
-    Büyük Şeytana (Amerika’ya) ölüm, işbirlikçiye lanet,
-    İhanetin bedeli; Zalimler Devrilmeli.
-    Halkların özgürlüğü ancak İslam’la olur,
-    Ümmetin özgürlüğü ancak Kur’an’la olur.
+    [Am]Büyük Şeytana ölüm, [Em]işbirlikçiye lanet,
+    [G]İhanetin bedeli; [Em]Zalimler [Am]Devrilmeli.
+    [Am]Halkların özgürlüğü [Em]ancak İslam’la olur,
+    [G]Ümmetin özgürlüğü [Em]ancak Kur’an’la [Am]olur.
 
-    Andola yarına, Andola akan kana,
-    Andola Allah için çarpışan kullara.
+    {start_of_chorus}
+    [Am]Andola yarına, [Em]Andola akan kana,
+    [G]Andola Allah için [Em]çarpışan [Am]kullara.
+    [Am]Andola yarına, [Em]Andola akan kana,
+    [G]Andola Allah için [Em]çarpışan [Am]kullara.
+    {end_of_chorus}
     ''',
     "Ey Şehid": '''
-    Hayat iman ve cihad, alnımızın yazısı
-    Hayat iman ve cihad, alnımızın yazısı
-    Gözlerimde bir hırsı, kamçılayan bir arzu
-    Sana ulaşan çağrı Ey Şehid, Ey Şehid
+    [Em]Hayat iman [Am]ve cihad, alnımızın [F]yazısı[Em]
+    [Em]Hayat iman [Am]ve cihad, alnımızın [F]yazısı[Em]
     
-    Gözlerimde bir hırsı, kamçılayan bir arzu
-    Sana ulaşan çağrı Ey Şehid, Ey Şehid
-    Alnı öpülesiler her biri bir dağ gibi
-    Alnı öpülesiler her biri bir dağ gibi
-    Düşseler vurulupta kanlarıyla boğacak
-    Zulmün soluk sesini Ey Şehid, Ey Şehid
+    Gözlerimde [Am]bir hırsı, kamçılayan [G]bir arzu
+    Sana ulaşan[F] çağrı Ey Şehid[G], Ey Şehid[Em]
+    Gözlerimde [Am]bir hırsı, kamçılayan [G]bir arzu
+    Sana ulaşan[F] çağrı Ey Şehid[G], Ey Şehid[Em]
     
-    Düşseler vurulupta kanlarıyla boğacak
-    Zulmün soluk sesini Ey Şehid, Ey Şehid
-    Çırpınan kuş misali kalbim sığmaz kabına
-    Çırpınan kuş misali kalbim sığmaz kabına
-    Allah için bir mermi çıkarırken katına
-    Çağırsın ardımızdan Ey Şehid, Ey Şehid
+    [Em]Alnı öpülesiler[Am] her biri bir [F]dağ gibi[Em]
+    [Em]Alnı öpülesiler[Am] her biri bir [F]dağ gibi[Em]
     
-    Allah için bir mermi çıkarırken katına
-    Çağırsın ardımızdan Ey Şehid, Ey Şehid
-    Ey Şehid, Ey Şehid
-    Ey Şehid, Ey Şehid
+    Düşseler vurulup[Am]da kanlarıyla [G]boğacak
+    Zulmün soluk [F]sesini Ey Şehid[G], Ey Şehid[Em]
+    Düşseler vurulup[Am]da kanlarıyla [G]boğacak
+    Zulmün soluk [F]sesini Ey Şehid[G], Ey Şehid[Em]
+    
+    [Em]Gün geçtikçe [Am]büyüyor gönüllerin [F]ateşi[Em]
+    [Em]Gün geçtikçe [Am]büyüyor gönüllerin [F]ateşi[Em]
+    
+    Taş yürek ses [Am]veriyor doğan İslam [G]güneşi
+    İlk düşen sensin[F] yola Ey Şehid[G], Ey Şehid[Em]
+    Taş yürek ses [Am]veriyor doğan İslam [G]güneşi
+    İlk düşen sensin[F] yola Ey Şehid[G], Ey Şehid[Em]
+    
+    [Em]Çırpınan kuş [Am]misali kalbim sığmaz [F]kabına[Em]
+    [Em]Çırpınan kuş [Am]misali kalbim sığmaz [F]kabına[Em]
+    
+    Allah için bir [Am]mermi çıkarırken [G]katına
+    Çağırsın [F]ardımızdan Ey Şehid[G], Ey Şehid[Em]
+    Allah için bir [Am]mermi çıkarırken [G]katına
+    Çağırsın [F]ardımızdan Ey Şehid[G], Ey Şehid[Em]
+    
     ''',
     "Mescid-i Aksa": '''
-    Dayan kanlı mescit, Mescid-i Aksa
-    Bu zulüm, işkence sürmez asla
-    Filizleniyor kutsal, yüce dava
-    Kafirlerin yapmadığı kalmadı
-    Filistin, Filistin, rasul yılmadı
-    Kafirlerin yapmadığı kalmadı
-    Filistin, Filistin, rasul yılmadı
-    Bir uyanış ki dağlar inliyor
-    Bir kıyam ki gökler gürlüyor
-    Bir uyanış ki dağlar inliyor
-    Bir kıyam ki gökler gürlüyor
-    Bir cihat ki kalpler titriyor
-    Toprağına rahmet yağmuru yağdı
-    Filistin, Filistin sabret az kaldı
-    Bir cihat ki kalpler titriyor
-    Toprağına rahmet yağmuru yağdı
-    Filistin, Filistin sabret az kaldı
-    Zulüm sende kardeş, sakın boşverme
-    Uyku bizi sarmış zehirli meyve
-    Sevdaların en yücesi sende
-    Kafirlerin yapmadığı kalmadı
-    Filistin, Filistin rasul yılmadı
-    Kafirlerin yapmadığı kalmadı
-    Filistin, Filistin rasul yılmadı
-    Bir uyanış ki dağlar inliyor
-    Bir kıyam ki gökler gürlüyor
-    Bir uyanış ki dağlar inliyor
-    Bir kıyam ki gökler gürlüyor
-    Bir cihat ki kalpler titriyor
-    Toprağına rahmet yağmuru yağdı
-    Filistin, Filistin sabret az kaldı
-    Bir cihat ki kalpler titriyor
-    Toprağına rahmet yağmuru yağdı
-    Filistin, Filistin sabret az kaldı
+    [Em]Dayan kanlı mescit, Mescid[G]i Aksa[F]
+    Bu zulüm, [G]işkence [F]sürmez asla[Em]
+    Filizleniyor[G] kutsal, yüce dava
+    
+    {start_of_chorus}
+    Kafirlerin[Am] yapmadığı [G]kalmadı
+    [Em]Filistin[F], [G]Filistin, [G]rasul [F]yılmadı[Em]
+    Kafirlerin[Am] yapmadığı [G]kalmadı
+    [Em]Filistin[F], [G]Filistin[Am], [G]rasul [F]yılmadı[Em]
+    [Em]Bir uyanış [F]ki [Em]dağlar inliyor[F]
+    [Em]Bir uyanış [F]ki [Em]dağlar inliyor[F]
+    [Am]Bir cihat ki [G]kalpler titriyor
+    Toprağına rahmet yağmuru yağdı[Em]
+    [Em]Filistin[F], [G]Filistin[Am], [G]sabret [F]az kaldı[Em]
+    [Am]Bir cihat ki [G]kalpler titriyor
+    Toprağına rahmet yağmuru yağdı[Em]
+    [Em]Filistin[F], [G]Filistin[Am], [G]sabret [F]az kaldı[Em]
+    {end_of_chorus}
+    
+    [Em]Zulüm sende [G]kardeş, sakın boşverme[F]
+    Uyku bizi [G]sarmış [F]zehirli meyve[Em]
+    Sevdaların[G] en yücesi [Em]sende
+    
+    {start_of_chorus}
+    Kafirlerin[Am] yapmadığı [G]kalmadı
+    [Em]Filistin[F], [G]Filistin, [G]rasul [F]yılmadı[Em]
+    Kafirlerin[Am] yapmadığı [G]kalmadı
+    [Em]Filistin[F], [G]Filistin[Am], [G]rasul [F]yılmadı[Em]
+    [Em]Bir uyanış [F]ki [Em]dağlar inliyor[F]
+    [Em]Bir uyanış [F]ki [Em]dağlar inliyor[F]
+    [Am]Bir cihat ki [G]kalpler titriyor
+    Toprağına rahmet yağmuru yağdı[Em]
+    [Em]Filistin[F], [G]Filistin[Am], [G]sabret [F]az kaldı[Em]
+    [Am]Bir cihat ki [G]kalpler titriyor
+    Toprağına rahmet yağmuru yağdı[Em]
+    [Em]Filistin[F], [G]Filistin[Am], [G]sabret [F]az kaldı[Em]
+    {end_of_chorus}
     ''',
     "Kardan Aydınlık": '''
-    Gergin uykulardan, kör gecelerden
-    Bir sabah gelecek kardan aydınlık
-    Gergin uykulardan, kör gecelerden
-    Bir sabah gelecek kardan aydınlık
+    [Am]Gergin uykulardan, [G]kör gece[Am]lerden
+    [Am]Bir sabah gelecek [Em]kardan [Am]aydınlık
+    [Am]Gergin uykulardan, [G]kör gece[Am]lerden
+    [Am]Bir sabah gelecek [Em]kardan [Am]aydınlık
     
-    Sonra düğüm düğüm bilmecelerden
-    Bir sabah gelecek kardan aydanlık
-    Sonra düğüm düğüm bilmecelerden
-    Bir sabah gelecek kardan aydanlık
+    [C]Sonra düğüm düğüm [Dm]bilmece[Am]lerden
+    [Em]Bir sabah gelecek kardan ay[Am]dınlık
+    [C]Sonra düğüm düğüm [Dm]bilmece[Am]lerden
+    [E]Bir sabah gelecek kardan ay[Am]dınlık
     
-    Vurulup ömrünün ilkbaharında
-    Kanından çiçekler açar yanında
-    Vurulup ömrünün ilkbaharında
-    Kanından çiçekler açar yanında
+    [Am]Vurulup ömrünün [G]ilkbaharında[Am]
+    [Am]Kanından çiçekler [E]açar yanında[Am]
+    [Am]Vurulup ömrünün [G]ilkbaharında[Am]
+    [Am]Kanından çiçekler [E]açar yanında[Am]
     
-    Cümle şehitlerin omuzlarında
-    Bir sabah gelecek kardan aydınlık
-    Cümle şehitlerin omuzlarında
-    Bir sabah gelecek kardan aydınlık
+    [C]Cümle şehitlerin [Dm]omuzlar[Am]ında
+    [E]Bir sabah gelecek kardan ay[Am]dınlık
+    [C]Cümle şehitlerin [Dm]omuzlar[Am]ında
+    [E]Bir sabah gelecek kardan ay[Am]dınlık
     
-    Gökten yağmur yağmur yağacak renkler
-    Daha hoş kokacak otlar, çiçekler
-    Gökten yağmur yağmur yağacak renkler
-    Daha hoş kokacak otlar, çiçekler
+    [Am]Gökten yağmur yağmur [G]yağacak [Am]renkler
+    [Am]Daha hoş kokacak [E]otlar, çi[Am]çekler
+    [Am]Gökten yağmur yağmur [G]yağacak [Am]renkler
+    [Am]Daha hoş kokacak [E]otlar, çi[Am]çekler
     
-    Ardından bitmeyen mutlu gerçekler
-    Bir sabah gelecek kardan aydınlık
-    Ardından bitmeyen mutlu gerçekler
-    Bir sabah gelecek kardan aydınlık
-    Bir sabah gelecek kardan aydınlık
+    [C]Ardından bitmeyen [Dm]mutlu ger[Am]çekler
+    [E]Bir sabah gelecek kardan ay[Am]dınlık
+    [C]Ardından bitmeyen [Dm]mutlu ger[Am]çekler
+    [E]Bir sabah gelecek kardan ay[Am]dınlık
+    [E]Bir sabah gelecek kardan ay[Am]dınlık
     ''',
     "Şehadet Uykusu": '''
-    Kara gözlerinde mahmurca gülüş
-    Gayrı uyanılmaz uykunda mısın
-    Gayrı uyanılmaz uykunda mısın
+    {Kapo 2}
+    [Em]Kara gözler[D]inde mah[Em]murca gül[D]üş
+    [Am]Gayrı uya[Em]nılmaz uy[D]kunda mısın[Em]
     
-    Kanın cemre gibi toprağa düşmüş
-    Şehadet yolunun ufkunda mısın
-    Şehadet yolunun ufkunda mısın
+    [Em]Kanın cemre [D]gibi top[Em]rağa düş[D]müş
+    [Am]Şehadet yol[Em]unun uf[D]kunda mısın[Em]
+    [Am]Şehadet yol[Em]unun uf[D]kunda mısın[Em]
+
+    {start_of_chorus}  
+    [Am]Çizgilerle [Em]dolu el[D]lerin yüzün[Em]
+    [Am]Otuzunda [Em]mısın kırk[D]ında mısın[Em]
+    [Am]Bizi yalnız [Em]koyup gö[D]ğe süzüldün[Em]
+    [Am]Acın daya[Em]nılmaz fark[D]ında mısın[Em]
+    [Am]Acın daya[Em]nılmaz fark[D]ında mısın[Em]
+    {end_of_chorus}
     
-    Çizgilerle dolu ellerin yüzün
-    Otuzunda mısın kırkında mısın
-    Bizi yalnız koyup göğe süzüldün
-    Acın dayanılmaz farkında mısın
+    [Em]Dudakların [D]sanki bir [Em]şey söylüy[D]or
+    [Am]Yine aynı [Em]sevda şark[D]ında mısın[Em]
+    [Em]Melekler bile[D] sana [Em]özeni[D]yor
+    [Am]Cennette döş[Em]enmiş taht[D]ında mısın[Em]
+    [Am]Cennette döş[Em]enmiş taht[D]ında mısın[Em]
     
-    Dudakların sanki bir şey söylüyor
-    Yine aynı sevda şarkında mısın
-    Yine aynı sevda şarkında mısın
-    
-    Melekler bile sana özeniyor
-    Cennette döşenmiş tahtında mısın
-    Cennette döşenmiş tahtında mısın
-    
-    Çizgilerle dolu ellerin yüzün
-    Otuzunda mısın kırkında mısın
-    Bizi yalnız koyup göğe süzüldün
-    Acın dayanılmaz farkında mısın
-    
-    Acın dayanılmaz farkında mısın
-    Farkında mısın
-    Melekler bile sana özeniyor
-    Cennette döşenmiş tahtında mısın
-    Yine aynı sevda şarkında mısın
-    Şarkında mısın
+    {start_of_chorus}  
+    [Am]Çizgilerle [Em]dolu el[D]lerin yüzün[Em]
+    [Am]Otuzunda [Em]mısın kırk[D]ında mısın[Em]
+    [Am]Bizi yalnız [Em]koyup gö[D]ğe süzüldün[Em]
+    [Am]Acın daya[Em]nılmaz fark[D]ında mısın[Em]
+    [Am]Acın daya[Em]nılmaz fark[D]ında mısın[Em]
+    {end_of_chorus}
 ''',
     "Bilal": '''
     Yine dağların sevdası düştü yüreğime anne
@@ -1739,32 +1772,44 @@ class _BlurredBackgroundForLyricsState
     Bu savaş bitecek, bu savaş bitecek,
     Hemde karanlığa kalmadan anne
     
-    Kanlı gömleğimi göğsüme basıp
-    Tağuta lanet okursun ağlarsın ana
+    [Em]Kanlı gömleğimi [Am]göğsüme [G]basıp
+    [Am]Tağuta lan[G]et okursun ağlarsın [Em]ana
     
-    Yürekler avuçta dağlara çıkıp
-    Şehit şehit vardık düşman üstüne ana
+    [Em]Yürekler avuçta [Am]dağlara [G]çıkıp
+    [Am]Şehit şehit [G]vardık düşman üstüne [Em]ana
     
-    Bilal öldü derler ise sakın inanma ana
-    Bilki ben şehid olmuşum şehidler ölmez ana
+    {start_of_chorus}
+    [Em]Bilal öldü [Am]derler ise [G]sakın inanma ana
+    [Am]Bilki ben [G]şehid olmuşum şehidler ölmez [Em]ana
+    [Em]Şehidler [D]ölmez ana şehidler [C]ölmez ana
+    Şehidler ölmez ana
+    {end_of_chorus}
     
-    Şarapnel altında kurşun altında
-    Tekbir getiririz marşlar söyleriz ana
+    [Em]Şarapnel altında [Am]kurşun [G]altında
+    [Am]Tekbir getiri[G]riz marşlar söyleriz [Em]ana
     
-    Şafakla birlikte düşman üstüne
-    Cehennem alevi olur yağarız ana
+    [Em]Şafakla birlikte [Am]düşman [G]üstüne
+    [Am]Cehennem [G]alevi olur yağarız [Em]ana
     
-    Bilal öldü derler ise sakın inanma ana
-    Bilki ben şehid olmuşum şehidler ölmez ana
+    {start_of_chorus}
+    [Em]Bilal öldü [Am]derler ise [G]sakın inanma ana
+    [Am]Bilki ben [G]şehid olmuşum şehidler ölmez [Em]ana
+    [Em]Şehidler [D]ölmez ana şehidler [C]ölmez ana
+    Şehidler ölmez ana
+    {end_of_chorus}
     
-    Dağlardan dünya bir başka görünür
-    Ölüm korkusu gözümden silinir ana
+    [Em]Dağlardan dünya bir [Am]başka [G]görünür
+    [Am]Ölüm korkusu [G]gözümden silinir [Em]ana
     
-    Her şehidin kanı bir lale olmuş
-    Haydi sende katıl bize katıl der ana
+    [Em]Her şehidin kanı [Am]bir lale [G]olmuş
+    [Am]Haydi sende [G]katıl bize katıl der [Em]bana
     
-    Bilal öldü derler ise sakın inanma ana
-    Bilki ben şehid olmuşum şehidler ölmez ana
+    {start_of_chorus}
+    [Em]Bilal öldü [Am]derler ise [G]sakın inanma ana
+    [Am]Bilki ben [G]şehid olmuşum şehidler ölmez [Em]ana
+    [Em]Şehidler [D]ölmez ana şehidler [C]ölmez ana
+    Şehidler ölmez ana
+    {end_of_chorus}
     
     Ve 29 ekim 1987
     Bilal de can evinden vuruldu
@@ -2002,6 +2047,22 @@ class _BlurredBackgroundForLyricsState
         widgets.add(
           Text(
             'Nakarat Bitişi.',
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontSize: lyricsFontSize, color: selectedColor),
+          ),
+        );
+      } else if (line.contains('{Kapo 4}')) {
+        widgets.add(
+          Text(
+            'Kapo: 4',
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontSize: lyricsFontSize, color: selectedColor),
+          ),
+        );
+      } else if (line.contains('{Kapo 2}')) {
+        widgets.add(
+          Text(
+            'Kapo: 2',
             overflow: TextOverflow.ellipsis,
             style: TextStyle(fontSize: lyricsFontSize, color: selectedColor),
           ),
