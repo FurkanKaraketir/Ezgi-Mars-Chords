@@ -1107,21 +1107,44 @@ class _BlurredBackgroundForLyricsState
     [E]Rüyalar öldürmez çocuğum[Am]
     ''',
     "Büyük Şeytana Ölüm": '''
-    Kıyama duracak İslam ümmeti
-    Himaye edecek öksüz, yetimi
-    Zalimleri kovmaya yeminliyiz
-    Büyük şeytana ölüm, Kahrol Amerika
-    Kahrol Amerika katil Amerika
-    Nifağın kaynağı şeytan Amerika
-    Büyük şeytana ölüm, Kahrol Amerika
-    Öfke çektim kınından biledim imanla
-    Tek vücut, tek bilek ve tek feryatla
-    Semaya yükselir Allah-u Ekber
-    Büyük şeytana ölüm, Kahrol Amerika
-    Kefeni giyip de çıkmışız biz yola
-    Endişemiz yoktur asla yarına
-    Kudüs’ünde taşken meydanda bir slogan
-    Büyük şeytana ölüm, Kahrol Amerika
+    [Em]Kıyama duracak İslam ümmeti
+    [G]Himaye edecek öksüz, yetimi
+    [Am]Zalimleri kovmaya [Em]yeminliyiz
+    [D]Büyük şeytana ölüm, [C]Kahrol Amerika[Em]
+    
+    {start_of_chorus}
+    [Em]Kahrol Amerika [G]katil Amerika
+    [D]Nifağın kaynağı şeytan Amerika
+    [Em]Kahrol Amerika [G]katil Amerika
+    [D]Nifağın kaynağı şeytan Amerika
+    [D]Büyük şeytana ölüm, [C]Kahrol Amerika[Em]
+    {end_of_chorus}
+    
+    [Em]Öfke çektim kınından biledim imanla
+    [G]Tek vücut, tek bilek ve tek feryatla
+    [Am]Semaya yükselir [Em]Allah-u Ekber
+    [D]Büyük şeytana ölüm, [C]Kahrol Amerika[Em]
+    
+    {start_of_chorus}
+    [Em]Kahrol Amerika [G]katil Amerika
+    [D]Nifağın kaynağı şeytan Amerika
+    [Em]Kahrol Amerika [G]katil Amerika
+    [D]Nifağın kaynağı şeytan Amerika
+    [D]Büyük şeytana ölüm, [C]Kahrol Amerika[Em]
+    {end_of_chorus}
+    
+    [Em]Kefeni giyip de çıkmışız biz yola
+    [G]Endişemiz yoktur asla yarına
+    [Am]Kudüs’ünde taşken [Em]meydanda bir slogan
+    [D]Büyük şeytana ölüm, [C]Kahrol Amerika[Em]
+    
+    {start_of_chorus}
+    [Em]Kahrol Amerika [G]katil Amerika
+    [D]Nifağın kaynağı şeytan Amerika
+    [Em]Kahrol Amerika [G]katil Amerika
+    [D]Nifağın kaynağı şeytan Amerika
+    [D]Büyük şeytana ölüm, [C]Kahrol Amerika[Em]
+    {end_of_chorus}
     ''',
     "Ninni": '''
     Susmayan çığlıklar duyuyorum
