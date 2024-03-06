@@ -2423,288 +2423,378 @@ class _BlurredBackgroundForSettingsState
   Widget settingsList(BuildContext context) {
     return ListView(children: [
       const SizedBox(height: 20),
-      ExpansionTile(
-        title: Row(
-          children: [
-            SvgPicture.asset(
-              'assets/metronome.svg',
-              colorFilter:
-                  const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-              height: 50.0,
-              width: 50.0,
-            ),
-            const SizedBox(width: 6),
-            // Adjust the spacing between the icon and text
-            const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Metronom Hızı",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  "Metronom Hızını Ayarlayın",
-                  style: TextStyle(fontSize: 14),
-                ),
-              ],
-            ),
-          ],
+      Container(
+        margin: const EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          color: const Color(0xFF121C2F),
+          // Set your desired background color
+          borderRadius: BorderRadius.circular(25),
         ),
-        trailing: Icon(isExpanded ? Icons.arrow_downward : Icons.arrow_forward),
-        onExpansionChanged: (bool expansion) {
-          setState(
-            () {
-              _loadScrollDuration();
-              isExpanded = expansion;
-            },
-          );
-        },
-        children: [
-          //dialog to select the set the scroll duration with right and left arrow buttons
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+        child: ExpansionTile(
+          tilePadding: const EdgeInsets.all(15),
+          title: Row(
             children: [
-              IconButton(
-                icon: const Icon(Icons.arrow_left),
-                onPressed: () {
-                  setState(
-                    () {
-                      metronomeBpm = metronomeBpm - 1;
-                      if (metronomeBpm < 10) {
-                        metronomeBpm = 10;
-                      }
-                      SaveMetronomeBpm.saveMetronomeBpm(metronomeBpm);
-                    },
-                  );
-                },
+              SvgPicture.asset(
+                'assets/metronome.svg',
+                colorFilter:
+                    const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                height: 50.0,
+                width: 50.0,
               ),
-              Text(
-                "$metronomeBpm BPM",
-                style: const TextStyle(
-                  fontSize: 24,
-                  color: Colors.white,
-                ),
-              ),
-              IconButton(
-                icon: const Icon(Icons.arrow_right),
-                onPressed: () {
-                  setState(
-                    () {
-                      metronomeBpm = metronomeBpm + 1;
-                      if (metronomeBpm > 200) {
-                        metronomeBpm = 200;
-                      }
-                      SaveMetronomeBpm.saveMetronomeBpm(metronomeBpm);
-                    },
-                  );
-                },
+              const SizedBox(width: 6),
+              // Adjust the spacing between the icon and text
+              const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Metronom Hızı",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    "Metronom Hızını Ayarlayın",
+                    style: TextStyle(fontSize: 14),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
-      const SizedBox(height: 20),
-      ExpansionTile(
-        title: const Row(
+          shape: const Border(),
+          trailing:
+              Icon(isExpanded ? Icons.arrow_downward : Icons.arrow_forward),
+          onExpansionChanged: (bool expansion) {
+            setState(
+              () {
+                _loadScrollDuration();
+                isExpanded = expansion;
+              },
+            );
+          },
           children: [
-            Image(
-              image: AssetImage('assets/ChordColor.png'),
-              height: 40,
-              width: 40,
-            ),
-            SizedBox(width: 8),
-            // Adjust the spacing between the icon and text
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Akor Rengi",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  "Akor rengini seçin",
-                  style: TextStyle(fontSize: 14),
-                ),
-              ],
-            ),
-          ],
-        ),
-        trailing: Icon(isExpanded ? Icons.arrow_downward : Icons.arrow_forward),
-        onExpansionChanged: (bool expansion) {
-          // Update the expansion state when the tile is expanded or collapsed
-          setState(
-            () {
-              _loadSelectedColor();
-              isExpanded = expansion;
-            },
-          );
-        },
-        children: [
-          SizedBox(
-            height: 70, // Set a fixed height
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: colorOptions.length,
-              itemBuilder: (context, index) {
-                Color color = colorOptions[index];
-                return InkWell(
-                  onTap: () {
-                    setState(
-                      () {
-                        selectedColor = color;
-                        //save the selected color to shared preferences
-                        SaveSelectedColor.saveColor(selectedColor.value);
-                      },
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    // Adjust the padding as needed
-                    child: Container(
-                      width: 50,
-                      // Set a fixed width for each color box
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: color,
-                        borderRadius: BorderRadius.circular(
-                            10.0), // Adjust the corner radius as needed
+            //dialog to select the set the scroll duration with right and left arrow buttons
+            Container(
+              margin: const EdgeInsets.only(
+                  left: 30, right: 30, bottom: 15, top: 15),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1C273D),
+                // Set your desired background color
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_left),
+                    onPressed: () {
+                      setState(
+                        () {
+                          metronomeBpm = metronomeBpm - 1;
+                          if (metronomeBpm < 10) {
+                            metronomeBpm = 10;
+                          }
+                          SaveMetronomeBpm.saveMetronomeBpm(metronomeBpm);
+                        },
+                      );
+                    },
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(15),
+                    margin: const EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF121C2F),
+                      // Set your desired background color
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: Text(
+                      "$metronomeBpm BPM",
+                      style: const TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
                       ),
-                      child: selectedColor == color
-                          ? const Center(
-                              child: Icon(
-                                Icons.check,
-                                color: Colors.black38,
-                              ),
-                            )
-                          : null,
                     ),
                   ),
-                );
-              },
-            ),
-          )
-        ],
-      ),
-      const SizedBox(height: 20),
-      ExpansionTile(
-        title: Row(
-          children: [
-            SvgPicture.asset(
-              'assets/arrow_downward_circle.svg',
-              colorFilter:
-                  const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-              height: 30.0,
-              width: 30.0,
-            ),
-            const SizedBox(width: 15),
-            // Adjust the spacing between the icon and text
-            const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Yavaş Kaydırma",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  "Şarkı sözlerini yavaşça kaydırın",
-                  style: TextStyle(fontSize: 14),
-                ),
-              ],
+                  IconButton(
+                    icon: const Icon(Icons.arrow_right),
+                    onPressed: () {
+                      setState(
+                        () {
+                          metronomeBpm = metronomeBpm + 1;
+                          if (metronomeBpm > 200) {
+                            metronomeBpm = 200;
+                          }
+                          SaveMetronomeBpm.saveMetronomeBpm(metronomeBpm);
+                        },
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ],
         ),
-        trailing: Icon(isExpanded ? Icons.arrow_downward : Icons.arrow_forward),
-        onExpansionChanged: (bool expansion) {
-          setState(
-            () {
-              _loadScrollDuration();
-
-              isExpanded = expansion;
-            },
-          );
-        },
-        children: [
-          //dialog to select the set the scroll duration with right and left arrow buttons
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+      ),
+      const SizedBox(height: 20),
+      Container(
+        margin: const EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          color: const Color(0xFF121C2F),
+          // Set your desired background color
+          borderRadius: BorderRadius.circular(25),
+        ),
+        child: ExpansionTile(
+          tilePadding: const EdgeInsets.all(15),
+          title: const Row(
             children: [
-              IconButton(
-                icon: const Icon(Icons.arrow_left),
-                onPressed: () {
-                  setState(
-                    () {
-                      scrollDuration = scrollDuration - 10;
-                      if (scrollDuration < 10) {
-                        scrollDuration = 10;
-                      }
-                      SaveScrollDuration.saveScrollDuration(scrollDuration);
-                    },
-                  );
-                },
+              Image(
+                image: AssetImage('assets/ChordColor.png'),
+                height: 40,
+                width: 40,
               ),
-              Text(
-                "$scrollDuration Saniye",
-                style: const TextStyle(
-                  fontSize: 24,
-                  color: Colors.white,
-                ),
-              ),
-              IconButton(
-                icon: const Icon(Icons.arrow_right),
-                onPressed: () {
-                  setState(
-                    () {
-                      scrollDuration = scrollDuration + 10;
-                      if (scrollDuration > 900) {
-                        scrollDuration = 900;
-                      }
-                      SaveScrollDuration.saveScrollDuration(scrollDuration);
-                    },
-                  );
-                },
+              SizedBox(width: 8),
+              // Adjust the spacing between the icon and text
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Akor Rengi",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    "Akor rengini seçin",
+                    style: TextStyle(fontSize: 14),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
-      const SizedBox(height: 20),
-      ListTile(
-        title: Row(
+          shape: const Border(),
+          trailing:
+              Icon(isExpanded ? Icons.arrow_downward : Icons.arrow_forward),
+          onExpansionChanged: (bool expansion) {
+            // Update the expansion state when the tile is expanded or collapsed
+            setState(
+              () {
+                _loadSelectedColor();
+                isExpanded = expansion;
+              },
+            );
+          },
           children: [
-            SvgPicture.asset(
-              'assets/info.svg',
-              colorFilter:
-                  const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-              height: 30.0,
-              width: 30.0,
-            ),
-            const SizedBox(width: 15),
-            // Adjust the spacing between the icon and text
-            const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Hakkında",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  "Uygulama Hakkında Bilgi",
-                  style: TextStyle(fontSize: 14),
-                ),
-              ],
+            Container(
+              margin: const EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1C273D),
+                // Set your desired background color
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: Container(
+                  margin: const EdgeInsets.all(10),
+                  child: SizedBox(
+                    height: 70, // Set a fixed height
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: colorOptions.length,
+                      itemBuilder: (context, index) {
+                        Color color = colorOptions[index];
+                        return InkWell(
+                          onTap: () {
+                            setState(
+                              () {
+                                selectedColor = color;
+                                //save the selected color to shared preferences
+                                SaveSelectedColor.saveColor(
+                                    selectedColor.value);
+                              },
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            // Adjust the padding as needed
+                            child: Container(
+                              width: 50,
+                              // Set a fixed width for each color box
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: color,
+                                borderRadius: BorderRadius.circular(
+                                    10.0), // Adjust the corner radius as needed
+                              ),
+                              child: selectedColor == color
+                                  ? const Center(
+                                      child: Icon(
+                                        Icons.check,
+                                        color: Colors.black38,
+                                      ),
+                                    )
+                                  : null,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  )),
             ),
           ],
         ),
-        trailing: const Icon(Icons.arrow_forward),
-        onTap: () {
-          // Handle the tap event
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const AboutScreen(),
+      ),
+      const SizedBox(height: 20),
+      Container(
+        padding: const EdgeInsets.all(15),
+        margin: const EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          color: const Color(0xFF121C2F),
+          // Set your desired background color
+          borderRadius: BorderRadius.circular(25),
+        ),
+        child: ExpansionTile(
+          title: Row(
+            children: [
+              SvgPicture.asset(
+                'assets/arrow_downward_circle.svg',
+                colorFilter:
+                    const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                height: 30.0,
+                width: 30.0,
+              ),
+              const SizedBox(width: 15),
+              // Adjust the spacing between the icon and text
+              const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Yavaş Kaydırma",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    "Şarkı sözlerini yavaşça kaydırın",
+                    style: TextStyle(fontSize: 14),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          shape: const Border(),
+          trailing:
+              Icon(isExpanded ? Icons.arrow_downward : Icons.arrow_forward),
+          onExpansionChanged: (bool expansion) {
+            setState(
+              () {
+                _loadScrollDuration();
+
+                isExpanded = expansion;
+              },
+            );
+          },
+          children: [
+            //dialog to select the set the scroll duration with right and left arrow buttons
+
+            Container(
+              margin: const EdgeInsets.only(
+                  left: 30, right: 30, bottom: 15, top: 15),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1C273D),
+                // Set your desired background color
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_left),
+                    onPressed: () {
+                      setState(
+                        () {
+                          scrollDuration = scrollDuration - 10;
+                          if (scrollDuration < 10) {
+                            scrollDuration = 10;
+                          }
+                          SaveScrollDuration.saveScrollDuration(scrollDuration);
+                        },
+                      );
+                    },
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF121C2F),
+                      // Set your desired background color
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: Text(
+                      "$scrollDuration Saniye",
+                      style: const TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.arrow_right),
+                    onPressed: () {
+                      setState(
+                        () {
+                          scrollDuration = scrollDuration + 10;
+                          if (scrollDuration > 900) {
+                            scrollDuration = 900;
+                          }
+                          SaveScrollDuration.saveScrollDuration(scrollDuration);
+                        },
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
-          );
-        },
+          ],
+        ),
+      ),
+      const SizedBox(height: 20),
+      Container(
+        padding: const EdgeInsets.all(15),
+        margin: const EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          color: const Color(0xFF121C2F),
+          // Set your desired background color
+          borderRadius: BorderRadius.circular(25),
+        ),
+        child: ListTile(
+          title: Row(
+            children: [
+              SvgPicture.asset(
+                'assets/info.svg',
+                colorFilter:
+                    const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                height: 30.0,
+                width: 30.0,
+              ),
+              const SizedBox(width: 15),
+              // Adjust the spacing between the icon and text
+              const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Hakkında",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    "Uygulama Hakkında Bilgi",
+                    style: TextStyle(fontSize: 14),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          trailing: const Icon(Icons.arrow_forward),
+          onTap: () {
+            // Handle the tap event
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const AboutScreen(),
+              ),
+            );
+          },
+        ),
       ),
       const SizedBox(height: 20)
     ]);
