@@ -2665,7 +2665,7 @@ class _BlurredBackgroundForSettingsState
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    "Şarkı sözlerini yavaşça kaydırın",
+                    "Kaydırma Süresini Ayarlayın",
                     style: TextStyle(fontSize: 14),
                   ),
                 ],
