@@ -1,6 +1,8 @@
 import 'package:Ezgiler/lyrics.dart';
 import 'package:Ezgiler/main.dart';
+import 'package:Ezgiler/app_state.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SongItem extends StatelessWidget {
@@ -16,7 +18,7 @@ class SongItem extends StatelessWidget {
       required this.albumCover})
       : super(key: key);
 
-  Future<void> _addToLastPlayedSongs(String song) async {
+  Future<void> _addToLastPlayedSongs(BuildContext context, String song) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       List<String>? lastPlayedSongs = prefs.getStringList('items') ?? [];
@@ -32,9 +34,11 @@ class SongItem extends StatelessWidget {
         lastPlayedSongs.removeLast();
       }
 
-      Future<void> loadSelectedColor() async {
+      Future<void> loadSelectedColor(BuildContext context) async {
+        final appState = context.read<AppState>();
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        selectedColor = Color(prefs.getInt('selectedColor') ?? 0xFFFEA501);
+        appState
+            .updateColor(Color(prefs.getInt('selectedColor') ?? 0xFFFEA501));
       }
 
       Future<void> loadMetronomeBpm() async {
@@ -43,10 +47,7 @@ class SongItem extends StatelessWidget {
       }
 
       loadMetronomeBpm();
-      loadSelectedColor();
-      // Optionally, you can limit the size of the list, e.g., keep only the last N songs
-      // const int maxSongs = 10;
-      // lastPlayedSongs = lastPlayedSongs.take(maxSongs).toList();
+      loadSelectedColor(context);
 
       await prefs.setStringList('items', lastPlayedSongs);
     } catch (e) {
@@ -54,15 +55,15 @@ class SongItem extends StatelessWidget {
     }
   }
 
-  void addToLastPlayedSongs(String song) async {
-    await _addToLastPlayedSongs(song);
+  void addToLastPlayedSongs(BuildContext context, String song) async {
+    await _addToLastPlayedSongs(context, song);
   }
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        _addToLastPlayedSongs(title);
+        _addToLastPlayedSongs(context, title);
         Navigator.push(
           context,
           MaterialPageRoute(

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:Ezgiler/app_state.dart';
 import 'package:Ezgiler/chords.dart';
 import 'package:Ezgiler/main.dart';
 import 'package:Ezgiler/settings.dart';
@@ -6,6 +7,7 @@ import 'chord_diagram.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'shared.dart';
@@ -498,7 +500,7 @@ class _BlurredBackgroundForLyricsState
               style: TextStyle(
                 fontSize: lyricsFontSize * 0.8,
                 fontWeight: FontWeight.bold,
-                color: selectedColor,
+                color: context.watch<AppState>().selectedColor,
               ),
             ),
           ),
@@ -547,7 +549,7 @@ class _BlurredBackgroundForLyricsState
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: lyricsFontSize + 4,
-            color: Colors.white,
+            color: context.watch<AppState>().selectedColor,
           ),
         ),
       ),
@@ -559,7 +561,9 @@ class _BlurredBackgroundForLyricsState
           Center(
             child: Text(
               'Nakarat Başlangıcı:',
-              style: TextStyle(fontSize: lyricsFontSize, color: selectedColor),
+              style: TextStyle(
+                  fontSize: lyricsFontSize,
+                  color: context.watch<AppState>().selectedColor),
             ),
           ),
         );
@@ -568,7 +572,9 @@ class _BlurredBackgroundForLyricsState
           Center(
             child: Text(
               'Nakarat Bitişi.',
-              style: TextStyle(fontSize: lyricsFontSize, color: selectedColor),
+              style: TextStyle(
+                  fontSize: lyricsFontSize,
+                  color: context.watch<AppState>().selectedColor),
             ),
           ),
         );
@@ -577,7 +583,9 @@ class _BlurredBackgroundForLyricsState
           Center(
             child: Text(
               'Kapo: 4',
-              style: TextStyle(fontSize: lyricsFontSize, color: selectedColor),
+              style: TextStyle(
+                  fontSize: lyricsFontSize,
+                  color: context.watch<AppState>().selectedColor),
             ),
           ),
         );
@@ -586,7 +594,9 @@ class _BlurredBackgroundForLyricsState
           Center(
             child: Text(
               'Kapo: 2',
-              style: TextStyle(fontSize: lyricsFontSize, color: selectedColor),
+              style: TextStyle(
+                  fontSize: lyricsFontSize,
+                  color: context.watch<AppState>().selectedColor),
             ),
           ),
         );

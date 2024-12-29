@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  provider: ^6.0.5
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -69,18 +69,18 @@ flutter_launcher_icons:
     image_path: "assets/haykir.jpeg"
 
 flutter_native_splash:
-  color: "#364259"
+  color: "#0B1627"
   image: assets/haykir.jpeg
   branding: assets/haykir.jpeg
-  color_dark: "#364259"
+  color_dark: "#0B1627"
   image_dark: assets/haykir.jpeg
   branding_dark: assets/haykir.jpeg
 
   android_12:
     image: assets/haykir.jpeg
-    icon_background_color: "#364259"
+    icon_background_color: "#0B1627"
     image_dark: assets/haykir.jpeg
-    icon_background_color_dark: "#364259"
+    icon_background_color_dark: "#0B1627"
 
   web: true
   image_web: assets/haykir.jpeg

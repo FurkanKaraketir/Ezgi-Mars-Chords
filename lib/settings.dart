@@ -1,7 +1,9 @@
 import 'package:Ezgiler/about.dart';
+import 'package:Ezgiler/app_state.dart';
 import 'package:Ezgiler/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -78,8 +80,9 @@ class _BlurredBackgroundForSettingsState
 
   //get the selected color from shared preferences
   Future<void> _loadSelectedColor() async {
+    final appState = context.read<AppState>();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    selectedColor = Color(prefs.getInt('selectedColor') ?? 0xFFFEA501);
+    appState.updateColor(Color(prefs.getInt('selectedColor') ?? 0xFFFEA501));
   }
 
   Future<void> _loadScrollDuration() async {
@@ -88,6 +91,7 @@ class _BlurredBackgroundForSettingsState
   }
 
   Widget settingsList(BuildContext context) {
+    final appState = context.watch<AppState>();
     return ListView(children: [
       const SizedBox(height: 20),
       Container(
@@ -264,28 +268,20 @@ class _BlurredBackgroundForSettingsState
                         Color color = colorOptions[index];
                         return InkWell(
                           onTap: () {
-                            setState(
-                              () {
-                                selectedColor = color;
-                                //save the selected color to shared preferences
-                                SaveSelectedColor.saveColor(
-                                    selectedColor.value);
-                              },
-                            );
+                            final appState = context.read<AppState>();
+                            appState.updateColor(color);
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            // Adjust the padding as needed
                             child: Container(
                               width: 50,
-                              // Set a fixed width for each color box
                               height: 50,
                               decoration: BoxDecoration(
                                 color: color,
-                                borderRadius: BorderRadius.circular(
-                                    10.0), // Adjust the corner radius as needed
+                                borderRadius: BorderRadius.circular(10.0),
                               ),
-                              child: selectedColor == color
+                              child: context.watch<AppState>().selectedColor ==
+                                      color
                                   ? const Center(
                                       child: Icon(
                                         Icons.check,
@@ -535,8 +531,10 @@ class MySettingsAppBar extends StatelessWidget implements PreferredSizeWidget {
         onPressed: () {
           // Handle back button press
           Future<void> loadSelectedColor() async {
+            final appState = context.read<AppState>();
             SharedPreferences prefs = await SharedPreferences.getInstance();
-            selectedColor = Color(prefs.getInt('selectedColor') ?? 0xFFFFFFFF);
+            appState.updateColor(
+                Color(prefs.getInt('selectedColor') ?? 0xFFFEA501));
           }
 
           Future<void> loadMetronomeBpm() async {

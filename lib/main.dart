@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:Ezgiler/Song.dart';
 import 'package:Ezgiler/SongItem.dart';
+import 'package:Ezgiler/app_state.dart';
 import 'package:Ezgiler/songs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -12,13 +14,19 @@ import 'firebase_options.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPreferences.getInstance();
-  runApp(const MyApp());
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  final appState = AppState();
+  await appState.loadColor();
+  runApp(
+    ChangeNotifierProvider.value(
+      value: appState,
+      child: const MyApp(),
+    ),
+  );
 }
 
-Color selectedColor = const Color(0xFFFEA501); // Default selected color
 int scrollDuration = 60;
 int metronomeBpm = 120;
 double lyricsFontSize = 18;
@@ -30,7 +38,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData.dark(useMaterial3: true),
-      debugShowCheckedModeBanner: false, // false
+      debugShowCheckedModeBanner: false,
       home: const Scaffold(
         extendBodyBehindAppBar: true,
         appBar: MyAppBar(),
