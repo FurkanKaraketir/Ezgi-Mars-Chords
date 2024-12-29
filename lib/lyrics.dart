@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:Ezgiler/chords.dart';
 import 'package:Ezgiler/main.dart';
 import 'package:Ezgiler/settings.dart';
+import 'chord_diagram.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:just_audio/just_audio.dart';
@@ -12,6 +13,42 @@ import 'shared.dart';
 final ScrollController _scrollController = ScrollController();
 
 var chords = <String>[];
+
+const List<String> CHORD_SEQUENCE = [
+  'A',
+  'A#',
+  'B',
+  'C',
+  'C#',
+  'D',
+  'D#',
+  'E',
+  'F',
+  'F#',
+  'G',
+  'G#'
+];
+
+String shiftChord(String chord, int semitones) {
+  // Handle minor chords
+  bool isMinor = chord.contains('m') && !chord.contains('maj');
+  String baseChord = isMinor ? chord.replaceAll('m', '') : chord;
+
+  // Find the root note
+  String root =
+      baseChord.split('').take(baseChord.contains('#') ? 2 : 1).join();
+  String remainder = baseChord.substring(root.length);
+
+  // Find the new root note
+  int currentIndex = CHORD_SEQUENCE.indexOf(root);
+  if (currentIndex == -1) return chord; // Return original if chord not found
+
+  int newIndex = (currentIndex + semitones) % 12;
+  if (newIndex < 0) newIndex += 12;
+
+  // Reconstruct the chord
+  return CHORD_SEQUENCE[newIndex] + (isMinor ? 'm' : '') + remainder;
+}
 
 class LyricsScreen extends StatelessWidget {
   // This widget is a new screen for the lyrics of a song.
@@ -240,6 +277,8 @@ class _BlurredBackgroundForLyricsState
 
   var scrollDuration = 60;
 
+  int currentTranspose = 0;
+
   Future<void> _startAutoSlowScroll() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     scrollDuration = prefs.getInt('scrollDuration') ?? 60;
@@ -359,6 +398,54 @@ class _BlurredBackgroundForLyricsState
             ),
           ),
         ),
+        Positioned(
+          left: 15,
+          bottom: 15,
+          child: Row(
+            children: [
+              Container(
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0xFF364259),
+                ),
+                child: IconButton(
+                  icon: const Icon(Icons.remove, color: Colors.white),
+                  onPressed: () {
+                    setState(() {
+                      currentTranspose--;
+                      widgets.clear(); // Force rebuild of lyrics
+                    });
+                  },
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Text(
+                  '${currentTranspose > 0 ? '+' : ''}$currentTranspose',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              Container(
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0xFF364259),
+                ),
+                child: IconButton(
+                  icon: const Icon(Icons.add, color: Colors.white),
+                  onPressed: () {
+                    setState(() {
+                      currentTranspose++;
+                      widgets.clear(); // Force rebuild of lyrics
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -377,85 +464,70 @@ class _BlurredBackgroundForLyricsState
 
   Widget buildLyricsLine(String line, BuildContext context) {
     RegExp regExp = RegExp(r'\[([^\]]*)\]');
-    List<InlineSpan> textSpans = [];
-    List<InlineSpan> chordSpans = [];
-    int lastIndex = 0;
-    bool startsWithChord = false;
-
-    if (line.startsWith(regExp)) {
-      startsWithChord = true;
-    }
+    List<Widget> chordWidgets = [];
+    String lyricsText = line.replaceAll(regExp, '');
+    double currentPosition = 0;
 
     for (Match match in regExp.allMatches(line)) {
-      String chord = match.group(1) ?? '';
-      String lyricsBefore =
-          line.substring(lastIndex, match.start).replaceAll(regExp, '');
+      String originalChord = match.group(1) ?? '';
+      String shiftedChord = shiftChord(originalChord, currentTranspose);
 
-      // Add lyrics before the chord
-      if (lyricsBefore.isNotEmpty) {
-        textSpans.add(TextSpan(
-          text: lyricsBefore,
-          style: TextStyle(fontSize: lyricsFontSize, color: Colors.white),
-        ));
-        chordSpans.add(TextSpan(
-          text: " " * lyricsBefore.length,
-          style: TextStyle(fontSize: lyricsFontSize, color: Colors.transparent),
-        ));
+      if (!chords.contains(shiftedChord)) {
+        chords.add(shiftedChord);
       }
 
-      if (!chords.contains(chord)) {
-        chords.add(chord);
-      }
+      // Calculate position based on text before the chord
+      String textBefore = line.substring(0, match.start).replaceAll(regExp, '');
+      TextPainter textPainter = TextPainter(
+        text: TextSpan(
+          text: textBefore,
+          style: TextStyle(fontSize: lyricsFontSize),
+        ),
+        textDirection: TextDirection.ltr,
+      )..layout();
 
-      chordSpans.add(WidgetSpan(
-        child: GestureDetector(
-          onTap: () {
-            _showChordImageDialog(chord, context);
-          },
-          child: Text(
-            chord,
-            style: TextStyle(
-              fontSize: lyricsFontSize * 0.8,
-              fontWeight: FontWeight.bold,
-              color: selectedColor,
+      chordWidgets.add(
+        Positioned(
+          left: textPainter.width,
+          child: GestureDetector(
+            onTap: () {
+              _showChordImageDialog(shiftedChord, context);
+            },
+            child: Text(
+              shiftedChord,
+              style: TextStyle(
+                fontSize: lyricsFontSize * 0.8,
+                fontWeight: FontWeight.bold,
+                color: selectedColor,
+              ),
             ),
           ),
         ),
-      ));
-      chordSpans.add(TextSpan(
-        text: " ",
-        style: TextStyle(fontSize: lyricsFontSize, color: Colors.transparent),
-      ));
-
-      lastIndex = match.end;
-    }
-
-    if (lastIndex < line.length) {
-      String remainingLyrics = line.substring(lastIndex);
-      textSpans.add(TextSpan(
-        text: remainingLyrics,
-        style: TextStyle(fontSize: lyricsFontSize, color: Colors.white),
-      ));
-      chordSpans.add(TextSpan(
-        text: " " * remainingLyrics.length,
-        style: TextStyle(fontSize: lyricsFontSize, color: Colors.transparent),
-      ));
+      );
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          RichText(
-            textAlign: TextAlign.center,
-            text: TextSpan(children: chordSpans),
-          ),
-          RichText(
-            textAlign: TextAlign.center,
-            text: TextSpan(children: textSpans),
-          ),
-        ],
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: SizedBox(
+        width: double.infinity,
+        child: Stack(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: lyricsFontSize * 0.8 + 4), // Space for chords
+                Text(
+                  lyricsText,
+                  style: TextStyle(
+                    fontSize: lyricsFontSize,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+            ...chordWidgets,
+          ],
+        ),
       ),
     );
   }
@@ -545,28 +617,33 @@ class _BlurredBackgroundForLyricsState
 }
 
 void _showChordImageDialog(String chord, BuildContext context) {
-  // Here you can implement the logic to show a dialog with the image of the chord
-  // You can use Flutter's built-in dialog or a custom solution.
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text(chord),
-        content: ClipRRect(
-          borderRadius: BorderRadius.circular(16.0),
-          // Set your desired corner radius
-          child: Image.asset(
-            'assets/chord_images/$chord.png',
-            fit: BoxFit.fill,
+        backgroundColor: const Color(0xFF1C273D),
+        title: Text(
+          chord,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
           ),
         ),
-        // Adjust the path
+        content: SizedBox(
+          width: 200,
+          height: 250,
+          child: CustomPaint(
+            painter: ChordDiagram(chord),
+          ),
+        ),
         actions: <Widget>[
           TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(); // Close the dialog
-            },
-            child: const Text('Kapat'),
+            onPressed: () => Navigator.pop(context),
+            child: const Text(
+              'Kapat',
+              style: TextStyle(color: Colors.white),
+            ),
           ),
         ],
       );

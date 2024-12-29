@@ -26,6 +26,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: "^0.13.1"
+  flutter_native_splash: ^2.3.10
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -66,3 +67,21 @@ flutter_launcher_icons:
   macos:
     generate: true
     image_path: "assets/haykir.jpeg"
+
+flutter_native_splash:
+  color: "#364259"
+  image: assets/haykir.jpeg
+  branding: assets/haykir.jpeg
+  color_dark: "#364259"
+  image_dark: assets/haykir.jpeg
+  branding_dark: assets/haykir.jpeg
+
+  android_12:
+    image: assets/haykir.jpeg
+    icon_background_color: "#364259"
+    image_dark: assets/haykir.jpeg
+    icon_background_color_dark: "#364259"
+
+  web: true
+  image_web: assets/haykir.jpeg
+  image_dark_web: assets/haykir.jpeg
