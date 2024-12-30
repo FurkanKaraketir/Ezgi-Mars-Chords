@@ -4,18 +4,23 @@ import 'package:Ezgiler/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:go_router/go_router.dart';
 
 class SongItem extends StatelessWidget {
   // This widget is a custom list item for each song.
   final String title;
   final String keyNote;
   final String albumCover;
+  final String albumTitle;
+  final String id;
 
   const SongItem(
       {Key? key,
       required this.title,
       required this.keyNote,
-      required this.albumCover})
+      required this.albumCover,
+      required this.albumTitle,
+      required this.id})
       : super(key: key);
 
   Future<void> _addToLastPlayedSongs(BuildContext context, String song) async {
@@ -64,14 +69,7 @@ class SongItem extends StatelessWidget {
     return InkWell(
       onTap: () {
         _addToLastPlayedSongs(context, title);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => LyricsScreen(
-              title: title,
-            ),
-          ),
-        );
+        context.go('/song/$id');
       },
       child: Container(
         margin: const EdgeInsets.all(10),

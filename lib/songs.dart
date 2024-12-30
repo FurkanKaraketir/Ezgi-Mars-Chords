@@ -1,13 +1,26 @@
 import 'package:Ezgiler/SongItem.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class SongsScreen extends StatelessWidget {
-  String albumTitle;
+  String albumId;
 
-  SongsScreen({super.key, required this.albumTitle});
+  SongsScreen({super.key, required this.albumId});
+
+  String _getAlbumTitle(String id) {
+    switch (id) {
+      case 'album1':
+        return 'Haykır · Grup İslami Direniş';
+      case 'album2':
+        return 'Arşiv';
+      default:
+        return '';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    String albumTitle = _getAlbumTitle(albumId);
     return Scaffold(
         body: MySongsPage(
       albumTitle: albumTitle,
@@ -56,12 +69,9 @@ class MySongListAppBar extends StatelessWidget implements PreferredSizeWidget {
           color: Colors.white,
         ),
         onPressed: () {
-          // Handle back button press
-          Navigator.of(context).pop();
+          context.go('/');
         },
       ),
-
-      // Replace with your desired icon
       backgroundColor: Colors.transparent,
       elevation: 0,
     );
@@ -106,124 +116,187 @@ class BlurredBackgroundForSongs extends StatelessWidget {
   Widget albumList(albumTitle) {
     if (albumTitle == "Haykır · Grup İslami Direniş") {
       return ListView(
-        children: const [
+        children: [
           SongItem(
+            id: 'song1',
             title: 'Ahzab\'daki Yiğitler',
             keyNote: '',
             albumCover: 'assets/haykir.jpeg',
+            albumTitle: albumTitle,
           ),
           SongItem(
+            id: 'song2',
             title: 'Dağlardayız Biz Ovalarda',
             keyNote: '',
             albumCover: 'assets/haykir.jpeg',
+            albumTitle: albumTitle,
           ),
           SongItem(
+            id: 'song3',
             title: 'Haykır',
             keyNote: '',
             albumCover: 'assets/haykir.jpeg',
+            albumTitle: albumTitle,
           ),
           SongItem(
+            id: 'song4',
             title: 'Bağlanmaz ki Yüreğim',
             keyNote: '',
             albumCover: 'assets/haykir.jpeg',
+            albumTitle: albumTitle,
           ),
           SongItem(
+            id: 'song5',
             title: 'Savur İnancsız Külleri',
             keyNote: '',
             albumCover: 'assets/haykir.jpeg',
+            albumTitle: albumTitle,
           ),
           SongItem(
+            id: 'song6',
             title: 'Kaçış',
             keyNote: '',
             albumCover: 'assets/haykir.jpeg',
+            albumTitle: albumTitle,
           ),
           SongItem(
+            id: 'song7',
             title: 'Çocuğum',
             keyNote: '',
             albumCover: 'assets/haykir.jpeg',
+            albumTitle: albumTitle,
           ),
           SongItem(
+            id: 'song8',
             title: 'Büyük Şeytana Ölüm',
             keyNote: '',
             albumCover: 'assets/haykir.jpeg',
+            albumTitle: albumTitle,
           ),
           SongItem(
+            id: 'song9',
             title: 'Ninni',
             keyNote: '',
             albumCover: 'assets/haykir.jpeg',
+            albumTitle: albumTitle,
           ),
           SongItem(
+            id: 'song10',
             title: 'Müstezafin',
             keyNote: '',
             albumCover: 'assets/haykir.jpeg',
+            albumTitle: albumTitle,
           ),
         ],
       );
     } else {
       return ListView(
-        children: const [
+        children: [
           SongItem(
+            id: 'song11',
             title: 'Şehadet Bir Tutku',
             keyNote: '',
             albumCover: 'assets/archive.jpg',
+            albumTitle: albumTitle,
           ),
           SongItem(
+            id: 'song12',
             title: 'Yolunda İslamın',
             keyNote: '',
             albumCover: 'assets/archive.jpg',
+            albumTitle: albumTitle,
           ),
           SongItem(
+            id: 'song13',
             title: 'Adı Bilinmez Müslüman',
             keyNote: '',
             albumCover: 'assets/archive.jpg',
+            albumTitle: albumTitle,
           ),
           SongItem(
-              title: "Suskunluğun Bedeli",
-              keyNote: "",
-              albumCover: "assets/archive.jpg"),
+            id: 'song14',
+            title: "Suskunluğun Bedeli",
+            keyNote: "",
+            albumCover: "assets/archive.jpg",
+            albumTitle: albumTitle,
+          ),
           SongItem(
+            id: 'song15',
             title: "Bak Ülkeme",
             keyNote: "",
             albumCover: "assets/archive.jpg",
+            albumTitle: albumTitle,
           ),
           SongItem(
+            id: 'song16',
             title: "Şehitler Ölmez",
             keyNote: "",
             albumCover: "assets/archive.jpg",
+            albumTitle: albumTitle,
           ),
           SongItem(
+            id: 'song17',
             title: "Şehit Tahtında",
             keyNote: "",
             albumCover: "assets/archive.jpg",
+            albumTitle: albumTitle,
           ),
           SongItem(
+            id: 'song18',
             title: "Ayrılık Türküsü",
             keyNote: "",
             albumCover: "assets/archive.jpg",
+            albumTitle: albumTitle,
           ),
           SongItem(
+            id: 'song19',
             title: "Özgürlük Türküleri",
             keyNote: "",
             albumCover: "assets/archive.jpg",
+            albumTitle: albumTitle,
           ),
           SongItem(
-              title: "Andola", keyNote: "", albumCover: "assets/archive.jpg"),
+            id: 'song20',
+            title: "Andola",
+            keyNote: "",
+            albumCover: "assets/archive.jpg",
+            albumTitle: albumTitle,
+          ),
           SongItem(
-              title: "Ey Şehid", keyNote: "", albumCover: "assets/archive.jpg"),
+            id: 'song21',
+            title: "Ey Şehid",
+            keyNote: "",
+            albumCover: "assets/archive.jpg",
+            albumTitle: albumTitle,
+          ),
           SongItem(
-              title: "Mescid-i Aksa",
-              keyNote: "",
-              albumCover: "assets/archive.jpg"),
+            id: 'song22',
+            title: "Mescid-i Aksa",
+            keyNote: "",
+            albumCover: "assets/archive.jpg",
+            albumTitle: albumTitle,
+          ),
           SongItem(
-              title: "Kardan Aydınlık",
-              keyNote: "",
-              albumCover: "assets/archive.jpg"),
+            id: 'song23',
+            title: "Kardan Aydınlık",
+            keyNote: "",
+            albumCover: "assets/archive.jpg",
+            albumTitle: albumTitle,
+          ),
           SongItem(
-              title: "Şehadet Uykusu",
-              keyNote: "",
-              albumCover: "assets/archive.jpg"),
+            id: 'song24',
+            title: "Şehadet Uykusu",
+            keyNote: "",
+            albumCover: "assets/archive.jpg",
+            albumTitle: albumTitle,
+          ),
           SongItem(
-              title: "Bilal", keyNote: "", albumCover: "assets/archive.jpg"),
+            id: 'song25',
+            title: "Bilal",
+            keyNote: "",
+            albumCover: "assets/archive.jpg",
+            albumTitle: albumTitle,
+          ),
         ],
       );
     }

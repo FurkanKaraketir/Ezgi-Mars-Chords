@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:go_router/go_router.dart';
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
@@ -296,12 +297,9 @@ class MyAboutAppBar extends StatelessWidget implements PreferredSizeWidget {
           color: Colors.white,
         ),
         onPressed: () {
-          // Handle back button press
-          Navigator.of(context).pop();
+          context.go('/settings');
         },
       ),
-
-      // Replace with your desired icon
       backgroundColor: Colors.transparent,
       elevation: 0,
     );

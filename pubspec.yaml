@@ -10,6 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
   provider: ^6.0.5
 
   # The following adds the Cupertino Icons font to your application.
@@ -21,6 +23,7 @@ dependencies:
   url_launcher: ^6.0.10
   just_audio: ^0.9.38
   firebase_core: ^2.27.0
+  go_router: ^13.2.0
 
 dev_dependencies:
   flutter_test:
@@ -53,35 +56,28 @@ flutter:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/haykir.jpeg"
+  image_path: "assets/splash.png"
   min_sdk_android: 21 # android min sdk min:16, default 21
-  web:
-    generate: true
-    image_path: "assets/haykir.jpeg"
-    background_color: "#hexcode"
-    theme_color: "#364259"
   windows:
     generate: true
-    image_path: "assets/haykir.jpeg"
+    image_path: "assets/splash.png"
     icon_size: 48 # min:48, max:256, default: 48
   macos:
     generate: true
-    image_path: "assets/haykir.jpeg"
+    image_path: "assets/splash.png"
 
 flutter_native_splash:
   color: "#0B1627"
-  image: assets/haykir.jpeg
-  branding: assets/haykir.jpeg
+  image: assets/splash.png
   color_dark: "#0B1627"
-  image_dark: assets/haykir.jpeg
-  branding_dark: assets/haykir.jpeg
+  image_dark: assets/splash.png
 
   android_12:
-    image: assets/haykir.jpeg
+    image: assets/splash.png
     icon_background_color: "#0B1627"
-    image_dark: assets/haykir.jpeg
+    image_dark: assets/splash.png
     icon_background_color_dark: "#0B1627"
 
   web: true
-  image_web: assets/haykir.jpeg
-  image_dark_web: assets/haykir.jpeg
+  image_web: assets/splash.png
+  image_dark_web: assets/splash.png

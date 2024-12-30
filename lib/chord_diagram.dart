@@ -5,19 +5,30 @@ class ChordDiagram extends CustomPainter {
   final String chord;
   final ChordPosition chordPosition;
   final bool isDarkTheme;
+  final int capoPosition;
 
-  ChordDiagram(this.chord, {this.isDarkTheme = true})
-      : chordPosition = _getChordPosition(chord);
+  ChordDiagram(
+    this.chord, {
+    this.isDarkTheme = true,
+    this.capoPosition = 0,
+    ChordPosition? position,
+  }) : chordPosition = position ?? _getChordPosition(chord, capoPosition);
 
-  static ChordPosition _getChordPosition(String chord) {
+  static ChordPosition _getChordPosition(String chord, int capoPosition) {
     List<List<int>> positions = ChordTheory.generateChordPositions(chord);
 
-    if (positions.isNotEmpty) {
-      return ChordPosition.fromFrets(positions.first);
+    if (positions.isEmpty) {
+      return ChordPosition(
+          frets: List.filled(6, -1), fingers: List.filled(6, -1));
     }
 
-    return ChordPosition(
-        frets: List.filled(6, -1), fingers: List.filled(6, -1));
+    // Adjust fret positions for capo
+    List<int> adjustedFrets = positions.first.map((fret) {
+      if (fret == -1) return -1;
+      return fret - capoPosition;
+    }).toList();
+
+    return ChordPosition.fromFrets(adjustedFrets);
   }
 
   @override
@@ -37,8 +48,90 @@ class ChordDiagram extends CustomPainter {
     // Translate canvas to add margin
     canvas.translate(margin, margin);
 
-    // Draw frets
+    // Draw capo if needed
+    if (capoPosition > 0) {
+      final capoPaint = Paint()
+        ..color = isDarkTheme ? Colors.white70 : Colors.black87
+        ..style = PaintingStyle.fill;
+
+      // Draw capo bar with rounded corners and shadow
+      final capoRect = RRect.fromRectAndRadius(
+        Rect.fromLTWH(
+          -margin * 0.2,
+          -fretHeight * 0.15,
+          diagramWidth + margin * 0.4,
+          fretHeight * 0.3,
+        ),
+        Radius.circular(fretHeight * 0.15),
+      );
+
+      // Draw shadow
+      canvas.drawRRect(
+        capoRect.shift(Offset(2, 2)),
+        Paint()
+          ..color = Colors.black.withOpacity(0.3)
+          ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3),
+      );
+
+      // Draw capo bar
+      canvas.drawRRect(
+        capoRect,
+        capoPaint,
+      );
+
+      // Draw capo text in a more elegant way
+      final TextPainter capoPainter = TextPainter(
+        text: TextSpan(
+          text: 'CAPO',
+          style: TextStyle(
+            color: isDarkTheme ? Colors.black : Colors.white,
+            fontSize: size.width * 0.05,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1.2,
+          ),
+        ),
+        textDirection: TextDirection.ltr,
+        textAlign: TextAlign.center,
+      );
+      capoPainter.layout();
+
+      // Position text centered on the capo bar
+      capoPainter.paint(
+        canvas,
+        Offset(
+          (diagramWidth - capoPainter.width) / 2,
+          -fretHeight * 0.15 + (fretHeight * 0.3 - capoPainter.height) / 2,
+        ),
+      );
+
+      // Draw position number
+      final TextPainter positionPainter = TextPainter(
+        text: TextSpan(
+          text: capoPosition.toString(),
+          style: TextStyle(
+            color: isDarkTheme ? Colors.white : Colors.black,
+            fontSize: size.width * 0.08,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        textDirection: TextDirection.ltr,
+        textAlign: TextAlign.center,
+      );
+      positionPainter.layout();
+
+      // Position number to the left of the diagram
+      positionPainter.paint(
+        canvas,
+        Offset(
+          -margin * 0.8,
+          -fretHeight * 0.15 + (fretHeight * 0.3 - positionPainter.height) / 2,
+        ),
+      );
+    }
+
+    // Draw frets with varying thickness
     for (int i = 0; i <= 5; i++) {
+      paint.strokeWidth = i == 0 ? size.width * 0.02 : size.width * 0.01;
       double y = fretHeight * i;
       canvas.drawLine(
         Offset(0, y),
@@ -47,8 +140,10 @@ class ChordDiagram extends CustomPainter {
       );
     }
 
-    // Draw strings
+    // Draw strings with varying thickness
     for (int i = 0; i < 6; i++) {
+      paint.strokeWidth =
+          size.width * (0.01 - (i * 0.001)); // Thicker for bass strings
       double x = fretWidth * i;
       canvas.drawLine(
         Offset(x, 0),
@@ -73,6 +168,30 @@ class ChordDiagram extends CustomPainter {
           fretWidth * 0.35,
           dotPaint,
         );
+
+        // Draw finger number if available
+        if (chordPosition.fingers[string] > 0) {
+          final TextPainter fingerPainter = TextPainter(
+            text: TextSpan(
+              text: chordPosition.fingers[string].toString(),
+              style: TextStyle(
+                color: isDarkTheme ? Colors.black : Colors.white,
+                fontSize: size.width * 0.06,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            textDirection: TextDirection.ltr,
+            textAlign: TextAlign.center,
+          );
+          fingerPainter.layout();
+          fingerPainter.paint(
+            canvas,
+            Offset(
+              x - fingerPainter.width / 2,
+              fretHeight * (fret - 0.5) - fingerPainter.height / 2,
+            ),
+          );
+        }
       } else if (fret == 0) {
         // Draw open string symbol
         canvas.drawCircle(
@@ -112,8 +231,9 @@ class ChordDiagram extends CustomPainter {
     // Find the lowest fret position that's not 0 or -1
     int lowestFret = chordPosition.frets.where((f) => f > 0).fold(0, min);
     if (lowestFret > 1) {
+      String fretText = lowestFret.toString();
       textPainter.text = TextSpan(
-        text: lowestFret.toString(),
+        text: fretText,
         style: TextStyle(
           color: isDarkTheme ? Colors.white : Colors.black,
           fontSize: size.width * 0.08,

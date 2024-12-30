@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:go_router/go_router.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -450,12 +451,7 @@ class _BlurredBackgroundForSettingsState
           trailing: const Icon(Icons.arrow_forward),
           onTap: () {
             // Handle the tap event
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const AboutScreen(),
-              ),
-            );
+            context.go('/about');
           },
         ),
       ),
@@ -528,27 +524,15 @@ class MySettingsAppBar extends StatelessWidget implements PreferredSizeWidget {
           Icons.arrow_back,
           color: Colors.white,
         ),
-        onPressed: () {
-          // Handle back button press
-          Future<void> loadSelectedColor() async {
-            final appState = context.read<AppState>();
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            appState.updateColor(
-                Color(prefs.getInt('selectedColor') ?? 0xFFFEA501));
-          }
-
-          Future<void> loadMetronomeBpm() async {
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            metronomeBpm = prefs.getInt('metronomeBpm') ?? 120;
-          }
-
-          loadMetronomeBpm();
-          loadSelectedColor();
-          Navigator.of(context).pop();
+        onPressed: () async {
+          final appState = context.read<AppState>();
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          appState
+              .updateColor(Color(prefs.getInt('selectedColor') ?? 0xFFFEA501));
+          metronomeBpm = prefs.getInt('metronomeBpm') ?? 120;
+          context.go('/');
         },
       ),
-
-      // Replace with your desired icon
       backgroundColor: Colors.transparent,
       elevation: 0,
     );

@@ -1,13 +1,21 @@
 {
-    "name": "ezgi",
-    "short_name": "ezgi",
+    "name": "Ezgiler ve Marşlar - Grup İslami Direniş",
+    "short_name": "Ezgiler",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#hexcode",
+    "background_color": "#0B1627",
     "theme_color": "#364259",
-    "description": "Ezgiler ve Marşlar",
+    "description": "Grup İslami Direniş'in ezgi ve marşlarını dinleyebileceğiniz resmi uygulama. Şarkı sözleri, akorlar ve daha fazlası.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
+    "categories": ["music", "entertainment", "lifestyle"],
+    "screenshots": [
+        {
+            "src": "screenshots/home.png",
+            "sizes": "1280x720",
+            "type": "image/png"
+        }
+    ],
     "icons": [
         {
             "src": "icons/Icon-192.png",

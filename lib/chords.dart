@@ -1,7 +1,8 @@
 import 'package:Ezgiler/lyrics.dart';
 import 'package:flutter/material.dart';
-import 'chord_diagram.dart';
+import 'chord_diagram.dart' as diagram;
 import 'chord_theory.dart';
+import 'package:go_router/go_router.dart';
 
 class ChordsScreen extends StatelessWidget {
   final List<String> chords;
@@ -38,7 +39,7 @@ class MyChordsAppBar extends StatelessWidget implements PreferredSizeWidget {
           color: Colors.white,
         ),
         onPressed: () {
-          Navigator.of(context).pop();
+          context.pop();
         },
       ),
       backgroundColor: Colors.transparent,
@@ -174,7 +175,7 @@ class _ChordsPageState extends State<ChordsPage> {
                             width: 180,
                             child: CustomPaint(
                               size: const Size(180, 180),
-                              painter: ChordDiagram(searchedChord!),
+                              painter: diagram.ChordDiagram(searchedChord!),
                             ),
                           ),
                         ],
@@ -207,6 +208,15 @@ class _ChordsPageState extends State<ChordsPage> {
   }
 
   Widget _buildChordCard(BuildContext context, String chord) {
+    List<List<int>> positions = ChordTheory.generateChordPositions(chord);
+    diagram.ChordPosition position = diagram.ChordPosition.fromFrets(
+      positions.isEmpty ? List.filled(6, -1) : positions[0],
+    );
+
+    // Get alternative capo positions
+    List<(String, int)> alternatives = ChordTheory.getCapoAlternatives(chord);
+    bool hasAlternatives = alternatives.length > 1;
+
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(
@@ -229,11 +239,48 @@ class _ChordsPageState extends State<ChordsPage> {
                   color: Colors.white,
                 ),
               ),
+              if (hasAlternatives)
+                const Text(
+                  '(Has capo alternatives)',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.white70,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              if (!hasAlternatives)
+                const Text(
+                  'Kapo Bulunmuyor',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.white70,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              if (positions.length > 1)
+                const Text(
+                  '(Multiple positions available)',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.white70,
+                  ),
+                ),
               const SizedBox(height: 16),
               Expanded(
                 child: CustomPaint(
                   size: const Size(150, 150),
-                  painter: ChordDiagram(chord),
+                  painter: diagram.ChordDiagram(
+                    chord,
+                    position: position,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Frets: ${position.frets.map((f) => f == -1 ? "x" : f.toString()).join(" ")}',
+                style: const TextStyle(
+                  color: Colors.white70,
+                  fontSize: 10,
                 ),
               ),
             ],
@@ -244,47 +291,156 @@ class _ChordsPageState extends State<ChordsPage> {
   }
 
   void _showChordDialog(BuildContext context, String chord) {
+    int selectedPosition = 0;
+    int capoPosition = 0;
+    List<List<int>> allPositions = ChordTheory.generateChordPositions(chord);
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Dialog(
-          backgroundColor: const Color(0xFF1C273D),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  chord,
-                  style: const TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+        return StatefulBuilder(
+          builder: (context, setState) {
+            // Create a ChordPosition from the current selected position
+            diagram.ChordPosition currentPosition =
+                diagram.ChordPosition.fromFrets(
+              allPositions.isEmpty
+                  ? List.filled(6, -1)
+                  : allPositions[selectedPosition],
+            );
+
+            // Adjust for capo position
+            if (capoPosition > 0) {
+              List<int> adjustedFrets = currentPosition.frets.map((fret) {
+                if (fret == -1 || fret == 0) return fret;
+                return fret > capoPosition ? fret - capoPosition : fret;
+              }).toList();
+              currentPosition = diagram.ChordPosition.fromFrets(adjustedFrets);
+            }
+
+            return Dialog(
+              backgroundColor: const Color(0xFF1C273D),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      chord,
+                      style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    if (allPositions.length > 1) ...[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.arrow_back,
+                                color: Colors.white),
+                            onPressed: selectedPosition > 0
+                                ? () {
+                                    setState(() {
+                                      selectedPosition--;
+                                    });
+                                  }
+                                : null,
+                          ),
+                          Text(
+                            'Position ${selectedPosition + 1}/${allPositions.length}',
+                            style: const TextStyle(
+                              color: Colors.white70,
+                              fontSize: 14,
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.arrow_forward,
+                                color: Colors.white),
+                            onPressed:
+                                selectedPosition < allPositions.length - 1
+                                    ? () {
+                                        setState(() {
+                                          selectedPosition++;
+                                        });
+                                      }
+                                    : null,
+                          ),
+                        ],
+                      ),
+                    ],
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.remove, color: Colors.white),
+                          onPressed: capoPosition > 0
+                              ? () {
+                                  setState(() {
+                                    capoPosition--;
+                                  });
+                                }
+                              : null,
+                        ),
+                        Text(
+                          'Capo: $capoPosition',
+                          style: const TextStyle(
+                            color: Colors.white70,
+                            fontSize: 14,
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.add, color: Colors.white),
+                          onPressed: capoPosition < 12
+                              ? () {
+                                  setState(() {
+                                    capoPosition++;
+                                  });
+                                }
+                              : null,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      width: 250,
+                      height: 250,
+                      child: CustomPaint(
+                        size: const Size(250, 250),
+                        painter: diagram.ChordDiagram(
+                          chord,
+                          capoPosition: capoPosition,
+                          position: currentPosition,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    // Show fret positions as text
+                    Text(
+                      'Frets: ${currentPosition.frets.map((f) => f == -1 ? "x" : f.toString()).join(" ")}',
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 12,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    TextButton(
+                      onPressed: () => context.pop(),
+                      child: const Text(
+                        'Kapat',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 20),
-                SizedBox(
-                  width: 250,
-                  height: 250,
-                  child: CustomPaint(
-                    size: const Size(250, 250),
-                    painter: ChordDiagram(chord),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text(
-                    'Kapat',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );

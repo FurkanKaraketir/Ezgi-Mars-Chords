@@ -3,7 +3,8 @@ import 'package:Ezgiler/app_state.dart';
 import 'package:Ezgiler/chords.dart';
 import 'package:Ezgiler/main.dart';
 import 'package:Ezgiler/settings.dart';
-import 'chord_diagram.dart';
+import 'chord_diagram.dart' as diagram;
+import 'chord_theory.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:just_audio/just_audio.dart';
@@ -11,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'shared.dart';
+import 'package:go_router/go_router.dart';
 
 final ScrollController _scrollController = ScrollController();
 
@@ -53,16 +55,27 @@ String shiftChord(String chord, int semitones) {
 }
 
 class LyricsScreen extends StatelessWidget {
-  // This widget is a new screen for the lyrics of a song.
-  final String title;
+  final String songId;
 
-  const LyricsScreen({Key? key, required this.title}) : super(key: key);
+  const LyricsScreen({Key? key, required this.songId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // Extract title and albumTitle from songId
+    final albumTitle =
+        songId.startsWith('song') ? "Haykır · Grup İslami Direniş" : "Arşiv";
+
+    // Extract the number from the ID (either after 'song' or 'archive')
+    final number = songId.replaceAll(RegExp(r'[^0-9]'), '');
+    final songIndex = int.tryParse(number) ?? 1;
+
+    // Get the song title based on the album and index
+    final songLyrics = DictionaryHolder.sharedDictionary;
+    final title = songLyrics.keys.elementAt(songIndex - 1);
+
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: MyAppBarForLyrics(myTitle: title),
+      appBar: MyAppBarForLyrics(myTitle: title, albumTitle: albumTitle),
       body: BlurredBackgroundForLyrics(myTitle: title),
     );
   }
@@ -70,8 +83,20 @@ class LyricsScreen extends StatelessWidget {
 
 class MyAppBarForLyrics extends StatefulWidget implements PreferredSizeWidget {
   final String myTitle;
+  final String albumTitle;
 
-  const MyAppBarForLyrics({Key? key, required this.myTitle}) : super(key: key);
+  const MyAppBarForLyrics(
+      {Key? key, required this.myTitle, required this.albumTitle})
+      : super(key: key);
+
+  String _getAlbumId(String albumTitle) {
+    if (albumTitle == 'Haykır · Grup İslami Direniş') {
+      return 'album1';
+    } else if (albumTitle == 'Arşiv') {
+      return 'album2';
+    }
+    return '';
+  }
 
   @override
   _MyAppBarForLyricsState createState() => _MyAppBarForLyricsState();
@@ -108,11 +133,9 @@ class _MyAppBarForLyricsState extends State<MyAppBarForLyrics> {
   }
 
   void _startStopMetronome() {
-    setState(
-      () {
-        _isPlaying = !_isPlaying;
-      },
-    );
+    setState(() {
+      _isPlaying = !_isPlaying;
+    });
 
     if (_isPlaying) {
       _timer = Timer.periodic(
@@ -140,13 +163,7 @@ class _MyAppBarForLyricsState extends State<MyAppBarForLyrics> {
             width: 24.0,
           ),
           onPressed: () {
-            // Open a new screen to show the chords
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ChordsScreen(chords: chords),
-              ),
-            );
+            context.push('/chords', extra: chords);
           },
         ),
         IconButton(
@@ -157,17 +174,14 @@ class _MyAppBarForLyricsState extends State<MyAppBarForLyrics> {
             width: 30.0,
           ),
           onPressed: () {
-            setState(
-              () {
-                _isMetronomePlaying = !_isMetronomePlaying;
-                // Call your metronome start/stop logic here
-                if (_isMetronomePlaying) {
-                  _startStopMetronome();
-                } else {
-                  _startStopMetronome();
-                }
-              },
-            );
+            setState(() {
+              _isMetronomePlaying = !_isMetronomePlaying;
+              if (_isMetronomePlaying) {
+                _startStopMetronome();
+              } else {
+                _startStopMetronome();
+              }
+            });
           },
         ),
         IconButton(
@@ -176,13 +190,7 @@ class _MyAppBarForLyricsState extends State<MyAppBarForLyrics> {
             color: Colors.white,
           ),
           onPressed: () {
-            // Open a new screen to show the settings
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const SettingsScreen(),
-              ),
-            );
+            context.push('/settings');
           },
         ),
       ],
@@ -192,8 +200,8 @@ class _MyAppBarForLyricsState extends State<MyAppBarForLyrics> {
           color: Colors.white,
         ),
         onPressed: () {
-          // Handle back button press
-          Navigator.of(context).pop();
+          final albumId = widget._getAlbumId(widget.albumTitle);
+          context.go('/album/$albumId');
         },
       ),
       backgroundColor: Colors.transparent,
@@ -280,6 +288,20 @@ class _BlurredBackgroundForLyricsState
   var scrollDuration = 60;
 
   int currentTranspose = 0;
+  int globalCapo = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize globalCapo with song's kapo value
+    final songLyrics = DictionaryHolder.sharedDictionary;
+    var lyrics = songLyrics[widget.myTitle]!;
+    RegExp capoRegex = RegExp(r'\{Kapo (\d+)\}');
+    Match? match = capoRegex.firstMatch(lyrics);
+    if (match != null) {
+      globalCapo = int.parse(match.group(1)!);
+    }
+  }
 
   Future<void> _startAutoSlowScroll() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -329,7 +351,6 @@ class _BlurredBackgroundForLyricsState
               shape: BoxShape.circle,
               color: Color(0xFF364259),
             ),
-            //open the youtube link of the song
             child: GestureDetector(
               onTap: () {
                 launchUri(Uri.parse(songYoutubeLinks[widget.myTitle]!));
@@ -401,9 +422,10 @@ class _BlurredBackgroundForLyricsState
           ),
         ),
         Positioned(
-          left: 15,
-          bottom: 15,
-          child: Row(
+          right: 15,
+          bottom: 145,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Container(
                 decoration: const BoxDecoration(
@@ -411,23 +433,37 @@ class _BlurredBackgroundForLyricsState
                   color: Color(0xFF364259),
                 ),
                 child: IconButton(
-                  icon: const Icon(Icons.remove, color: Colors.white),
-                  onPressed: () {
-                    setState(() {
-                      currentTranspose--;
-                      widgets.clear(); // Force rebuild of lyrics
-                    });
-                  },
+                  icon: const Icon(Icons.add, color: Colors.white),
+                  onPressed: globalCapo < 12
+                      ? () {
+                          setState(() {
+                            globalCapo++;
+                            widgets.clear(); // Force rebuild of lyrics
+                          });
+                        }
+                      : null,
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Text(
-                  '${currentTranspose > 0 ? '+' : ''}$currentTranspose',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                  ),
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      'Kapo',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                      ),
+                    ),
+                    Text(
+                      globalCapo.toString(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Container(
@@ -436,13 +472,15 @@ class _BlurredBackgroundForLyricsState
                   color: Color(0xFF364259),
                 ),
                 child: IconButton(
-                  icon: const Icon(Icons.add, color: Colors.white),
-                  onPressed: () {
-                    setState(() {
-                      currentTranspose++;
-                      widgets.clear(); // Force rebuild of lyrics
-                    });
-                  },
+                  icon: const Icon(Icons.remove, color: Colors.white),
+                  onPressed: globalCapo > 0
+                      ? () {
+                          setState(() {
+                            globalCapo--;
+                            widgets.clear(); // Force rebuild of lyrics
+                          });
+                        }
+                      : null,
                 ),
               ),
             ],
@@ -468,14 +506,34 @@ class _BlurredBackgroundForLyricsState
     RegExp regExp = RegExp(r'\[([^\]]*)\]');
     List<Widget> chordWidgets = [];
     String lyricsText = line.replaceAll(regExp, '');
-    double currentPosition = 0;
+    double lastChordEndPosition = 0;
 
     for (Match match in regExp.allMatches(line)) {
       String originalChord = match.group(1) ?? '';
-      String shiftedChord = shiftChord(originalChord, currentTranspose);
+      // Split chord if it contains multiple options (separated by '/')
+      List<String> chordOptions = originalChord.split('/');
+      // Use only the first chord option for display
+      String primaryChord = chordOptions[0].trim();
 
-      if (!chords.contains(shiftedChord)) {
-        chords.add(shiftedChord);
+      // Apply both transpose and capo adjustments
+      String transposedChord = shiftChord(primaryChord, currentTranspose);
+      String shiftedChord = globalCapo > 0
+          ? ChordTheory.getActualChord(transposedChord, globalCapo)
+          : transposedChord;
+
+      // Store all chord options for the dialog
+      List<String> allTransposedOptions = chordOptions.map((chord) {
+        String transposed = shiftChord(chord.trim(), currentTranspose);
+        return globalCapo > 0
+            ? ChordTheory.getActualChord(transposed, globalCapo)
+            : transposed;
+      }).toList();
+
+      // Add all variations to the chords list for the chord diagram
+      for (String chord in allTransposedOptions) {
+        if (!chords.contains(chord)) {
+          chords.add(chord);
+        }
       }
 
       // Calculate position based on text before the chord
@@ -488,15 +546,38 @@ class _BlurredBackgroundForLyricsState
         textDirection: TextDirection.ltr,
       )..layout();
 
+      // Calculate the width of the current chord
+      TextPainter chordPainter = TextPainter(
+        text: TextSpan(
+          text: shiftedChord,
+          style: TextStyle(fontSize: lyricsFontSize * 0.8),
+        ),
+        textDirection: TextDirection.ltr,
+      )..layout();
+
+      // Ensure minimum spacing between chords
+      double chordPosition = textPainter.width;
+      if (chordPosition < lastChordEndPosition) {
+        chordPosition = lastChordEndPosition + 10;
+      }
+
+      lastChordEndPosition = chordPosition + chordPainter.width;
+
       chordWidgets.add(
         Positioned(
-          left: textPainter.width,
+          left: chordPosition,
           child: GestureDetector(
             onTap: () {
-              _showChordImageDialog(shiftedChord, context);
+              // Pass all chord options to the dialog
+              _showChordImageDialog(
+                allTransposedOptions.join(' / '),
+                context,
+                globalCapo,
+              );
             },
             child: Text(
-              shiftedChord,
+              // Show primary chord with indication if there are alternatives
+              allTransposedOptions.length > 1 ? '$shiftedChord*' : shiftedChord,
               style: TextStyle(
                 fontSize: lyricsFontSize * 0.8,
                 fontWeight: FontWeight.bold,
@@ -553,6 +634,19 @@ class _BlurredBackgroundForLyricsState
           ),
         ),
       ),
+      if (globalCapo > 0)
+        Container(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Text(
+            'Kapo: $globalCapo',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: lyricsFontSize,
+              color: context.watch<AppState>().selectedColor,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
     ];
 
     for (String line in lines) {
@@ -578,29 +672,8 @@ class _BlurredBackgroundForLyricsState
             ),
           ),
         );
-      } else if (line.contains('{Kapo 4}')) {
-        widgets.add(
-          Center(
-            child: Text(
-              'Kapo: 4',
-              style: TextStyle(
-                  fontSize: lyricsFontSize,
-                  color: context.watch<AppState>().selectedColor),
-            ),
-          ),
-        );
-      } else if (line.contains('{Kapo 2}')) {
-        widgets.add(
-          Center(
-            child: Text(
-              'Kapo: 2',
-              style: TextStyle(
-                  fontSize: lyricsFontSize,
-                  color: context.watch<AppState>().selectedColor),
-            ),
-          ),
-        );
-      } else {
+      } else if (!line.contains('{Kapo')) {
+        // Skip kapo marker lines
         widgets.add(Center(child: buildLyricsLine(line, context)));
       }
     }
@@ -626,36 +699,177 @@ class _BlurredBackgroundForLyricsState
   }
 }
 
-void _showChordImageDialog(String chord, BuildContext context) {
+void _showChordImageDialog(String chord, BuildContext context, int globalCapo) {
+  int selectedPosition = 0;
+  int defaultCapo = 0;
+
+  // Get capo position from lyrics if available
+  final songLyrics = DictionaryHolder.sharedDictionary;
+  for (var entry in songLyrics.entries) {
+    if (entry.value.contains(chord)) {
+      RegExp capoRegex = RegExp(r'\{Kapo (\d+)\}');
+      Match? match = capoRegex.firstMatch(entry.value);
+      if (match != null) {
+        defaultCapo = int.parse(match.group(1)!);
+        break;
+      }
+    }
+  }
+
+  // Initialize capo position with the same value as shown in the header
+  int capoPosition = globalCapo > 0 ? globalCapo : defaultCapo;
+  List<List<int>> allPositions = ChordTheory.generateChordPositions(chord);
+
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return AlertDialog(
-        backgroundColor: const Color(0xFF1C273D),
-        title: Text(
-          chord,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        content: SizedBox(
-          width: 200,
-          height: 250,
-          child: CustomPaint(
-            painter: ChordDiagram(chord),
-          ),
-        ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text(
-              'Kapat',
-              style: TextStyle(color: Colors.white),
+      return StatefulBuilder(
+        builder: (context, setState) {
+          // Create a ChordPosition from the current selected position
+          diagram.ChordPosition currentPosition =
+              diagram.ChordPosition.fromFrets(
+            allPositions.isEmpty
+                ? List.filled(6, -1)
+                : allPositions[selectedPosition],
+          );
+
+          // Adjust for capo position
+          if (capoPosition > 0) {
+            List<int> adjustedFrets = currentPosition.frets.map((fret) {
+              if (fret == -1 || fret == 0) return fret;
+              return fret > capoPosition ? fret - capoPosition : fret;
+            }).toList();
+            currentPosition = diagram.ChordPosition.fromFrets(adjustedFrets);
+          }
+
+          return AlertDialog(
+            backgroundColor: const Color(0xFF1C273D),
+            title: Column(
+              children: [
+                Text(
+                  chord,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                if (capoPosition > 0)
+                  Text(
+                    'With Capo ${capoPosition}: ${ChordTheory.getActualChord(chord, capoPosition)}',
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 16,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                const SizedBox(height: 8),
+                if (allPositions.length > 1) ...[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.arrow_back, color: Colors.white),
+                        onPressed: selectedPosition > 0
+                            ? () {
+                                setState(() {
+                                  selectedPosition--;
+                                });
+                              }
+                            : null,
+                      ),
+                      Text(
+                        'Position ${selectedPosition + 1}/${allPositions.length}',
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontSize: 14,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.arrow_forward,
+                            color: Colors.white),
+                        onPressed: selectedPosition < allPositions.length - 1
+                            ? () {
+                                setState(() {
+                                  selectedPosition++;
+                                });
+                              }
+                            : null,
+                      ),
+                    ],
+                  ),
+                ],
+                const SizedBox(height: 8),
+                // Capo controls - initialize with the global or song capo
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.remove, color: Colors.white),
+                      onPressed: capoPosition > 0
+                          ? () {
+                              setState(() {
+                                capoPosition--;
+                              });
+                            }
+                          : null,
+                    ),
+                    Text(
+                      'Kapo: $capoPosition',
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 14,
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.add, color: Colors.white),
+                      onPressed: capoPosition < 12
+                          ? () {
+                              setState(() {
+                                capoPosition++;
+                              });
+                            }
+                          : null,
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ),
-        ],
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  width: 200,
+                  height: 250,
+                  child: CustomPaint(
+                    painter: diagram.ChordDiagram(
+                      chord,
+                      capoPosition: capoPosition,
+                      position: currentPosition,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Frets: ${currentPosition.frets.map((f) => f == -1 ? "x" : f.toString()).join(" ")}',
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => context.pop(),
+                child: const Text(
+                  'Kapat',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+          );
+        },
       );
     },
   );

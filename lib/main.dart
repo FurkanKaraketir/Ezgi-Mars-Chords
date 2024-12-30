@@ -1,8 +1,13 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'dart:html' as html;
 
 import 'package:Ezgiler/Song.dart';
 import 'package:Ezgiler/SongItem.dart';
+import 'package:Ezgiler/about.dart';
 import 'package:Ezgiler/app_state.dart';
+import 'package:Ezgiler/chords.dart';
+import 'package:Ezgiler/settings.dart';
 import 'package:Ezgiler/songs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -10,8 +15,14 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:go_router/go_router.dart';
+import 'package:Ezgiler/lyrics.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
+import 'package:Ezgiler/songs.dart';
+import 'package:Ezgiler/lyrics.dart';
 
 Future<void> main() async {
+  setUrlStrategy(PathUrlStrategy());
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPreferences.getInstance();
   await Firebase.initializeApp(
@@ -31,19 +42,128 @@ int scrollDuration = 60;
 int metronomeBpm = 120;
 double lyricsFontSize = 18;
 
+final _router = GoRouter(
+  initialLocation: '/',
+  debugLogDiagnostics: true,
+  redirect: (context, state) {
+    if (state.matchedLocation.startsWith('/song/')) {
+      final songId = state.pathParameters['id'];
+      if (songId == null || songId.isEmpty) {
+        return '/';
+      }
+      final songNumber = int.tryParse(songId.replaceAll(RegExp(r'[^0-9]'), ''));
+      if (songNumber == null || songNumber < 1 || songNumber > 25) {
+        return '/';
+      }
+    }
+    return null;
+  },
+  routes: [
+    GoRoute(
+      path: '/',
+      name: 'home',
+      builder: (context, state) {
+        _updatePageTitle('Ana Sayfa - Ezgiler ve Marşlar');
+        return const HomeScreen();
+      },
+    ),
+    GoRoute(
+      path: '/album/:id',
+      name: 'album',
+      builder: (context, state) {
+        final albumId = state.pathParameters['id'];
+        if (albumId == null || (albumId != 'album1' && albumId != 'album2')) {
+          _updatePageTitle('Albüm Bulunamadı - Ezgiler ve Marşlar');
+          return const Scaffold(
+            body: Center(
+              child: Text('Album not found'),
+            ),
+          );
+        }
+        final albumTitle = albumId == 'album1' ? 'Haykır' : 'Arşiv';
+        _updatePageTitle('$albumTitle - Ezgiler ve Marşlar');
+        return SongsScreen(albumId: albumId);
+      },
+    ),
+    GoRoute(
+      path: '/song/:id',
+      name: 'song',
+      builder: (context, state) {
+        final songId = state.pathParameters['id'];
+        if (songId == null || songId.isEmpty) {
+          _updatePageTitle('Şarkı Bulunamadı - Ezgiler ve Marşlar');
+          return const Scaffold(
+            body: Center(
+              child: Text('Song not found'),
+            ),
+          );
+        }
+        final songNumber =
+            int.tryParse(songId.replaceAll(RegExp(r'[^0-9]'), ''));
+        if (songNumber == null || songNumber < 1 || songNumber > 25) {
+          _updatePageTitle('Geçersiz Şarkı - Ezgiler ve Marşlar');
+          return const Scaffold(
+            body: Center(
+              child: Text('Invalid song ID'),
+            ),
+          );
+        }
+        _updatePageTitle('$songId - Ezgiler ve Marşlar');
+        return LyricsScreen(songId: songId);
+      },
+    ),
+    GoRoute(
+      path: '/settings',
+      name: 'settings',
+      builder: (context, state) {
+        _updatePageTitle('Ayarlar - Ezgiler ve Marşlar');
+        return const SettingsScreen();
+      },
+    ),
+    GoRoute(
+      path: '/about',
+      name: 'about',
+      builder: (context, state) {
+        _updatePageTitle('Hakkında - Ezgiler ve Marşlar');
+        return const AboutScreen();
+      },
+    ),
+    GoRoute(
+      path: '/chords',
+      name: 'chords',
+      builder: (context, state) {
+        _updatePageTitle('Akorlar - Ezgiler ve Marşlar');
+        final chordsList = state.extra as List<String>? ?? [];
+        return ChordsScreen(chords: chordsList);
+      },
+    ),
+  ],
+  errorBuilder: (context, state) => Scaffold(
+    body: Center(
+      child: Text(
+        'Sayfa bulunamadı: ${state.error}',
+        style: const TextStyle(fontSize: 18),
+      ),
+    ),
+  ),
+);
+
+void _updatePageTitle(String title) {
+  if (kIsWeb) {
+    html.document.title = title;
+  }
+}
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: _router,
       theme: ThemeData.dark(useMaterial3: true),
       debugShowCheckedModeBanner: false,
-      home: const Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: MyAppBar(),
-        body: BlurredBackground(),
-      ),
+      title: 'Ezgiler ve Marşlar - Grup İslami Direniş',
     );
   }
 }
@@ -91,10 +211,12 @@ class BlurredBackground extends StatefulWidget {
 class _BlurredBackgroundState extends State<BlurredBackground> {
   final albumCovers = [
     const Song(
+      id: "album1",
       title: "Haykır · Grup İslami Direniş",
       cover: 'assets/haykir.jpeg',
     ),
     const Song(
+      id: "album2",
       title: "Arşiv",
       cover: 'assets/archive.jpg',
     ),
@@ -202,10 +324,16 @@ class _BlurredBackgroundState extends State<BlurredBackground> {
                 scrollDirection: Axis.vertical,
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
+                  final songTitle = snapshot.data![index];
+                  final isHaykir =
+                      (songList[songTitle] ?? "").contains("haykir");
                   return SongItem(
-                    title: snapshot.data![index],
+                    id: isHaykir ? 'song_${index + 1}' : 'archive_${index + 1}',
+                    title: songTitle,
                     keyNote: "",
-                    albumCover: songList[snapshot.data![index]] ?? "",
+                    albumCover: songList[songTitle] ?? "",
+                    albumTitle:
+                        isHaykir ? "Haykır · Grup İslami Direniş" : "Arşiv",
                   );
                 },
               ),
@@ -221,14 +349,7 @@ class _BlurredBackgroundState extends State<BlurredBackground> {
         child: Column(children: [
       GestureDetector(
         onTap: () {
-          // Navigate to the SongsScreen when an album cover is tapped
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  SongsScreen(albumTitle: albumCovers[0].title),
-            ),
-          );
+          context.go('/album/album1');
         },
         child: Column(
           children: [
@@ -267,14 +388,7 @@ class _BlurredBackgroundState extends State<BlurredBackground> {
       ),
       GestureDetector(
         onTap: () {
-          // Navigate to the SongsScreen when an album cover is tapped
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  SongsScreen(albumTitle: albumCovers[1].title),
-            ),
-          );
+          context.go('/album/album2');
         },
         child: Column(
           children: [
@@ -313,5 +427,18 @@ class _BlurredBackgroundState extends State<BlurredBackground> {
       ),
       _buildLastPlayedSongs()
     ]));
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: MyAppBar(),
+      body: BlurredBackground(),
+    );
   }
 }
