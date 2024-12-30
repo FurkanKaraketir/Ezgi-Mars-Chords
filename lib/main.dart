@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'dart:html' as html;
 
 import 'package:Ezgiler/Song.dart';
 import 'package:Ezgiler/SongItem.dart';
@@ -17,12 +16,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:go_router/go_router.dart';
 import 'package:Ezgiler/lyrics.dart';
-import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import 'package:Ezgiler/songs.dart';
-import 'package:Ezgiler/lyrics.dart';
+import 'package:Ezgiler/web_utils.dart';
+
+int scrollDuration = 60;
+int metronomeBpm = 120;
+double lyricsFontSize = 18;
 
 Future<void> main() async {
-  setUrlStrategy(PathUrlStrategy());
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPreferences.getInstance();
   await Firebase.initializeApp(
@@ -37,10 +37,6 @@ Future<void> main() async {
     ),
   );
 }
-
-int scrollDuration = 60;
-int metronomeBpm = 120;
-double lyricsFontSize = 18;
 
 final _router = GoRouter(
   initialLocation: '/',
@@ -63,7 +59,7 @@ final _router = GoRouter(
       path: '/',
       name: 'home',
       builder: (context, state) {
-        _updatePageTitle('Ana Sayfa - Ezgiler ve Marşlar');
+        updateWebTitle('Ana Sayfa - Ezgiler ve Marşlar');
         return const HomeScreen();
       },
     ),
@@ -73,7 +69,7 @@ final _router = GoRouter(
       builder: (context, state) {
         final albumId = state.pathParameters['id'];
         if (albumId == null || (albumId != 'album1' && albumId != 'album2')) {
-          _updatePageTitle('Albüm Bulunamadı - Ezgiler ve Marşlar');
+          updateWebTitle('Albüm Bulunamadı - Ezgiler ve Marşlar');
           return const Scaffold(
             body: Center(
               child: Text('Album not found'),
@@ -81,7 +77,7 @@ final _router = GoRouter(
           );
         }
         final albumTitle = albumId == 'album1' ? 'Haykır' : 'Arşiv';
-        _updatePageTitle('$albumTitle - Ezgiler ve Marşlar');
+        updateWebTitle('$albumTitle - Ezgiler ve Marşlar');
         return SongsScreen(albumId: albumId);
       },
     ),
@@ -91,7 +87,7 @@ final _router = GoRouter(
       builder: (context, state) {
         final songId = state.pathParameters['id'];
         if (songId == null || songId.isEmpty) {
-          _updatePageTitle('Şarkı Bulunamadı - Ezgiler ve Marşlar');
+          updateWebTitle('Şarkı Bulunamadı - Ezgiler ve Marşlar');
           return const Scaffold(
             body: Center(
               child: Text('Song not found'),
@@ -101,14 +97,14 @@ final _router = GoRouter(
         final songNumber =
             int.tryParse(songId.replaceAll(RegExp(r'[^0-9]'), ''));
         if (songNumber == null || songNumber < 1 || songNumber > 25) {
-          _updatePageTitle('Geçersiz Şarkı - Ezgiler ve Marşlar');
+          updateWebTitle('Geçersiz Şarkı - Ezgiler ve Marşlar');
           return const Scaffold(
             body: Center(
               child: Text('Invalid song ID'),
             ),
           );
         }
-        _updatePageTitle('$songId - Ezgiler ve Marşlar');
+        updateWebTitle('$songId - Ezgiler ve Marşlar');
         return LyricsScreen(songId: songId);
       },
     ),
@@ -116,7 +112,7 @@ final _router = GoRouter(
       path: '/settings',
       name: 'settings',
       builder: (context, state) {
-        _updatePageTitle('Ayarlar - Ezgiler ve Marşlar');
+        updateWebTitle('Ayarlar - Ezgiler ve Marşlar');
         return const SettingsScreen();
       },
     ),
@@ -124,7 +120,7 @@ final _router = GoRouter(
       path: '/about',
       name: 'about',
       builder: (context, state) {
-        _updatePageTitle('Hakkında - Ezgiler ve Marşlar');
+        updateWebTitle('Hakkında - Ezgiler ve Marşlar');
         return const AboutScreen();
       },
     ),
@@ -132,7 +128,7 @@ final _router = GoRouter(
       path: '/chords',
       name: 'chords',
       builder: (context, state) {
-        _updatePageTitle('Akorlar - Ezgiler ve Marşlar');
+        updateWebTitle('Akorlar - Ezgiler ve Marşlar');
         final chordsList = state.extra as List<String>? ?? [];
         return ChordsScreen(chords: chordsList);
       },
@@ -147,12 +143,6 @@ final _router = GoRouter(
     ),
   ),
 );
-
-void _updatePageTitle(String title) {
-  if (kIsWeb) {
-    html.document.title = title;
-  }
-}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -188,13 +178,12 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: Padding(
         padding: const EdgeInsets.all(8.0),
         child: SvgPicture.asset(
-          'assets/logo.svg', // Replace with the path to your SVG file
+          'assets/logo.svg',
           colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
           height: 240.0,
           width: 240.0,
         ),
       ),
-      // Replace with your desired icon
       backgroundColor: Colors.transparent,
       elevation: 0,
     );
@@ -236,7 +225,6 @@ class _BlurredBackgroundState extends State<BlurredBackground> {
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage('assets/background_image.png'),
-          // Replace with your image asset path
           fit: BoxFit.cover,
         ),
       ),
@@ -247,10 +235,8 @@ class _BlurredBackgroundState extends State<BlurredBackground> {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       List<String>? items = prefs.getStringList('items');
-
       return items;
     } catch (e) {
-      // Handle any potential exceptions, e.g., if SharedPreferences fails
       return null;
     }
   }
