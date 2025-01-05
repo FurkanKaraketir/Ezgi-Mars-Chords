@@ -206,7 +206,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        final String location = _router.routerDelegate.currentConfiguration?.uri.path ?? '/';
+        final String location = _router.routerDelegate.currentConfiguration.uri.path;
         if (location == '/') {
           return true; // Allow app to close only on home screen
         }

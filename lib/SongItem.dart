@@ -1,4 +1,3 @@
-import 'package:Ezgiler/lyrics.dart';
 import 'package:Ezgiler/main.dart';
 import 'package:Ezgiler/app_state.dart';
 import 'package:flutter/material.dart';

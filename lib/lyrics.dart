@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'package:Ezgiler/app_state.dart';
-import 'package:Ezgiler/chords.dart';
 import 'package:Ezgiler/main.dart';
-import 'package:Ezgiler/settings.dart';
 import 'chord_diagram.dart' as diagram;
 import 'chord_theory.dart';
 import 'package:flutter/material.dart';

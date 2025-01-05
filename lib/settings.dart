@@ -1,4 +1,3 @@
-import 'package:Ezgiler/about.dart';
 import 'package:Ezgiler/app_state.dart';
 import 'package:Ezgiler/main.dart';
 import 'package:flutter/material.dart';
@@ -98,7 +97,6 @@ class _BlurredBackgroundForSettingsState
   }
 
   Widget settingsList(BuildContext context) {
-    final appState = context.watch<AppState>();
     return ListView(children: [
       const SizedBox(height: 20),
       Container(

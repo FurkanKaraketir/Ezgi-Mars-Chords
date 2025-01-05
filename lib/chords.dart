@@ -1,4 +1,3 @@
-import 'package:Ezgiler/lyrics.dart';
 import 'package:flutter/material.dart';
 import 'chord_diagram.dart' as diagram;
 import 'chord_theory.dart';

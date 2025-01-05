@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class SongsScreen extends StatelessWidget {
-  String albumId;
+  final String albumId;
 
   SongsScreen({super.key, required this.albumId});
 
@@ -86,7 +86,7 @@ class MySongListAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class BlurredBackgroundForSongs extends StatelessWidget {
-  String albumTitle = "";
+  final String albumTitle;
 
   BlurredBackgroundForSongs({super.key, required this.albumTitle});
 

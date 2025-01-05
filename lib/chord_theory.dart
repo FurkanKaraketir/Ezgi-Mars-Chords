@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 
 class ChordTheory {
   // Standard guitar tuning from low to high string
@@ -163,16 +162,7 @@ class ChordTheory {
     return positions;
   }
 
-  // Generate chord notes based on root note and chord type
-  static List<String> _getChordNotes(String rootNote, String chordType) {
-    int rootIndex = _getNoteIndex(rootNote);
-    List<int> intervals = CHORD_INTERVALS[chordType] ?? CHORD_INTERVALS['']!;
-
-    return intervals.map((interval) {
-      return CHROMATIC_SCALE[(rootIndex + interval) % 12];
-    }).toList();
-  }
-
+ 
   // Parse chord name into root note and type
   static (String, String) parseChordName(String chord) {
     // Handle special cases first
@@ -560,7 +550,6 @@ class ChordPosition {
   static List<int> generateFingerPositions(List<int> frets) {
     List<int> fingers = List.filled(6, -1);
     Map<int, int> fretToFinger = {};
-    int nextFinger = 1;
 
     // First pass: identify unique fret positions
     List<int> uniqueFrets = frets.where((f) => f > 0).toList()..sort();
