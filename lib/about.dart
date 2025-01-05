@@ -16,10 +16,16 @@ class AboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: MyAboutAppBar(),
-      extendBodyBehindAppBar: true,
-      body: BlurredBackgroundForAbout(),
+    return WillPopScope(
+      onWillPop: () async {
+        context.go('/settings');
+        return false; // Prevent app from closing
+      },
+      child: const Scaffold(
+        appBar: MyAboutAppBar(),
+        extendBodyBehindAppBar: true,
+        body: BlurredBackgroundForAbout(),
+      ),
     );
   }
 }

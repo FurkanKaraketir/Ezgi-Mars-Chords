@@ -22,10 +22,16 @@ class SettingsPage extends StatelessWidget {
   // This widget is the home page of your application.
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: MySettingsAppBar(),
-      extendBodyBehindAppBar: true,
-      body: BlurredBackgroundForSettings(),
+    return WillPopScope(
+      onWillPop: () async {
+        context.go('/');
+        return false;
+      },
+      child: const Scaffold(
+        appBar: MySettingsAppBar(),
+        extendBodyBehindAppBar: true,
+        body: BlurredBackgroundForSettings(),
+      ),
     );
   }
 }

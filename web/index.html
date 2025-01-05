@@ -56,7 +56,7 @@
     const serviceWorkerVersion = null;
   </script>
   <!-- This script adds the flutter initialization JS code -->
-  <script src="flutter.js" defer=""></script>
+  <script src="flutter.js" defer></script>
   
   
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
@@ -79,7 +79,7 @@
       margin: 0;
       min-height: 100%;
       background-color: #0B1627;
-          background-size: 100% 100%;
+      background-size: 100% 100%;
     }
 
     .center {
@@ -107,72 +107,9 @@
       width:100%; height:100%;
       object-fit: cover;
     }
-
-    .bottom {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      -ms-transform: translate(-50%, 0);
-      transform: translate(-50%, 0);
-    }
-
-    .bottomLeft {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-    }
-
-    .bottomRight {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      body {
-        background-color: #0B1627;
-          }
-    }
   </style>
-  <script id="splash-screen-script">
-    function removeSplashFromWeb() {
-      document.getElementById("splash")?.remove();
-      document.getElementById("splash-branding")?.remove();
-      document.body.style.background = "transparent";
-    }
-  </script>
 </head>
 <body>
-  <picture id="splash">
-      <source srcset="splash/img/light-1x.png 1x, splash/img/light-2x.png 2x, splash/img/light-3x.png 3x, splash/img/light-4x.png 4x" media="(prefers-color-scheme: light)">
-      <source srcset="splash/img/dark-1x.png 1x, splash/img/dark-2x.png 2x, splash/img/dark-3x.png 3x, splash/img/dark-4x.png 4x" media="(prefers-color-scheme: dark)">
-      <img class="center" aria-hidden="true" src="splash/img/light-1x.png" alt="">
-  </picture>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
-  const firebaseConfig = {
-    apiKey: "AIzaSyBcRMlBqZUfSJv5dT2V5XZcTqX5xonsTWc",
-    authDomain: "testproject-23ee9.firebaseapp.com",
-    projectId: "testproject-23ee9",
-    storageBucket: "testproject-23ee9.appspot.com",
-    messagingSenderId: "1047885870282",
-    appId: "1:1047885870282:web:41e95b3ff09fccd8467033",
-    measurementId: "G-1ZKPMLTLYG"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
   <script>
     window.addEventListener('load', function(ev) {
       // Download main.dart.js
@@ -188,6 +125,5 @@
       });
     });
   </script>
-
-
-</body></html>
+</body>
+</html>

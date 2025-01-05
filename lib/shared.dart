@@ -1,104 +1,5 @@
 class DictionaryHolder {
   static Map<String, dynamic> sharedDictionary = {
-    'Dağlardayız Biz Ovalarda': '''
-    {Kapo 4}
-    [Em]Dağlardayız biz [G]ovalarda [Em]
-    [Am]Makina başında [Em]sıralarda
-    [Am]Sürdürüyoruz [G]kavgamızı
-    [D]Zalimler boğulaya[Em]
-       
-    {start_of_chorus}
-    [Em]Alev alan [G]Ateş söner mi hiç
-    [Am]Özgürlük türküleri [Em]biter mi hiç
-    [Am]Göğe savrulan [G]yumruklar
-    [D]Zalim gitmedikçe [Em]iner mi hiç
-    {end_of_chorus}
-    
-    [Em]Haydin çocuklar [G]gençler kadınlar
-    [Am]Yükseltelim [Em]feryadımızı
-    [Am]ALLAH sözünü [G]hakim kılmak için
-    [D]Tağutları yıkalım[Em]
-    
-    {start_of_chorus}
-    [Em]Alev alan [G]Ateş söner mi hiç
-    [Am]Özgürlük türküleri [Em]biter mi hiç
-    [Am]Göğe savrulan [G]yumruklar
-    [D]Zalim gitmedikçe [Em]iner mi hiç
-    {end_of_chorus}
-    
-  ''',
-    'Haykır': '''
-    {Kapo 2}
-    [Em]Ay ışığı[Am] [D]şahit [C]yalnızlığıma
-    [Em]Kim tutacak[Am] [D]mahrum [C]ellerimden
-    [Em]Kan kusuyor[Am] [D]burası benim [C]coğrafyam
-    [Em]Umudumu[Am] [D]bağladım [C]ufuklara
-    
-    [Em]Hadi haykır [G]hiç korkma [D]Allah hep [C]yanında
-    [Em]Hadi diren [G]zalime [D]Allah hep [C]seninle
-    [Em]Vur zillete [G]kır zulmü [D]küffar [C]zincirleri
-    [Em]Hadi kuşan [G]davayı [D]onurlu [C]sevdayı
-    
-    [Em]Uyan diren [G]özgürleş[D] [C]
-    [Em]Diren yılma [G]sen kardeş[D] [C]
-    [Em]Balçıkla sıvanmaz [G]güneş[D] [C]
-    
-    [G]Uyan diren özgürleş[Bm] ki
-    [G]Yırtılıp çıksın bağrından[D] karanlığın tüm şafaklar[Em]
-    
-    Yeryüzünü zulüm örter kıyar tüm canlara
-    Sömürür zalim efendiler, umut biter yarına, 
-    Susar hain işbirlikçi, sözde kınar birileri
-    Sen de susup haykırmazsan, kim haykırır gerçekleri
-    
-    Gidenler Hüseyin kalanlar Zeynep olur
-    Sen haykır hiç düşünme ateşler gülistan olur
-    Denizler yol olur, zindanlar mektep olur
-    Hira’dan bir kıvılcım çağlara güneş olur
-     
-    Bu kıvılcım sadra düşer, gönüllerde umut pişer
-    Alnı secdede yükseldi insan oldu beşer
-    Bağrında bir yangın bir bismillah haykır
-    Bir yumruk, bir kurşun, bir slogan haykır
-     
-    [Em]Gün ışığı[Am] [D]şahid özgürlüğüme[C]
-    [Em]Kim duracak[Am] [D]şimdi [C]karşımda?
-    [Em]Destan yazıyor[Am] [D]burası benim [C]coğrafyam
-    [Em]Kıyam düşer[Am] [D]mahzun diyarlara[C]
-    
-    [Em]Hadi haykır [G]hiç korkma [D]Allah hep [C]yanında
-    [Em]Hadi diren [G]zalime [D]Allah hep [C]seninle
-    [Em]Vur zillete [G]kır zulmü [D]küffar [C]zincirleri
-    [Em]Hadi kuşan [G]davayı [D]onurlu [C]sevdayı
-    
-    [Em]Uyan diren [G]özgürleş[D] [C]
-    [Em]Diren yılma [G]sen kardeş[D] [C]
-    [Em]Balçıkla sıvanmaz [G]güneş[D] [C]
-    
-    [G]Uyan diren özgürleş[Bm] ki
-    [G]Yırtılıp çıksın bağrından[D] karanlığın tüm şafaklar[Em]
-    
-    Güç, para, şan, şöhret putlar artık taştan değil
-    Ebreheler şimdileri fil yerine tankla gelir
-    Sanılır ki çoğunluklar her zaman galip gelir
-    Ebabiller gibi hür çocuklar varken değil
-    
-    Sakın şaşma hakikat aslında biraz yalnızlıktır
-    Vicdanları yutkunanların korkaklıkları azıktır
-    Yazıktır, bedel zamanı sesleri hep kısıktır
-    Ölüm gelip çatsa bile zillet bizden uzaktır
-    
-    Bir balta kuşan şimdi ilahi bir kelimeden
-    Özgürlükle oku hadi yıkılsın bu hain düzen
-    Umut ek sabır büyüt yılmak nedir bilmeden
-    Suni zindanlar yıkılmaz Rabbim Allah demeden
-    
-    [G]Uyan Diren özgürleş[Bm] ki
-    [G]karanlığın bağrından[D] çıkar bütün şafaklar[Em]
-    
-    
-    
-    ''',
     "Ahzab'daki Yiğitler": '''
     [Em]Bir seher vaktinde şafakla geleceğiz
     [F]Gün bugün ötesi yok, gün bugün durmak [Em]yok 
@@ -137,7 +38,106 @@ class DictionaryHolder {
     [Fmaj7]Susmazsa eğer [Dm7]söz veren erler [G]Ahzab′daki[F] yiğitler[Em]
     {end_of_chorus}
     
+    ''', 'Dağlardayız Biz Ovalarda': '''
+    {Kapo 4}
+    [Em]Dağlardayız biz [G]ovalarda[Em]
+    [Am]Makina başında [Em]sıralarda
+    [Am]Sürdürüyoruz [G]kavgamızı
+    [D]Zalimler boğulaya[Em]
+       
+    {start_of_chorus}
+    [Em]Alev alan Ateş [G]söner mi hiç
+    [Am]Özgürlük türküleri [Em]biter mi hiç
+    [Am]Göğe savrulan [G]yumruklar
+    [D]Zalim gitmedikçe [Em]iner mi hiç
+    {end_of_chorus}
+    
+    [Em]Haydin çocuklar [G]gençler kadınlar
+    [Am]Yükseltelim [Em]feryadımızı
+    [Am]ALLAH sözünü [G]hakim kılmak için
+    [D]Tağutları yıkalım[Em]
+    
+    {start_of_chorus}
+    [Em]Alev alan Ateş [G]söner mi hiç
+    [Am]Özgürlük türküleri [Em]biter mi hiç
+    [Am]Göğe savrulan [G]yumruklar
+    [D]Zalim gitmedikçe [Em]iner mi hiç
+    {end_of_chorus}
+    
+  ''',
+    'Haykır': '''
+    {Kapo 2}
+    [Em]Ay ışı[Am]ğı [D]şahit [C]yalnızlığıma
+    [Em]Kim tutac[Am]ak [D]mahrum [C]ellerimden
+    [Em]Kan kusuy[Am]or [D]burası benim [C]coğrafyam
+    [Em]Umudu[Am]mu [D]bağladım [C]ufuklara
+    
+    [Em]Hadi haykır [G]hiç korkma [D]Allah hep [C]yanında
+    [Em]Hadi diren [G]zalime [D]Allah hep [C]seninle
+    [Em]Vur zillete [G]kır zulmü [D]küffar [C]zincirleri
+    [Em]Hadi kuşan [G]davayı [D]onurlu [C]sevdayı
+    
+    [Em]Uyan diren [G]özgürleş[D] [C]
+    [Em]Diren yılma [G]sen kardeş[D] [C]
+    [Em]Balçıkla sıvanmaz [G]güneş[D] [C]
+    
+    [G]Uyan diren özgürleş[Bm] ki
+    [G]Yırtılıp çıksın bağrından[D] karanlığın tüm şafaklar[Em]
+    
+    Yeryüzünü zulüm örter kıyar tüm canlara
+    Sömürür zalim efendiler, umut biter yarına, 
+    Susar hain işbirlikçi, sözde kınar birileri
+    Sen de susup haykırmazsan, kim haykırır gerçekleri
+    
+    Gidenler Hüseyin kalanlar Zeynep olur
+    Sen haykır hiç düşünme ateşler gülistan olur
+    Denizler yol olur, zindanlar mektep olur
+    Hira’dan bir kıvılcım çağlara güneş olur
+     
+    Bu kıvılcım sadra düşer, gönüllerde umut pişer
+    Alnı secdede yükseldi insan oldu beşer
+    Bağrında bir yangın bir bismillah haykır
+    Bir yumruk, bir kurşun, bir slogan haykır
+     
+    [Em]Gün ışı[Am]ğı [D]şahid özgürlüğüme[C]
+    [Em]Kim durac[Am]ak [D]şimdi [C]karşımda?
+    [Em]Destan yazıy[Am]or [D]burası benim [C]coğrafyam
+    [Em]Kıyam düş[Am]er [D]mahzun diyarlara[C]
+    
+    [Em]Hadi haykır [G]hiç korkma [D]Allah hep [C]yanında
+    [Em]Hadi diren [G]zalime [D]Allah hep [C]seninle
+    [Em]Vur zillete [G]kır zulmü [D]küffar [C]zincirleri
+    [Em]Hadi kuşan [G]davayı [D]onurlu [C]sevdayı
+    
+    [Em]Uyan diren [G]özgürleş[D] [C]
+    [Em]Diren yılma [G]sen kardeş[D] [C]
+    [Em]Balçıkla sıvanmaz [G]güneş[D] [C]
+    
+    [G]Uyan diren özgürleş[Bm] ki
+    [G]Yırtılıp çıksın bağrından[D] karanlığın tüm şafaklar[Em]
+    
+    Güç, para, şan, şöhret putlar artık taştan değil
+    Ebreheler şimdileri fil yerine tankla gelir
+    Sanılır ki çoğunluklar her zaman galip gelir
+    Ebabiller gibi hür çocuklar varken değil
+    
+    Sakın şaşma hakikat aslında biraz yalnızlıktır
+    Vicdanları yutkunanların korkaklıkları azıktır
+    Yazıktır, bedel zamanı sesleri hep kısıktır
+    Ölüm gelip çatsa bile zillet bizden uzaktır
+    
+    Bir balta kuşan şimdi ilahi bir kelimeden
+    Özgürlükle oku hadi yıkılsın bu hain düzen
+    Umut ek sabır büyüt yılmak nedir bilmeden
+    Suni zindanlar yıkılmaz Rabbim Allah demeden
+    
+    [G]Uyan Diren özgürleş[Bm] ki
+    [G]karanlığın bağrından[D] çıkar bütün şafaklar[Em]
+    
+    
+    
     ''',
+
     "Bağlanmaz ki Yüreğim": '''
     
     [Am]Kurtuluşum [Bdim]İslam’dadır 
@@ -448,8 +448,8 @@ class DictionaryHolder {
     [Em]Yıkıldı firavun Haman[Am] ile Karun[Em]
     [Em]Yıkıldı firavun Haman[Am] ile Karun[Em]
     [Am]Nemruda ne oldu [G]çağdaşlara sorun[Am]
-    [Am]Bu inkılap [G]mazlumların en [D]haklı davası[Em]
-    [Am]Bu inkılap [G]tağutların [D]korkulu rüyası[Em]
+    [Am]Bu inkılap maz[G]lumların en [D]haklı davası[Em]
+    [Am]Bu inkılap tağ[G]utların [D]korkulu rüyası[Em]
     [G]Allahu Ekber[Em]
     [G]Allahu Ekber[Em]
     [G]Allahu Ekber[Em]
@@ -505,9 +505,9 @@ class DictionaryHolder {
     Küçücük[Am] bir şehit[F] cennete[G] uçacak[F] birazdan[Em]
     Birazdan[Em], Birazdan[Em]
     
-    Muhammed[Am] yaralı ceylanım kapatma gözlerini
-    Muhammed[G] kurbanın olayım bırakma elimi
-    Muhammed[Am] ne olur duy beni baba gel gidelim de
+    Muham[Am]med yaralı ceylanım kapatma gözlerini
+    Muham[G]med kurbanın olayım bırakma elimi
+    Muham[Am]med ne olur duy beni baba gel gidelim de
     Daha [G]çok görecek günün var acelen ne diye
     Kapıda[Am] annen bekliyor yolunu gözlüyor
     Muhammed[G], Muhammed[Am], Muhammed[Am]
@@ -722,9 +722,9 @@ class DictionaryHolder {
     Hakkını helal et, anne bana[Em],
     
     Dağları [Am]aşmam gerekse [G]de anne,
-    Bekle beni[F] anne geleceğim[Em],
+    Bekle beni[F] anne gele[Em]ceğim,
     Yollar bitmek[Am] bilmese de [G]anne,
-    Bekle beni[F] anne geleceğim[Em],
+    Bekle beni[F] anne gele[Em]ceğim,
     
     [Em]Belki bu son mektup olur anne[F],
     Sana yazdığım gurbet elde[Em],
@@ -842,8 +842,8 @@ class DictionaryHolder {
     Gözlerimde [Am]bir hırsı, kamçılayan [G]bir arzu
     Sana ulaşan[F] çağrı Ey Şehid[G], Ey Şehid[Em]
     
-    [Em]Alnı öpülesiler[Am] her biri bir [F]dağ gibi[Em]
-    [Em]Alnı öpülesiler[Am] her biri bir [F]dağ gibi[Em]
+    [Em]Alnı öpü[Am]lesiler her biri bir [F]dağ gibi[Em]
+    [Em]Alnı öpü[Am]lesiler her biri bir [F]dağ gibi[Em]
     
     Düşseler vurulup[Am]da kanlarıyla [G]boğacak
     Zulmün soluk [F]sesini Ey Şehid[G], Ey Şehid[Em]
@@ -868,20 +868,20 @@ class DictionaryHolder {
     
     ''',
     "Mescid-i Aksa": '''
-    [Em]Dayan kanlı mescit, Mescid[G]i Aksa[F]
+    [Em]Dayan kanlı mescit, Mes[G]cid-i Aksa[F]
     Bu zulüm, [G]işkence [F]sürmez asla[Em]
     Filizleniyor[G] kutsal, yüce dava
     
     {start_of_chorus}
     Kafirlerin[Am] yapmadığı [G]kalmadı
-    [Em]Filistin[F], [G]Filistin, [G]rasul [F]yılmadı[Em]
+    [Em]Filis[F]tin, [G]Filistin[Am], [G]rasul [F]yılmadı[Em]
     Kafirlerin[Am] yapmadığı [G]kalmadı
-    [Em]Filistin[F], [G]Filistin[Am], [G]rasul [F]yılmadı[Em]
+    [Em]Filis[F]tin, [G]Filistin[Am], [G]rasul [F]yılmadı[Em]
     [Em]Bir uyanış [F]ki [Em]dağlar inliyor[F]
     [Em]Bir uyanış [F]ki [Em]dağlar inliyor[F]
     [Am]Bir cihat ki [G]kalpler titriyor
     Toprağına rahmet yağmuru yağdı[Em]
-    [Em]Filistin[F], [G]Filistin[Am], [G]sabret [F]az kaldı[Em]
+    [Em]Filis[F]tin, [G]Filistin[Am], [G]sabret [F]az kaldı[Em]
     [Am]Bir cihat ki [G]kalpler titriyor
     Toprağına rahmet yağmuru yağdı[Em]
     [Em]Filistin[F], [G]Filistin[Am], [G]sabret [F]az kaldı[Em]
@@ -889,18 +889,18 @@ class DictionaryHolder {
     
     [Em]Zulüm sende [G]kardeş, sakın boşverme[F]
     Uyku bizi [G]sarmış [F]zehirli meyve[Em]
-    Sevdaların[G] en yücesi [Em]sende
+    Sevdaları[G]mın en yücesi [Em]sende
     
     {start_of_chorus}
     Kafirlerin[Am] yapmadığı [G]kalmadı
-    [Em]Filistin[F], [G]Filistin, [G]rasul [F]yılmadı[Em]
+    [Em]Filis[F]tin, [G]Filistin[Am], [G]rasul [F]yılmadı[Em]
     Kafirlerin[Am] yapmadığı [G]kalmadı
-    [Em]Filistin[F], [G]Filistin[Am], [G]rasul [F]yılmadı[Em]
+    [Em]Filis[F]tin, [G]Filistin[Am], [G]rasul [F]yılmadı[Em]
     [Em]Bir uyanış [F]ki [Em]dağlar inliyor[F]
     [Em]Bir uyanış [F]ki [Em]dağlar inliyor[F]
     [Am]Bir cihat ki [G]kalpler titriyor
     Toprağına rahmet yağmuru yağdı[Em]
-    [Em]Filistin[F], [G]Filistin[Am], [G]sabret [F]az kaldı[Em]
+    [Em]Filis[F]tin, [G]Filistin[Am], [G]sabret [F]az kaldı[Em]
     [Am]Bir cihat ki [G]kalpler titriyor
     Toprağına rahmet yağmuru yağdı[Em]
     [Em]Filistin[F], [G]Filistin[Am], [G]sabret [F]az kaldı[Em]

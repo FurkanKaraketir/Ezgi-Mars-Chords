@@ -21,10 +21,17 @@ class SongsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String albumTitle = _getAlbumTitle(albumId);
-    return Scaffold(
-        body: MySongsPage(
-      albumTitle: albumTitle,
-    ));
+    return WillPopScope(
+      onWillPop: () async {
+        context.go('/');
+        return false; // Prevent app from closing
+      },
+      child: Scaffold(
+        appBar: MySongListAppBar(myTitle: albumTitle),
+        extendBodyBehindAppBar: true,
+        body: BlurredBackgroundForSongs(albumTitle: albumTitle),
+      ),
+    );
   }
 }
 

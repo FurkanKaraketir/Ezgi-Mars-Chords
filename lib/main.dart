@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/services.dart';
+import 'package:url_strategy/url_strategy.dart';
 
 import 'package:Ezgiler/Song.dart';
 import 'package:Ezgiler/SongItem.dart';
@@ -17,6 +19,7 @@ import 'firebase_options.dart';
 import 'package:go_router/go_router.dart';
 import 'package:Ezgiler/lyrics.dart';
 import 'package:Ezgiler/web_utils.dart';
+import 'package:uni_links/uni_links.dart';
 
 int scrollDuration = 60;
 int metronomeBpm = 120;
@@ -24,6 +27,33 @@ double lyricsFontSize = 18;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Configure URL strategy for web
+  if (kIsWeb) {
+    setPathUrlStrategy();
+  }
+  
+  // Initialize deep linking
+  if (!kIsWeb) {
+    try {
+      final initialUri = await getInitialUri();
+      if (initialUri != null) {
+        debugPrint('Initial URI: $initialUri');
+      }
+      
+      // Handle subsequent links
+      uriLinkStream.listen((Uri? uri) {
+        if (uri != null) {
+          debugPrint('URI received: $uri');
+        }
+      }, onError: (err) {
+        debugPrint('URI link error: $err');
+      });
+    } on PlatformException {
+      debugPrint('Failed to get initial URI');
+    }
+  }
+  
   await SharedPreferences.getInstance();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -149,11 +179,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: _router,
-      theme: ThemeData.dark(useMaterial3: true),
-      debugShowCheckedModeBanner: false,
-      title: 'Ezgiler ve Marşlar - Grup İslami Direniş',
+    return WillPopScope(
+      onWillPop: () async {
+        final String location = _router.routerDelegate.currentConfiguration?.uri.path ?? '/';
+        if (location == '/') {
+          return true; // Allow app to close only on home screen
+        }
+        _router.go('/');
+        return false; // Prevent app from closing on other screens
+      },
+      child: MaterialApp.router(
+        routerConfig: _router,
+        theme: ThemeData.dark(useMaterial3: true),
+        debugShowCheckedModeBanner: false,
+        title: 'Ezgiler ve Marşlar - Grup İslami Direniş',
+      ),
     );
   }
 }
@@ -421,10 +461,15 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: MyAppBar(),
-      body: BlurredBackground(),
+    return WillPopScope(
+      onWillPop: () async {
+        return true; // Allow app to close on home screen
+      },
+      child: const Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: MyAppBar(),
+        body: BlurredBackground(),
+      ),
     );
   }
 }

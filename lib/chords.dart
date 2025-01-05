@@ -11,10 +11,16 @@ class ChordsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: const MyChordsAppBar(),
-      body: ChordsPage(chords: chords),
+    return WillPopScope(
+      onWillPop: () async {
+        context.pop();
+        return false;
+      },
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: const MyChordsAppBar(),
+        body: ChordsPage(chords: chords),
+      ),
     );
   }
 }
