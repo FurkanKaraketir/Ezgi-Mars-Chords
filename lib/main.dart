@@ -19,7 +19,7 @@ import 'firebase_options.dart';
 import 'package:go_router/go_router.dart';
 import 'package:Ezgiler/lyrics.dart';
 import 'package:Ezgiler/web_utils.dart';
-import 'package:uni_links/uni_links.dart';
+import 'package:app_links/app_links.dart';
 
 int scrollDuration = 60;
 int metronomeBpm = 120;
@@ -36,21 +36,22 @@ Future<void> main() async {
   // Initialize deep linking
   if (!kIsWeb) {
     try {
-      final initialUri = await getInitialUri();
-      if (initialUri != null) {
-        debugPrint('Initial URI: $initialUri');
+      final appLinks = AppLinks();
+      
+      // Get the initial link
+      final uri = await appLinks.getInitialAppLink();
+      if (uri != null) {
+        debugPrint('Initial URI: $uri');
       }
       
       // Handle subsequent links
-      uriLinkStream.listen((Uri? uri) {
+      appLinks.uriLinkStream.listen((Uri? uri) {
         if (uri != null) {
           debugPrint('URI received: $uri');
         }
-      }, onError: (err) {
-        debugPrint('URI link error: $err');
       });
-    } on PlatformException {
-      debugPrint('Failed to get initial URI');
+    } catch (e) {
+      debugPrint('Failed to handle deep link: $e');
     }
   }
   
