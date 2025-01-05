@@ -1,5 +1,9 @@
 User-agent: *
 Allow: /
+Allow: /album/*
+Allow: /song/*
+Allow: /about
+Allow: /settings
+Allow: /chords
 
-# Sitemaps
 Sitemap: https://ezgiler.net/sitemap.xml 

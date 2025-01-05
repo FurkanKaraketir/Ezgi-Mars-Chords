@@ -101,6 +101,10 @@ final _router = GoRouter(
         final albumId = state.pathParameters['id'];
         if (albumId == null || (albumId != 'album1' && albumId != 'album2')) {
           updateWebTitle('Albüm Bulunamadı - Ezgiler ve Marşlar');
+          updateMetaTags(
+            title: 'Albüm Bulunamadı - Ezgiler ve Marşlar',
+            description: 'Aradığınız albüm bulunamadı.',
+          );
           return const Scaffold(
             body: Center(
               child: Text('Album not found'),
@@ -108,7 +112,15 @@ final _router = GoRouter(
           );
         }
         final albumTitle = albumId == 'album1' ? 'Haykır' : 'Arşiv';
+        final description = albumId == 'album1' 
+          ? 'Grup İslami Direniş\'in Haykır albümündeki ezgi ve marşlar. Şarkı sözleri ve akorlar ile birlikte dinleyin.'
+          : 'Grup İslami Direniş\'in Arşiv albümündeki ezgi ve marşlar. Şarkı sözleri ve akorlar ile birlikte dinleyin.';
         updateWebTitle('$albumTitle - Ezgiler ve Marşlar');
+        updateMetaTags(
+          title: '$albumTitle - Ezgiler ve Marşlar',
+          description: description,
+          imageUrl: albumId == 'album1' ? 'assets/haykir.jpeg' : 'assets/archive.jpg',
+        );
         return SongsScreen(albumId: albumId);
       },
     ),
@@ -119,16 +131,23 @@ final _router = GoRouter(
         final songId = state.pathParameters['id'];
         if (songId == null || songId.isEmpty) {
           updateWebTitle('Şarkı Bulunamadı - Ezgiler ve Marşlar');
+          updateMetaTags(
+            title: 'Şarkı Bulunamadı - Ezgiler ve Marşlar',
+            description: 'Aradığınız şarkı bulunamadı.',
+          );
           return const Scaffold(
             body: Center(
               child: Text('Song not found'),
             ),
           );
         }
-        final songNumber =
-            int.tryParse(songId.replaceAll(RegExp(r'[^0-9]'), ''));
+        final songNumber = int.tryParse(songId.replaceAll(RegExp(r'[^0-9]'), ''));
         if (songNumber == null || songNumber < 1 || songNumber > 25) {
           updateWebTitle('Geçersiz Şarkı - Ezgiler ve Marşlar');
+          updateMetaTags(
+            title: 'Geçersiz Şarkı - Ezgiler ve Marşlar',
+            description: 'Geçersiz şarkı numarası.',
+          );
           return const Scaffold(
             body: Center(
               child: Text('Invalid song ID'),
@@ -136,6 +155,11 @@ final _router = GoRouter(
           );
         }
         updateWebTitle('$songId - Ezgiler ve Marşlar');
+        updateMetaTags(
+          title: '$songId - Ezgiler ve Marşlar',
+          description: 'Grup İslami Direniş\'in $songId isimli ezgisini dinleyin. Şarkı sözleri ve akorlar ile birlikte.',
+          imageUrl: songNumber <= 10 ? 'assets/haykir.jpeg' : 'assets/archive.jpg',
+        );
         return LyricsScreen(songId: songId);
       },
     ),
