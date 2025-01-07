@@ -661,7 +661,7 @@ class _BlurredBackgroundForLyricsState
     chords.clear();
 
     // Extract kapo information if present
-    int? kapoValue;
+    int kapoValue = 0; // Default to 0
     RegExp capoRegex = RegExp(r'\{Kapo (\d+)\}');
     Match? match = capoRegex.firstMatch(lyrics);
     if (match != null) {
@@ -680,7 +680,7 @@ class _BlurredBackgroundForLyricsState
           ),
         ),
       ),
-      if (kapoValue != null)
+      if (kapoValue > 0) // Only show kapo info if greater than 0
         Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: Text(
@@ -804,16 +804,6 @@ void _showChordImageDialog(String chord, BuildContext context, int globalCapo) {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                if (capoPosition > 0)
-                  Text(
-                    // Show what chord it actually produces
-                    'Kapo ${capoPosition} ile: $actualChord',
-                    style: const TextStyle(
-                      color: Colors.white70,
-                      fontSize: 16,
-                      fontStyle: FontStyle.italic,
-                    ),
-                  ),
                 const SizedBox(height: 8),
                 if (allPositions.length > 1) ...[
                   Row(
@@ -850,14 +840,6 @@ void _showChordImageDialog(String chord, BuildContext context, int globalCapo) {
                     ],
                   ),
                 ],
-                const SizedBox(height: 8),
-                Text(
-                  'Kapo: $capoPosition',
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 14,
-                  ),
-                ),
               ],
             ),
             content: Column(

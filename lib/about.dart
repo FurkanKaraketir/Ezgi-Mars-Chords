@@ -41,7 +41,9 @@ class BlurredBackgroundForAbout extends StatelessWidget {
         buildGradientOverlay(),
 
         // Step 3: Album List
-        aboutList(),
+        SingleChildScrollView(
+          child: aboutList(),
+        ),
       ],
     );
   }
@@ -51,7 +53,6 @@ class BlurredBackgroundForAbout extends StatelessWidget {
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage('assets/background_settings.png'),
-          // Replace with your image asset path
           fit: BoxFit.cover,
         ),
       ),
@@ -65,218 +66,164 @@ class BlurredBackgroundForAbout extends StatelessWidget {
       }
     }
 
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Container(
-        margin: const EdgeInsets.only(top: 100.0),
-        child: const Center(
-          //make text center
-
-          child: Text(
-            'Grup İslami Direniş',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 32,
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ),
-      Container(
-        margin: const EdgeInsets.only(top: 10.0),
-        child: const Center(
-          //make text center
-
-          child: Text(
-            'Ezgi ve Marş Uygulaması',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 20,
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ),
-      Container(
-        margin: const EdgeInsets.all(20.0),
-        //make text center
-
-        child: const Text(
-          'İlk ve tek albümünü 1992 yılında Özgürlük İçin İslami Direniş adıyla yayınlayan grup, yeni üyeleriyle 2013 yılından beri çalışmalarına devam etmektedir.',
-          textAlign: TextAlign.start,
-          style: TextStyle(
-            fontSize: 19,
-            color: Colors.white,
-          ),
-        ),
-      ),
-      Container(
-        margin: const EdgeInsets.all(20.0),
-        //make text center
-
-        child: const Text(
-          'Linkler',
-          textAlign: TextAlign.start,
-          style: TextStyle(
-            fontSize: 24,
-            color: Colors.white,
-          ),
-        ),
-      ),
-      Container(
-        margin: const EdgeInsets.all(20.0),
-        //make text center
-
-        child: Row(
-          children: [
-            GestureDetector(
-              onTap: () {
-                launchUri(Uri.parse('https://instagram.com/grupislamidirenis'));
-              },
-              child: Image.asset(
-                'assets/instagram_icon.png',
-                width: 50,
-                height: 50,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: const EdgeInsets.only(top: 100.0),
+            width: double.infinity,
+            child: const Text(
+              'Grup İslami Direniş',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 32,
+                color: Colors.white,
               ),
             ),
-            const SizedBox(width: 10),
-            Column(
+          ),
+          Container(
+            margin: const EdgeInsets.only(top: 10.0),
+            width: double.infinity,
+            child: const Text(
+              'Ezgi ve Marş Uygulaması',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.all(20.0),
+            child: const Text(
+              'İlk ve tek albümünü 1992 yılında Özgürlük İçin İslami Direniş adıyla yayınlayan grup, yeni üyeleriyle 2013 yılından beri çalışmalarına devam etmektedir.',
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontSize: 19,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.all(20.0),
+            child: const Text(
+              'Linkler',
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontSize: 24,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          _buildSocialLink(
+            'Instagram',
+            'instagram.com/grupislamidirenis',
+            'assets/instagram_icon.png',
+            () => launchUri(Uri.parse('https://instagram.com/grupislamidirenis')),
+          ),
+          _buildSocialLink(
+            'Twitter',
+            'twitter.com/gislamidirenis',
+            'assets/x_icon.png',
+            () => launchUri(Uri.parse('https://twitter.com/gislamidirenis')),
+          ),
+          _buildSocialLink(
+            'Facebook',
+            'facebook.com/grupislamidirenis',
+            'assets/facebook_icon.png',
+            () => launchUri(Uri.parse('https://facebook.com/grupislamidirenis')),
+          ),
+          Container(
+            margin: const EdgeInsets.all(20.0),
+            child: const Text(
+              'Geliştiriciler',
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontSize: 24,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          _buildSocialLink(
+            'Enderun Mühendislik Klübü',
+            'instagram.com/enderunmuhendislikkulubu',
+            'assets/instagram_icon.png',
+            () => launchUri(Uri.parse('https://www.instagram.com/enderunmuhendislikkulubu/')),
+          ),
+          Container(
+            margin: const EdgeInsets.only(left: 40.0, top: 5.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildSocialLink(
+                  'Furkan Karaketir',
+                  'linkedin.com/in/furkankaraketir',
+                  'assets/linkedin_icon.png',
+                  () => launchUri(Uri.parse('https://www.linkedin.com/in/furkankaraketir/')),
+                ),
+                _buildSocialLink(
+                  'Halit Başbuğ',
+                  'linkedin.com/in/halit-başbuğ-a63510167',
+                  'assets/linkedin_icon.png',
+                  () => launchUri(Uri.parse('https://www.linkedin.com/in/halit-ba%C5%9Fbu%C4%9F-a63510167/')),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20), // Bottom padding
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSocialLink(String title, String url, String iconPath, VoidCallback onTap) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: onTap,
+            child: Image.asset(
+              iconPath,
+              width: 50,
+              height: 50,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 GestureDetector(
-                  onTap: () {
-                    launchUri(
-                        Uri.parse('https://instagram.com/grupislamidirenis'));
-                  },
-                  child: const Text(
-                    'Instagram',
-                    style: TextStyle(
+                  onTap: onTap,
+                  child: Text(
+                    title,
+                    style: const TextStyle(
                       fontSize: 18,
                       color: Colors.white,
                     ),
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {
-                    launchUri(
-                        Uri.parse('https://instagram.com/grupislamidirenis'));
-                  },
-                  child: const Text(
-                    'instagram.com/grupislamidirenis',
-                    style: TextStyle(
-                      fontSize: 18,
+                  onTap: onTap,
+                  child: Text(
+                    url,
+                    style: const TextStyle(
+                      fontSize: 16,
                       decoration: TextDecoration.underline,
                       color: Colors.white,
                     ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-      Container(
-        margin: const EdgeInsets.all(20.0),
-        //make text center
-
-        child: Row(
-          children: [
-            GestureDetector(
-              onTap: () {
-                launchUri(Uri.parse('https://twitter.com/gislamidirenis'));
-              },
-              child: Image.asset(
-                'assets/x_icon.png',
-                width: 50,
-                height: 50,
-              ),
-            ),
-            const SizedBox(width: 10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    launchUri(Uri.parse('https://twitter.com/gislamidirenis'));
-                  },
-                  child: const Text(
-                    'Twitter',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    launchUri(Uri.parse('https://twitter.com/gislamidirenis'));
-                  },
-                  child: const Text(
-                    'twitter.com/grupislamidirenis',
-                    style: TextStyle(
-                      fontSize: 18,
-                      decoration: TextDecoration.underline,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-      Container(
-        margin: const EdgeInsets.all(20.0),
-        //make text center
-
-        child: Row(
-          children: [
-            GestureDetector(
-              onTap: () {
-                launchUri(Uri.parse('https://facebook.com/grupislamidirenis'));
-              },
-              child: Image.asset(
-                'assets/facebook_icon.png',
-                width: 50,
-                height: 50,
-              ),
-            ),
-            const SizedBox(width: 10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    launchUri(
-                        Uri.parse('https://facebook.com/grupislamidirenis'));
-                  },
-                  child: const Text(
-                    'Facebook',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    launchUri(
-                        Uri.parse('https://facebook.com/grupislamidirenis'));
-                  },
-                  child: const Text(
-                    'facebook.com/grupislamidirenis',
-                    style: TextStyle(
-                      fontSize: 18,
-                      decoration: TextDecoration.underline,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    ]);
+    );
   }
 }
 

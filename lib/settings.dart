@@ -531,10 +531,19 @@ class MySettingsAppBar extends StatelessWidget implements PreferredSizeWidget {
         onPressed: () async {
           final appState = context.read<AppState>();
           SharedPreferences prefs = await SharedPreferences.getInstance();
-          appState
-              .updateColor(Color(prefs.getInt('selectedColor') ?? 0xFFFEA501));
+          appState.updateColor(Color(prefs.getInt('selectedColor') ?? 0xFFFEA501));
           metronomeBpm = prefs.getInt('metronomeBpm') ?? 120;
-          context.go('/');
+          
+          // Get the current location to determine where to go back to
+          final location = GoRouterState.of(context).uri.path;
+          if (location.startsWith('/settings')) {
+            final previousPath = GoRouter.of(context).routerDelegate.currentConfiguration.uri.path;
+            if (previousPath.startsWith('/song/')) {
+              context.go(previousPath);
+            } else {
+              context.go('/');
+            }
+          }
         },
       ),
       backgroundColor: Colors.transparent,
